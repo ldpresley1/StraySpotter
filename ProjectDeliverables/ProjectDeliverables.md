@@ -1,3 +1,8 @@
+---
+title: "Project Deliverables"
+layout: Page
+permalink: /ProjectDeliverables/
+--- 
 # Project Deliverables
 This is a page containing a link? to all of the project documents
 ## Presentations
