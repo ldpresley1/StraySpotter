@@ -20,7 +20,7 @@ export default function App() {
 	return (
 		<View style={styles.container}>
 			{ currentRender }
-			<Navigation setPage={setPage}/>
+			<Navigation setPage={setPage} page={page}/>
 		</View>
 	);
 }

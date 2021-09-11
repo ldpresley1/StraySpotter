@@ -3,7 +3,8 @@
 You need node.js
 
 Download files
-to install the necessary dependencies run the following command in the directory with package.json
+
+To install the necessary dependencies run the following command in the directory with package.json
 ```bash
 npm install
 ```

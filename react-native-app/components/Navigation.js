@@ -4,16 +4,16 @@ import { Pressable, Image, StyleSheet, Text, View } from 'react-native';
 const Navigation = (props) => {
   return (
 	<View style={styles.navigation}>
-		<Pressable onPress={() => props.setPage(0)} style={styles.button}>
+		<Pressable onPress={() => props.setPage(0)} style={ props.page == 0 ? styles.button : [styles.button,{backgroundColor:'#FFFFFFC5'}]}>
 			<Image style={styles.buttonIcon} source={require('../assets/addicon.png')} />
 		</Pressable>
-		<Pressable onPress={() => props.setPage(1)} style={styles.button}>
+		<Pressable onPress={() => props.setPage(1)} style={ props.page == 1 ? styles.button : [styles.button,{backgroundColor:'#FFFFFFC5'}]}>
 			<Image style={styles.buttonIcon} source={require('../assets/mapicon.png')} />
 		</Pressable>
-		<Pressable onPress={() => props.setPage(2)} style={styles.button}>
+		<Pressable onPress={() => props.setPage(2)} style={ props.page == 2 ? styles.button : [styles.button,{backgroundColor:'#FFFFFFC5'}]}>
 			<Image style={styles.buttonIcon} source={require('../assets/clockicon.png')} />
 		</Pressable>
-		<Pressable onPress={() => props.setPage(3)} style={styles.button}>
+		<Pressable onPress={() => props.setPage(3)} style={ props.page == 3 ? styles.button : [styles.button,{backgroundColor:'#FFFFFFC5'}]}>
 			<Image style={styles.buttonIcon} source={require('../assets/pfp.png')} />
 		</Pressable>
 	</View>
@@ -28,11 +28,11 @@ const styles = StyleSheet.create({
 		// position:'absolute',
 		// bottom: 0,
 		flex:1,
-		// backgroundColor: 'red',
+		backgroundColor: '#F47174',
 		flexDirection: "row",
 	},
 	button: {
-		// backgroundColor:'white',
+		backgroundColor:'white',
 		flex: 1,
 		borderTopWidth: 2,
 		// borderLeftWidth: 1,
