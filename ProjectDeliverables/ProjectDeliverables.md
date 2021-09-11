@@ -1,7 +1,6 @@
 ---
 title: "Project Deliverables"
-theme: jekyll-theme-slate
-layout: page
+layout: default
 permalink: /ProjectDeliverables/
 --- 
 # Project Deliverables
