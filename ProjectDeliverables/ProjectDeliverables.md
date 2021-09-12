@@ -11,7 +11,7 @@ This is where all our presentations will go
 This is where our code will go
 ## Documents
 This is where project backlog, journals, etc will go
-* [Project Backlog]({{file name='Project Backlog.xlsx'}})
+* [Project Backlog](https://github.com/ldpresley1/StraySpotter/blob/main/ProjectDeliverables/Project%20Backlog.xlsx)
 
 ### Navigation
 * [Project Goals](https://ldpresley1.github.io/StraySpotter/)
