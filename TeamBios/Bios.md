@@ -13,3 +13,8 @@ This is where a bio will go
 This is where a bio will go
 ## Sav Campbell
 This is where a bio will go
+
+
+* [Project Goals](https://ldpresley1.github.io/StraySpotter/)
+* [Project Deliverables](https://ldpresley1.github.io/StraySpotter/ProjectDeliverables/)
+* [Code](https://ldpresley1.github.io/StraySpotter/Code/)
