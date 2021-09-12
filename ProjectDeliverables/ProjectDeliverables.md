@@ -12,4 +12,7 @@ This is where our code will go
 ## Documents
 This is where project backlog, journals, etc will go
 
+* [Project Goals](https://ldpresley1.github.io/StraySpotter/)
+* [Team Bios](https://ldpresley1.github.io/StraySpotter/TeamBios/)
+* [Code](https://ldpresley1.github.io/StraySpotter/Code/)
 
