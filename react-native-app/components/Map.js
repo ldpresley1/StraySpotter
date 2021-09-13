@@ -9,11 +9,13 @@ const imageURL = ''
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
+
   return (
     <View style={styles.container}>
       <MapView
         style={{ alignSelf: 'stretch', height: '100%' }}
         region={mapRegion}
+        showsUserLocation = {true}
       >
             <Marker
           coordinate={{latitude: 33.2083, longitude: -87.5504}}
@@ -30,5 +32,3 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-
-export default Map;
