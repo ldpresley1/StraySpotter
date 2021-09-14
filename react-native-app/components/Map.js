@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { Dimensions, View, StyleSheet,Image } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-const App = () => {
+
+const width = Dimensions.get('window').width
+const height = Dimensions.get('window').height
+
+const Map = () => {
 const imageURL = ''
   const [mapRegion, setmapRegion] = useState({
     latitude: 33.2083,
@@ -10,8 +14,7 @@ const imageURL = ''
     longitudeDelta: 0.0421,
   });
 
-  const width = Dimensions.get('window').width
-  const height = Dimensions.get('window').height
+
   return (
     <View style={styles.container}>
       <MapView
@@ -19,16 +22,17 @@ const imageURL = ''
         region={mapRegion}
         showsUserLocation = {true}
       >
-            <Marker
-          coordinate={{latitude: 33.2083, longitude: -87.5504}}
-          title="this is a marker"
-          description="this is a marker example"
-        />
+              <Marker
+            coordinate={{latitude: 33.2083, longitude: -87.5504}}
+            title="this is a marker"
+            description="this is a marker example"
+          >
+          </Marker>
         </MapView>
     </View>
   );
 };
-export default App;
+export default Map;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
