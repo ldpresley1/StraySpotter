@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet,Image } from 'react-native';
+import { Dimensions, View, StyleSheet,Image } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 const App = () => {
 const imageURL = ''
@@ -10,6 +10,8 @@ const imageURL = ''
     longitudeDelta: 0.0421,
   });
 
+  const width = Dimensions.get('window').width
+  const height = Dimensions.get('window').height
   return (
     <View style={styles.container}>
       <MapView
@@ -29,6 +31,9 @@ const imageURL = ''
 export default App;
 const styles = StyleSheet.create({
   container: {
+
     flex: 1,
+    width,
+    height
   },
 });
