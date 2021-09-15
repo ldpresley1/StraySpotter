@@ -42,10 +42,10 @@ export default Navigation;
 const styles = StyleSheet.create({
 	navigation: {
 		width: "100%",
-		// position:'absolute',
-		// bottom: 0,
-		flex:.7,
-		// backgroundColor: '#F47174',
+		position:'absolute',
+		bottom: 0,
+		//flex:.7,
+		backgroundColor: '#121212',
 		flexDirection: "row",
 	},
 	button: {
@@ -57,7 +57,8 @@ const styles = StyleSheet.create({
 		// borderRightWidth: 1,
 		alignItems: 'center',
 		justifyContent: 'flex-start',
-		paddingTop:15
+		paddingTop:20,
+		paddingBottom: 20
 	},
 	iconStyle: {
 		width:100,
