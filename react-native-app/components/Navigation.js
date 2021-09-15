@@ -1,20 +1,37 @@
 import React from 'react';
 import { Pressable, Image, StyleSheet, Text, View } from 'react-native';
+import { Icon } from 'react-native-elements';
 
 const Navigation = (props) => {
   return (
 	<View style={styles.navigation}>
-		<Pressable onPress={() => props.setPage(0)} style={ props.page == 0 ? styles.button : [styles.button,{backgroundColor:'#B3E8FC'}]}>
-			<Image style={styles.buttonIcon} source={require('../assets/addicon.png')} />
+		<Pressable onPress={() => props.setPage(0)} style={ props.page != 0 ? styles.button : [styles.button,{backgroundColor:'#FFFFFFC5'}]}>
+			{
+				props.page != 0 ?
+				<Icon style={styles.iconStyle} name='camera' type='fontisto' color='white' /> :
+				<Icon style={styles.iconStyle} name='camera' type='fontisto' />
+			}
 		</Pressable>
-		<Pressable onPress={() => props.setPage(1)} style={ props.page == 1 ? styles.button : [styles.button,{backgroundColor:'#B3E8FC'}]}>
-			<Image style={styles.buttonIcon} source={require('../assets/mapicon.png')} />
+		<Pressable onPress={() => props.setPage(1)} style={ props.page != 1 ? styles.button : [styles.button,{backgroundColor:'#FFFFFFC5'}]}>
+			{
+				props.page != 1 ?
+				<Icon style={styles.iconStyle} name='map' type='fontisto' color='white'/> :
+				<Icon style={styles.iconStyle} name='map' type='fontisto' />
+			}
 		</Pressable>
-		<Pressable onPress={() => props.setPage(2)} style={ props.page == 2 ? styles.button : [styles.button,{backgroundColor:'#B3E8FC'}]}>
-			<Image style={styles.buttonIcon} source={require('../assets/clockicon.png')} />
+		<Pressable onPress={() => props.setPage(2)} style={ props.page != 2 ? styles.button : [styles.button,{backgroundColor:'#FFFFFFC5'}]}>
+			{
+				props.page != 2 ?
+				<Icon style={styles.iconStyle} name='paw' type='fontisto' color='white'/> :
+				<Icon style={styles.iconStyle} name='paw' type='fontisto' />
+			}
 		</Pressable>
-		<Pressable onPress={() => props.setPage(3)} style={ props.page == 3 ? styles.button : [styles.button,{backgroundColor:'#B3E8FC'}]}>
-			<Image style={styles.buttonIcon} source={require('../assets/pfp.png')} />
+		<Pressable onPress={() => props.setPage(3)} style={ props.page != 3 ? styles.button : [styles.button,{backgroundColor:'#FFFFFFC5'}]}>
+			{
+				props.page != 3 ?
+				<Icon style={styles.iconStyle} name='person' type='fontisto' color='white'/> :
+				<Icon style={styles.iconStyle} name='person' type='fontisto' />
+			}
 		</Pressable>
 	</View>
   );
@@ -25,25 +42,25 @@ export default Navigation;
 const styles = StyleSheet.create({
 	navigation: {
 		width: "100%",
-		position:'absolute',
-		bottom: 0,
-		//flex:1,
-		backgroundColor: '#F47174',
+		// position:'absolute',
+		// bottom: 0,
+		flex:.7,
+		// backgroundColor: '#F47174',
 		flexDirection: "row",
 	},
 	button: {
-		backgroundColor:'white',
+		// backgroundColor:'white',
 		flex: 1,
-		borderTopWidth: 2,
+		borderTopWidth: 1,
+		borderColor:'#303030',
 		// borderLeftWidth: 1,
 		// borderRightWidth: 1,
 		alignItems: 'center',
-		justifyContent: 'center',
-		paddingBottom: 15,
-		paddingTop: 15
+		justifyContent: 'flex-start',
+		paddingTop:15
 	},
-	buttonIcon: {
-		width: 40,
-		height: 40,
+	iconStyle: {
+		width:100,
+		backgroundColor:'#00000000'
 	},
 });

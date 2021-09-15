@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		// height: 100,
 		backgroundColor: 'lightgrey',
-		marginBottom: 30,
+		marginTop: 30,
 		padding: 20,
 		borderRadius: 15
 	},

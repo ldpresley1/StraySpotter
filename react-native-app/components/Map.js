@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Dimensions, View, StyleSheet,Image } from 'react-native';
+import { Dimensions, View, StyleSheet, Image, Text } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-const Map = () => {
+const Map = (props) => {
 const imageURL = ''
   const [mapRegion, setmapRegion] = useState({
     latitude: 33.2083,
@@ -16,7 +16,7 @@ const imageURL = ''
 
 
   return (
-    <View style={styles.container}>
+    <View style={[props.windowStyle, styles.container]}>
       <MapView
         style={{ alignSelf: 'stretch', height: '100%' }}
         region={mapRegion}
@@ -35,7 +35,6 @@ const imageURL = ''
 export default Map;
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     width,
     height
   },

@@ -4,7 +4,7 @@ import { Text, View } from 'react-native';
 const Profile = (props) => {
 	return (
 		<View style={props.windowStyle}>
-			<Text>This would be your profile, if you had one</Text>
+			<Text style={{color:'white'}}>This would be your profile, if you had one</Text>
 		</View>
 	);
 }

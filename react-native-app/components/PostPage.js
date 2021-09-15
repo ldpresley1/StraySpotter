@@ -4,7 +4,7 @@ import { Text, View } from 'react-native';
 const PostPage = (props) => {
 	return (
 		<View style={props.windowStyle}>
-			<Text>This is where you go to post stuff</Text>
+			<Text style={{color:'white'}}>This is where you go to post stuff</Text>
 		</View>
 	);
 }
