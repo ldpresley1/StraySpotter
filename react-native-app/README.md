@@ -12,3 +12,4 @@ to run, execute
 ```bash
 npm start
 ```
+to demo on your phone, download the expo-go app and scan the QR code

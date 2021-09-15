@@ -2,6 +2,8 @@ import React from 'react';
 import { Pressable, Image, StyleSheet, Text, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 
+const {Platform} = React;
+
 const Navigation = (props) => {
   return (
 	<View style={styles.navigation}>
@@ -39,12 +41,13 @@ const Navigation = (props) => {
 
 export default Navigation;
 
+
 const styles = StyleSheet.create({
 	navigation: {
 		width: "100%",
-		position:'absolute',
-		bottom: 0,
-		//flex:.7,
+		// position:'absolute',
+		// bottom: 0,
+		flex: (Platform.OS === 'ios') ? .7 : .5,
 		backgroundColor: '#121212',
 		flexDirection: "row",
 	},
@@ -57,8 +60,8 @@ const styles = StyleSheet.create({
 		// borderRightWidth: 1,
 		alignItems: 'center',
 		justifyContent: 'flex-start',
-		paddingTop:20,
-		paddingBottom: 20
+		paddingTop: (Platform.OS === 'ios') ? 20 : 15,
+		paddingBottom: (Platform.OS === 'ios') ? 0 : 0,
 	},
 	iconStyle: {
 		width:100,
