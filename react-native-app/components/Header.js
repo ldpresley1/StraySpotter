@@ -1,6 +1,10 @@
 import React from 'react';
-import { Pressable, Image, StyleSheet, Text, View } from 'react-native';
+import { Pressable, Image, StyleSheet, Text, View, Appearance } from 'react-native';
+import { Icon } from 'react-native-elements';
 import {useFonts} from 'expo-font';
+import { darkTheme, lightTheme } from './Themes';
+
+const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 
 const Header = (props) => {
 	const [loaded] = useFonts({
@@ -12,6 +16,7 @@ const Header = (props) => {
 	return (
 		<View style={styles.header}>
 			<Text style={styles.headerText}>Stray Spotter</Text>
+			<Icon style={styles.icon} name='search' type='fontisto' color={theme.colors.foreground}/>
 		</View>
 	);
 }
@@ -22,19 +27,22 @@ const styles = StyleSheet.create({
 	header: {
 		width:"100%",
 		position:'relative',
-		// bottom: 0,
 		flex:1,
-		backgroundColor:'#121212',
-		borderColor:'#303030',
+		backgroundColor:theme.colors.background,
+		borderColor:theme.colors.foreground,
 		borderBottomWidth:1,
-		justifyContent:'flex-end',
-		alignItems:'center'
+		justifyContent:'space-around',
+		alignItems:'flex-end',
+		flexDirection:'row'
 	},
 	headerText: {
-		color:'white',
-		fontSize:40,
-		paddingBottom:10,
-		fontFamily:'PacificoRegular',
+		color:theme.colors.foreground,
+		paddingBottom:theme.spacing.s,
+		...theme.textVariants.header,
 		// fontFamily:'SatisfyRegular',
 	},
+	icon: {
+		paddingBottom:theme.spacing.l,
+		...theme.textVariants.header
+	}
 });

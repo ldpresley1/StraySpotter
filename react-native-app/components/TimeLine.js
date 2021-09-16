@@ -1,6 +1,8 @@
 import React from 'react';
-import { Text, View, FlatList, StyleSheet, ScrollView, Image, Dimensions } from 'react-native';
+import { Text, View, FlatList, StyleSheet, ScrollView, Image, Dimensions, Appearance } from 'react-native';
+import { darkTheme, lightTheme } from './Themes';
 
+const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
@@ -159,7 +161,7 @@ const styles = StyleSheet.create({
 	post: {
 		width: screenWidth,
 		flex: 1,
-		paddingBottom:20,
+		paddingBottom:theme.spacing.l,
 		overflow:'hidden'
 	},
 	scrollViewContainer: {
@@ -195,13 +197,13 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 32,
 		textDecorationLine: 'underline',
-		paddingTop:10,
-		color:'white'
+		paddingTop:theme.spacing.s,
+		color:theme.colors.foreground
 	},
 	description: {
-		fontSize: 24,
-		paddingHorizontal:20,
-		paddingBottom:10,
-		color:'white'
+		...theme.textVariants.body,
+		paddingHorizontal:theme.spacing.m,
+		paddingBottom:theme.spacing.s,
+		color:theme.colors.foreground
 	},
 });
