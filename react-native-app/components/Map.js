@@ -5,23 +5,6 @@ import MapView, { Marker } from 'react-native-maps';
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-this.state = {
-  markers: [{
-    title: 'hello',
-    coordinates: {
-      latitude: 3.148561,
-      longitude: 101.652778
-    },
-  },
-  {
-    title: 'hello',
-    coordinates: {
-      latitude: 3.149771,
-      longitude: 101.655449
-    },
-  }]
-}
-
 const Map = (props) => {
 const imageURL = ''
   const [mapRegion, setmapRegion] = useState({
@@ -38,13 +21,13 @@ const imageURL = ''
         style={{ alignSelf: 'stretch', height: '100%' }}
         region={mapRegion}
         showsUserLocation = {true}
+      >
+              <Marker
+            coordinate={{latitude: 33.2083, longitude: -87.5504}}
+            title="this is a marker"
+            description="this is a marker example"
           >
-        {this.state.markers.map(marker => (
-          <MapView.Marker
-            coordinate={marker.coordinates}
-            title={marker.title}
-          />
-        ))}
+          </Marker>
         </MapView>
     </View>
   );
