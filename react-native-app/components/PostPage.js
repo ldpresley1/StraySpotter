@@ -1,6 +1,8 @@
 import React, {useState, useCallback} from 'react';
-import { Text, View, StyleSheet, TextInput } from 'react-native';
+import { Text, Pressable, View, StyleSheet, TextInput, Appearance } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { darkTheme, lightTheme } from './Themes';
+const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 
 
 const PostPage = (props) => {
@@ -35,6 +37,16 @@ const [Breeds, setBreeds] = useState([
   const[breedValue, setbreedValue] = useState(null);
   const[colorValue, setcolorValue] = useState([]);
   const[sizeValue, setsizeValue] = useState(null);
+
+  const [text, onChangeText] = React.useState(null);
+
+  const submitFunction = () => {
+    return(
+        <Text style={{fontSize: 20}}>
+          {"SUBMITTED"}
+        </Text>
+    );
+  }
 
   const ontypeOpen = useCallback(() => {
     setbreedOpen(false);
@@ -71,7 +83,7 @@ const [Breeds, setBreeds] = useState([
       setOpen={settypeOpen}
       setValue={settypeValue}
       setItems={setTypes}
-	  containerStyle={{width:82}}
+	  containerStyle={{marginLeft: 20, width:82}}
 	  zIndex={4000}
       zIndexInverse={1000}
     />
@@ -118,11 +130,24 @@ const [Breeds, setBreeds] = useState([
       setValue={setbreedValue}
 	  //disabled={true}
 	  disabledStyle={{opacity:0}}
-	  containerStyle={{width:200}}
+	  containerStyle={{marginLeft: 20, width:200}}
       setItems={setBreeds}
 	  zIndex={1000}
       zIndexInverse={2000}
-    />     
+    />   
+     <TextInput
+        style={styles.input}
+        multiline
+        numberOfLines={50}
+        onChangeText={onChangeText}
+        value={text}
+        placeholder="Additional details"
+      />  
+      <Pressable onPress={submitFunction} style= {[styles.button]}>
+				<Text style={{fontSize: 20}}> 
+        {'Submit'}
+        </Text> 
+		</Pressable>
             </>
 			</View>
 	);
@@ -131,7 +156,15 @@ const [Breeds, setBreeds] = useState([
 export default PostPage;
 
 const styles = StyleSheet.create({
-	container: {
+	input: {
+    height: 80,
+    width: "90%",
+    margin: 20,
+    borderWidth: 1,
+    padding: 10,
+    backgroundColor: '#fff',
+  },
+  container: {
 		alignContent: 'space-around',
 		width: '100%',
 		flex: 6,
@@ -140,4 +173,24 @@ const styles = StyleSheet.create({
 		marginLeft: 20,
 		marginRight: 20,
 	  },
+    button: {
+      backgroundColor:theme.colors.background,
+      width: "90%",
+      height: "10%",
+      borderWidth: 1,
+      borderColor:theme.colors.foreground,
+      alignItems: 'center',
+      marginLeft: 20,
+      paddingTop: "4%",
+    },
+    buttonActive: {
+      backgroundColor:theme.colors.foreground, // the rest of button is the same
+      flex: 1,
+      borderTopWidth: 1,
+      borderColor:theme.colors.foreground,
+      alignItems: 'center',
+      justifyContent: 'flex-start',
+      paddingTop: (Platform.OS === 'ios') ? 20 : 15,
+      paddingBottom: (Platform.OS === 'ios') ? 0 : 0,
+    },
 });
