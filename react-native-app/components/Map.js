@@ -27,6 +27,8 @@ const imageURL = ''
             title="this is a marker"
             description="this is a marker example"
           >
+
+          <Image source={require('./images/whisper.png')} style={{height: 35, width:35 }} />
           </Marker>
         </MapView>
     </View>
