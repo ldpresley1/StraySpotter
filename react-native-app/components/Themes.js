@@ -1,5 +1,8 @@
 const palette = {
-	blue: '#376CB3',
+	darkOne: '#9E1B32',
+	darkTwo: '#9E1B32',
+	lightOne: '#B4CAE8',
+	lightTwo: '#376CB3',
 	green: '#0ECD9D',
 	red: '#CD0E61',
 	black: '#121212',
@@ -10,7 +13,8 @@ export const lightTheme = {
 	colors: {
 		background: palette.white,
 		foreground: palette.black,
-		primary: palette.blue,
+		primary: palette.lightOne,
+		secondary: palette.lightTwo,
 		success: palette.green,
 		danger: palette.red,
 		failure: palette.red,
@@ -37,6 +41,8 @@ export const darkTheme = {
 	...lightTheme,
 	colors: {
 		...lightTheme.colors,
+		primary: palette.darkOne,
+		secondary:palette.darkTwo,
 		background: palette.black,
 		foreground: palette.white,
 	}

@@ -14,28 +14,28 @@ const Navigation = (props) => {
 			{
 				props.page != 0 ?
 				<Icon style={styles.iconStyle} name='camera' type='fontisto' color={theme.colors.foreground}/> :
-				<Icon style={styles.iconStyle} name='camera' type='fontisto' color={theme.colors.background}/>
+				<Icon style={styles.iconStyle} name='camera' type='fontisto' color={theme.colors.primary}/>
 			}
 		</Pressable>
 		<Pressable onPress={() => props.setPage(1)} style={ props.page != 1 ? styles.button : styles.buttonActive}>
 			{
 				props.page != 1 ?
 				<Icon style={styles.iconStyle} name='map' type='fontisto' color={theme.colors.foreground}/> :
-				<Icon style={styles.iconStyle} name='map' type='fontisto' color={theme.colors.background}/>
+				<Icon style={styles.iconStyle} name='map' type='fontisto' color={theme.colors.primary}/>
 			}
 		</Pressable>
 		<Pressable onPress={() => props.setPage(2)} style={ props.page != 2 ? styles.button : styles.buttonActive}>
 			{
 				props.page != 2 ?
 				<Icon style={styles.iconStyle} name='paw' type='fontisto' color={theme.colors.foreground}/> :
-				<Icon style={styles.iconStyle} name='paw' type='fontisto' color={theme.colors.background}/>
+				<Icon style={styles.iconStyle} name='paw' type='fontisto' color={theme.colors.primary}/>
 			}
 		</Pressable>
 		<Pressable onPress={() => props.setPage(3)} style={ props.page != 3 ? styles.button : styles.buttonActive}>
 			{
 				props.page != 3 ?
 				<Icon style={styles.iconStyle} name='person' type='fontisto' color={theme.colors.foreground}/> :
-				<Icon style={styles.iconStyle} name='person' type='fontisto' color={theme.colors.background}/>
+				<Icon style={styles.iconStyle} name='person' type='fontisto' color={theme.colors.primary}/>
 			}
 		</Pressable>
 	</View>
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
 		paddingBottom: (Platform.OS === 'ios') ? 0 : 0,
 	},
 	buttonActive: {
-		backgroundColor:theme.colors.foreground, // the rest of button is the same
+		backgroundColor:theme.colors.background, // the rest of button is the same
 		flex: 1,
 		borderTopWidth: 1,
 		borderColor:theme.colors.foreground,

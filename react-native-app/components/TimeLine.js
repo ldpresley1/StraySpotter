@@ -35,7 +35,7 @@ const DATA = [
 	},
 	{
 		id: '58694a0f-3da1-471f-bd96-145571e29d73',
-		title: 'Forth Item',
+		title: 'Fourth Item',
 		description: "This is the post's description. This is where you'll put details about the animal.",
 		images: ['https://pyxis.nymag.com/v1/imgs/424/858/e6c66c3a1992e711bca0137b754fea749f-cat-law.rsquare.w700.jpg','https://images-na.ssl-images-amazon.com/images/I/71%2BmDoHG4mL.png'],
 		cord: {lat:33.209953358934264,long:-87.5463168},
@@ -92,7 +92,7 @@ class Post extends React.Component {
 	// Maybe use horizontal flat list for photos
 
 	change = ({nativeEvent}) => {
-		const slide = Math.ceil(nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width);
+		const slide = Math.ceil((nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width)-.5);
 		if (slide != this.state.page) {
 			this.setState({page:slide});
 		}
@@ -115,7 +115,7 @@ class Post extends React.Component {
 								// quickly it checks. It always seems to 
 								// at a very high rate. Do not know what 
 								// number to best put this at
-								scrollEventThrottle={10000}
+								scrollEventThrottle={32}
 								onScroll={this.change}>
 								{
 									this.props.images.map((imageUrl, index) => {
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
 		width: screenWidth,
 		flex: 1,
 		paddingBottom:theme.spacing.m,
-		overflow:'hidden'
+		overflow:'hidden',
 	},
 	scrollViewContainer: {
 		flex:1,
@@ -248,10 +248,11 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		fontSize: 32,
-		textDecorationLine: 'underline',
-		paddingTop:theme.spacing.s,
-		marginLeft:theme.spacing.m,
-		color:theme.colors.foreground
+		// textDecorationLine: 'underline',
+		marginVertical:theme.spacing.s,
+		marginLeft:theme.spacing.s,
+		color:theme.colors.foreground,
+		fontWeight:'bold',
 	},
 	iconStyle: {
 		marginRight:theme.spacing.m,
@@ -259,7 +260,7 @@ const styles = StyleSheet.create({
 	},
 	description: {
 		...theme.textVariants.body,
-		paddingHorizontal:theme.spacing.m,
+		marginHorizontal:theme.spacing.m,
 		paddingBottom:theme.spacing.s,
 		color:theme.colors.foreground
 	},
@@ -269,12 +270,13 @@ const styles = StyleSheet.create({
 		flexWrap:'wrap'
 	},
 	tag: {
-		backgroundColor:theme.colors.background,
+		backgroundColor:theme.colors.primary,
 		color:theme.colors.foreground,
 		padding:theme.spacing.s,
 		marginHorizontal:theme.spacing.s,
-		marginVertical:2,
+		marginVertical:4,
 		borderRadius:10,
-		overflow:'hidden'
+		overflow:'hidden',
+		// fontWeight:'bold',
 	}
 });

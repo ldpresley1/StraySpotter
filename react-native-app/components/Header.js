@@ -16,7 +16,7 @@ const Header = (props) => {
 	return (
 		<View style={styles.header}>
 			<Text style={styles.headerText}>Stray Spotter</Text>
-			<Icon style={styles.icon} name='search' type='fontisto' color={theme.colors.foreground}/>
+			{/* <Icon style={styles.icon} name='search' type='fontisto' color={theme.colors.foreground}/> */}
 		</View>
 	);
 }
