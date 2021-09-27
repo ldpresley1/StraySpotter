@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import { Text, View, FlatList, StyleSheet, ScrollView, Image, Dimensions, Appearance, Pressable } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { darkTheme, lightTheme } from './Themes';
@@ -114,8 +114,8 @@ class Post extends React.Component {
 								// increases performance by lowering how 
 								// quickly it checks. It always seems to 
 								// at a very high rate. Do not know what 
-								// number to best put this at
-								scrollEventThrottle={32}
+								// number it is best to put this at
+								scrollEventThrottle={64}
 								onScroll={this.change}>
 								{
 									this.props.images.map((imageUrl, index) => {
@@ -179,13 +179,20 @@ const renderPost = ({ item }) => (
 );
 
 const TimeLine = (props) => {
+	const flatListRef = useRef();
+	const toTop = () => {
+		flatListRef.current.scrollToOffset({ animated: true, offset: 0 })
+	}
+
 	// notes for timeline render
 	// * ScrollView loads all objects
 	// * FlatList uses lazy rendering
 	// * for section support (don't know what that is), use SectionList 
 	return (
 		<View style={props.windowStyle}>
+			<Pressable style={styles.toTop} onPress={toTop}></Pressable>
 			<FlatList
+				ref={flatListRef}
 				style={{width:screenWidth}}
 				data={DATA}
 				renderItem={renderPost}
@@ -200,6 +207,15 @@ const TimeLine = (props) => {
 export default TimeLine
 
 const styles = StyleSheet.create({
+	toTop: {
+		position:'absolute',
+		height:'11%', // roughly the size of the header
+		width:'100%',
+		// backgroundColor:'red',
+		top:'-11%', // same as top
+		zIndex: 5,
+		opacity: 0,
+	},
 	flatlist: {
 		// DO NOT SET FLEX TO 1
 		// backgroundColor: 'blue',
