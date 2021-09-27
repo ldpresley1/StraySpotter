@@ -1,5 +1,5 @@
 import React, {useState, useCallback} from 'react';
-import { Text, Pressable, View, StyleSheet, TextInput, Appearance } from 'react-native';
+import { Text, Pressable, View, StyleSheet, TextInput, Appearance, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { darkTheme, lightTheme } from './Themes';
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
@@ -70,7 +70,7 @@ const [Breeds, setBreeds] = useState([
 	setcolorOpen(false);
   }, []);
 	return (
-		
+		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} >
 		<View style={[styles.container]}>
 		<>
 		<DropDownPicker
@@ -144,12 +144,13 @@ const [Breeds, setBreeds] = useState([
         placeholder="Additional details"
       />  
       <Pressable onPress={submitFunction} style= {[styles.button]}>
-				<Text style={{fontSize: 20}}> 
+				<Text style={{fontSize: 20, color:theme.colors.foreground}}> 
         {'Submit'}
         </Text> 
 		</Pressable>
             </>
 			</View>
+      </TouchableWithoutFeedback>
 	);
 }
 
