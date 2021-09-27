@@ -4,7 +4,7 @@ layout: default
 permalink: /Code/
 ---
 # Source Code
-*[Code Folder](https://github.com/ldpresley1/StraySpotter/tree/main/react-native-app)
+* [Code Folder](https://github.com/ldpresley1/StraySpotter/tree/main/react-native-app)
 
 # Code Execution
 You need to have downloaded node.js and then download the files from the github.
