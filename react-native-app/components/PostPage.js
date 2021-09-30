@@ -6,7 +6,7 @@ const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 
 
 const PostPage = (props) => {
-const [types, setTypes] = useState([
+const [types, setTypes] = useState([//might move the longer lists into text files for clarity
   {label: 'Dog', value: 'Dog'},
   {label: 'Cat', value: 'Cat'}
 ]);
@@ -33,14 +33,14 @@ const [Breeds, setBreeds] = useState([
   const [colorOpen, setcolorOpen] = useState(false);
   const [sizeOpen, setsizeOpen] = useState(false);
 
-  const[typeValue, settypeValue] = useState(null);
+  const[typeValue, settypeValue] = useState(null);//These are the values for the dropdowns theyre contained 
   const[breedValue, setbreedValue] = useState(null);
   const[colorValue, setcolorValue] = useState([]);
   const[sizeValue, setsizeValue] = useState(null);
 
-  const [text, onChangeText] = React.useState(null);
+  const [text, onChangeText] = React.useState(null);// This is the additional details value 
 
-  const submitFunction = () => {
+  const submitFunction = () => {//this is the function that gets called when the button is pushed
     return(
         <Text style={{fontSize: 20}}>
           {"SUBMITTED"}
