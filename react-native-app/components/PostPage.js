@@ -4,6 +4,10 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { darkTheme, lightTheme } from './Themes';
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 
+import { collection, addDoc } from "firebase/firestore";
+
+//const strayUploadsDB = collection(db, 'StraysFound');
+
 
 const PostPage = (props) => {
 const [types, setTypes] = useState([//might move the longer lists into text files for clarity
@@ -37,6 +41,16 @@ const [Breeds, setBreeds] = useState([
   const[breedValue, setbreedValue] = useState(null);
   const[colorValue, setcolorValue] = useState([]);
   const[sizeValue, setsizeValue] = useState(null);
+
+/*
+  const docRef = addDoc(collection(db, "StraysFound"), {
+    Breed: breedValue,
+    Color: colorValue,
+    Size: sizeValue,
+    type: typeValue
+  });
+  console.log("Document written with ID: ", docRef.id);
+*/
 
   const [text, onChangeText] = React.useState(null);// This is the additional details value 
 
