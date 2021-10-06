@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, Image, StyleSheet, Text, View, Appearance } from 'react-native';
+import { Pressable, Image, StyleSheet, Text, View, Appearance, Platform } from 'react-native';
 import { Icon } from 'react-native-elements';
 import {useFonts} from 'expo-font';
 import { darkTheme, lightTheme } from './Themes';
@@ -26,14 +26,17 @@ export default Header;
 const styles = StyleSheet.create({
 	header: {
 		width:"100%",
+		// React Navigation uses height to calculate, like so
+		//  does not use flex :(
+		height: Platform.OS === 'ios' ? 100 : 80,
 		position:'relative',
-		flex:1,
 		backgroundColor:theme.colors.background,
 		borderColor:theme.colors.foreground,
 		borderBottomWidth:1,
 		justifyContent:'space-around',
 		alignItems:'flex-end',
-		flexDirection:'row'
+		flexDirection:'row',
+		zIndex:3,
 	},
 	headerText: {
 		color:theme.colors.foreground,

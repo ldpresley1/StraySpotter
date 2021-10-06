@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import { Dimensions, View, StyleSheet, Image, Text } from 'react-native';
+import { Dimensions, View, StyleSheet, Image, Text, Appearance } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
+import { darkTheme, lightTheme } from './Themes';
+
+const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -16,7 +19,7 @@ const imageURL = ''
 
 
   return (
-    <View style={[props.windowStyle, styles.container]}>
+    <View style={[styles.window, styles.container]}>
       <MapView
         style={{ alignSelf: 'stretch', height: '100%' }}
         region={mapRegion}
@@ -41,5 +44,12 @@ const styles = StyleSheet.create({
   container: {
     width,
     height
+  },
+  window: {
+    width: '100%',
+    flex: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: theme.colors.background,
   },
 });

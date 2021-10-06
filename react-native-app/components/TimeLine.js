@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import { Text, View, FlatList, StyleSheet, ScrollView, Image, Dimensions, Appearance, Pressable } from 'react-native';
+import { Text, View, FlatList, StyleSheet, ScrollView, Image, Dimensions, Appearance, Pressable, Platform } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { darkTheme, lightTheme } from './Themes';
 import * as Linking from 'expo-linking';
@@ -189,7 +189,7 @@ const TimeLine = (props) => {
 	// * FlatList uses lazy rendering
 	// * for section support (don't know what that is), use SectionList 
 	return (
-		<View style={props.windowStyle}>
+		<View style={styles.window}>
 			<Pressable style={styles.toTop} onPress={toTop}></Pressable>
 			<FlatList
 				ref={flatListRef}
@@ -207,13 +207,22 @@ const TimeLine = (props) => {
 export default TimeLine
 
 const styles = StyleSheet.create({
+	window: {
+		width: '100%',
+		flex: 6,
+		alignItems: 'center',
+		justifyContent: 'center',
+		backgroundColor: theme.colors.background,
+	},
 	toTop: {
 		position:'absolute',
-		height:'11%', // roughly the size of the header
+		height:Platform.OS === 'ios' ? 100 : 80, // roughly the size of the header
 		width:'100%',
 		// backgroundColor:'red',
-		top:'-11%', // same as top
-		zIndex: 5,
+		backgroundColor:'transparent',
+		top:Platform.OS === 'ios' ? -20 : 0, // same as height
+		zIndex: 100,
+		elevation:100,
 		opacity: 0,
 	},
 	flatlist: {
