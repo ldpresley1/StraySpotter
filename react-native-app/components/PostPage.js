@@ -1,6 +1,9 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useMemo, useCallback} from 'react';
 import { Text, Pressable, View, StyleSheet, TextInput, Appearance, TouchableWithoutFeedback, Keyboard } from 'react-native';
+//import { ImageBrowser } from 'expo-image-picker-multiple';
+//import * as MediaLibrary from 'expo-media-library';
 import DropDownPicker from 'react-native-dropdown-picker';
+
 import { darkTheme, lightTheme } from './Themes';
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 
@@ -8,7 +11,7 @@ import { collection, addDoc } from "firebase/firestore";
 
 //const strayUploadsDB = collection(db, 'StraysFound');
 
-
+//MediaLibrary.requestPermissionsAsync();
 const PostPage = (props) => {
 const [types, setTypes] = useState([//might move the longer lists into text files for clarity
   {label: 'Dog', value: 'Dog'},
@@ -61,7 +64,18 @@ const [Breeds, setBreeds] = useState([
         </Text>
     );
   }
-
+  //const widgetSettings = useMemo(
+    //() => ({
+      //  getImageMetaData: false,
+        //initialLoad: 100,
+        //assetsType: [MediaType.photo, MediaType.video],
+        //minSelection: 1,
+        //maxSelection: 3,
+        //portraitCols: 4,
+        //landscapeCols: 4,
+    //}),
+    //[]
+//)
   const ontypeOpen = useCallback(() => {
     setbreedOpen(false);
 	setcolorOpen(false);
@@ -87,6 +101,7 @@ const [Breeds, setBreeds] = useState([
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} >
 		<View style={[styles.container]}>
 		<>
+  
 		<DropDownPicker
       open={typeOpen}
 	  onOpen={ontypeOpen}
@@ -97,7 +112,7 @@ const [Breeds, setBreeds] = useState([
       setOpen={settypeOpen}
       setValue={settypeValue}
       setItems={setTypes}
-	  containerStyle={{marginLeft: 20, width:82}}
+	  containerStyle={{width:82}}
 	  zIndex={4000}
       zIndexInverse={1000}
     />
@@ -144,7 +159,7 @@ const [Breeds, setBreeds] = useState([
       setValue={setbreedValue}
 	  //disabled={true}
 	  disabledStyle={{opacity:0}}
-	  containerStyle={{marginLeft: 20, width:200}}
+	  containerStyle={{width:200}}
       setItems={setBreeds}
 	  zIndex={1000}
       zIndexInverse={2000}
@@ -174,7 +189,6 @@ const styles = StyleSheet.create({
 	input: {
     height: 80,
     width: "90%",
-    margin: 20,
     borderWidth: 1,
     padding: 10,
     backgroundColor: '#fff',
@@ -195,7 +209,6 @@ const styles = StyleSheet.create({
       borderWidth: 1,
       borderColor:theme.colors.foreground,
       alignItems: 'center',
-      marginLeft: 20,
       paddingTop: "4%",
     },
     buttonActive: {
