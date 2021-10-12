@@ -7,7 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { Icon } from 'react-native-elements';
 
-
+import ImageBrowser from './components/ImageBrowserScreen';
 import Header from './components/Header';
 import Navigation from './components/Navigation';
 import Profile from './components/Profile';
@@ -17,9 +17,19 @@ import PostPage from './components/PostPage';
 import { darkTheme, lightTheme } from './components/Themes';
 
 const Tab = createBottomTabNavigator();
-
+const Stack = createNativeStackNavigator();
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme;
-
+function PostStackScreens(){
+	return (
+		<Stack.Navigator>
+			<Stack.Screen name = "PostPage" component = {PostPage} />
+			<Stack.Screen name='ImageBrowser' component={ImageBrowser}
+        			options={{
+        			title: 'Selected 0 files'
+      				}} />
+		</Stack.Navigator>
+	)
+}
 export default function App() {
 	return (
 		<NavigationContainer>
@@ -65,7 +75,7 @@ export default function App() {
 					initialRouteName: "Map"
 			  	})}
 			>
-				<Tab.Screen name="PostPage" component={PostPage} />
+        		<Tab.Screen name='PostStackScreens' component={PostStackScreens}/>
 				<Tab.Screen name="Map" component={Map} />
 				<Tab.Screen name="TimeLine" component={TimeLine} />
 				<Tab.Screen name="Profile" component={Profile} />

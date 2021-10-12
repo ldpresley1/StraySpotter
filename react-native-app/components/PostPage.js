@@ -1,7 +1,7 @@
-import React, {useState, useMemo, useCallback} from 'react';
-import { Text, Pressable, View, StyleSheet, TextInput, Appearance, TouchableWithoutFeedback, Keyboard } from 'react-native';
-//import { ImageBrowser } from 'expo-image-picker-multiple';
-//import * as MediaLibrary from 'expo-media-library';
+import React, {useState,  useCallback} from 'react';
+import { Text, Pressable, Button, View, StyleSheet, Image, ScrollView, TextInput, Appearance, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { ImageBrowser } from 'expo-image-picker-multiple';
+import * as MediaLibrary from 'expo-media-library';//THIS IS FOR PERMISSIONS
 import DropDownPicker from 'react-native-dropdown-picker';
 
 import { darkTheme, lightTheme } from './Themes';
@@ -11,7 +11,7 @@ import { collection, addDoc } from "firebase/firestore";
 
 //const strayUploadsDB = collection(db, 'StraysFound');
 
-//MediaLibrary.requestPermissionsAsync();
+MediaLibrary.requestPermissionsAsync();//working
 const PostPage = (props) => {
 const [types, setTypes] = useState([//might move the longer lists into text files for clarity
   {label: 'Dog', value: 'Dog'},
@@ -54,7 +54,7 @@ const [Breeds, setBreeds] = useState([
   });
   console.log("Document written with ID: ", docRef.id);
 */
-
+const { navigate } = props.navigation;
   const [text, onChangeText] = React.useState(null);// This is the additional details value 
 
   const submitFunction = () => {//this is the function that gets called when the button is pushed
@@ -64,18 +64,7 @@ const [Breeds, setBreeds] = useState([
         </Text>
     );
   }
-  //const widgetSettings = useMemo(
-    //() => ({
-      //  getImageMetaData: false,
-        //initialLoad: 100,
-        //assetsType: [MediaType.photo, MediaType.video],
-        //minSelection: 1,
-        //maxSelection: 3,
-        //portraitCols: 4,
-        //landscapeCols: 4,
-    //}),
-    //[]
-//)
+ 
   const ontypeOpen = useCallback(() => {
     setbreedOpen(false);
 	setcolorOpen(false);
@@ -101,7 +90,10 @@ const [Breeds, setBreeds] = useState([
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} >
 		<View style={[styles.container]}>
 		<>
-  
+    <Button
+          title="Open image browser"
+          onPress={() => { navigate('ImageBrowser'); }}
+        />
 		<DropDownPicker
       open={typeOpen}
 	  onOpen={ontypeOpen}
