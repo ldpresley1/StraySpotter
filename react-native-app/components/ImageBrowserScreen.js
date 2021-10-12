@@ -24,7 +24,7 @@ export default class ImageBrowserScreen extends Component {
           type: 'image/jpg'
         })
       }
-      navigation.navigate('Main', {photos: cPhotos});
+      navigation.navigate('PostPage', {photos: cPhotos});
     })
     .catch((e) => console.log(e));
   };
@@ -64,7 +64,7 @@ export default class ImageBrowserScreen extends Component {
     return (
       <View style={[styles.flex, styles.container]}>
         <ImageBrowser
-          max={4}
+          max={5}
           onChange={this.updateHandler}
           callback={this.imagesCallback}
           renderSelectedComponent={this.renderSelectedComponent}
@@ -86,8 +86,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   countBadge: {
-    paddingHorizontal: 8.6,
-    paddingVertical: 5,
+    paddingHorizontal: 4,
+    paddingVertical: 0,
     borderRadius: 50,
     position: 'absolute',
     right: 3,

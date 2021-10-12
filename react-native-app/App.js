@@ -22,7 +22,7 @@ const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme;
 function PostStackScreens(){
 	return (
 		<Stack.Navigator>
-			<Stack.Screen name = "PostPage" component = {PostPage} />
+			<Stack.Screen name = "PostPage" component = {PostPage} options={{headerShown: false,}} />
 			<Stack.Screen name='ImageBrowser' component={ImageBrowser}
         			options={{
         			title: 'Selected 0 files'
@@ -49,7 +49,7 @@ export default function App() {
 						let iconName;
 		
 						switch (route.name) {
-							case 'PostPage':
+							case 'PostStackScreens':
 								iconName = 'camera';
 								break;
 							case 'Map':

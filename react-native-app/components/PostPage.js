@@ -90,10 +90,11 @@ const { navigate } = props.navigation;
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} >
 		<View style={[styles.container]}>
 		<>
-    <Button
-          title="Open image browser"
-          onPress={() => { navigate('ImageBrowser'); }}
-        />
+    <Pressable style = {[styles.button]} onPress={() => { navigate('ImageBrowser'); }}>
+          <Text style={{fontSize: 15, color:theme.colors.foreground}}> 
+             {'Open Image Browser'}
+          </Text>
+    </Pressable>
 		<DropDownPicker
       open={typeOpen}
 	  onOpen={ontypeOpen}
@@ -164,7 +165,7 @@ const { navigate } = props.navigation;
         value={text}
         placeholder="Additional details"
       />  
-      <Pressable onPress={submitFunction} style= {[styles.button]}>
+      <Pressable onPress={submitFunction} style= {[styles.buttonActive]}>
 				<Text style={{fontSize: 20, color:theme.colors.foreground}}> 
         {'Submit'}
         </Text> 
@@ -196,21 +197,22 @@ const styles = StyleSheet.create({
 	  },
     button: {
       backgroundColor:theme.colors.background,
+      width: "50%",
+      height: "8%",
+      borderWidth: 1,
+      borderColor:theme.colors.foreground,
+      alignItems: 'center',
+      paddingTop: "4%",
+      marginLeft: "20%",
+      marginRight: "20%"
+    },
+    buttonActive: {
+      backgroundColor:theme.colors.background,
       width: "90%",
       height: "10%",
       borderWidth: 1,
       borderColor:theme.colors.foreground,
       alignItems: 'center',
       paddingTop: "4%",
-    },
-    buttonActive: {
-      backgroundColor:theme.colors.foreground, // the rest of button is the same
-      flex: 1,
-      borderTopWidth: 1,
-      borderColor:theme.colors.foreground,
-      alignItems: 'center',
-      justifyContent: 'flex-start',
-      paddingTop: (Platform.OS === 'ios') ? 20 : 15,
-      paddingBottom: (Platform.OS === 'ios') ? 0 : 0,
     },
 });
