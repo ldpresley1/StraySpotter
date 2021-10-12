@@ -17,9 +17,8 @@ const Profile = ({navigation, route}) => {
 	});
 
 	if (route.params?.latitude) {
-		// if something has changed, update the state
-		// if we always update the state, it will make an 
-		//  infinite loop
+		// what it does: check if something has changed, update the state
+		// why: if we always update the state, it will make an infinite loop
 		if (route.params.latitude != markerData.latitude || route.params.longitude != markerData.longitude) {
 			setMarkerData({
 				latitude: route.params.latitude,
