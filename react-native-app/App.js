@@ -16,6 +16,33 @@ import Map from './components/Map';
 import PostPage from './components/PostPage';
 import { darkTheme, lightTheme } from './components/Themes';
 
+//START FIREBASE STUFF
+import { firebase } from '@firebase/app'
+import {firestore} from 'firebase/firestore'
+//import {initializeApp} from 'firebase/app';
+//import { initializeApp } from 'firebase/app';
+//import { getDatabase } from 'firebase/database';
+//import { getDatabase } from "firebase/firestore";
+
+// Set the configuration for your app
+/*const firebaseConfig = {
+  apiKey: "AIzaSyBvxF2PzJFjhiJUQxzSyt67oEQBRo56fUA",
+  authDomain: "stray-spotter.firebaseapp.com",
+  databaseURL: "https://stray-spotter.firebaseio.com/",
+  storageBucket: "stray-spotter.appspot.com"
+};
+
+firebase.initializeApp(firebaseConfig);*/
+//const newApp = firebase.getFirestore();
+
+/*firebase.firestore();
+export firebase;*/
+
+// Get a reference to the database service
+//const database = getDatabase(app);
+
+//END FIREBASE STUFF
+
 const Tab = createBottomTabNavigator();
 
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme;

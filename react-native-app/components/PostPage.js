@@ -7,11 +7,69 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { darkTheme, lightTheme } from './Themes';
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 
-import { collection, addDoc } from "firebase/firestore";
+//Realtime database
 
-//const strayUploadsDB = collection(db, 'StraysFound');
+
+//firebase stuff
+import firebase from '@firebase/app';
+import firestore from '@firebase/firestore';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBvxF2PzJFjhiJUQxzSyt67oEQBRo56fUA",
+  authDomain: "stray-spotter.firebaseapp.com",
+  databaseURL: "https://stray-spotter.firebaseio.com/",
+  projectId: "stray-spotter",
+  storageBucket: "stray-spotter.appspot.com"
+};
+
+/*
+  apiKey: 'api-key',
+  authDomain: 'project-id.firebaseapp.com',
+  databaseURL: 'https://project-id.firebaseio.com',
+  projectId: 'project-id',
+  storageBucket: 'project-id.appspot.com',
+  messagingSenderId: 'sender-id',
+  appId: 'app-id',
+  measurementId: 'G-measurement-id',
+*/
+
+const app = firebase.initializeApp(firebaseConfig);
+
+const database = firebase.firestore();
+
+
+/*await setDoc(doc(database, "StraysFound", "Temp2"), {
+  employment: "plumber",
+  outfitColor: "red",
+  specialAttack: "fireball"
+});*/
+
+/*CORRECT FORMAT NEEDED TO ADD SOMETHING!!
+firebase.firestore()
+  .collection('StraysFound')
+  .add({
+    name: 'Ada Lovelace',
+    age: 30,
+  })
+  .then(() => {
+    console.log('User added!');
+  });*/
+
+
+ /*firebase.firestore()
+     .collection('StraysFound')
+     .add({
+        Breed: 'tempBreed',
+        Color: 'tempColor',
+        Size: 'tempSize',
+        Type: 'tempType',
+     })
+      .then(() => {
+         console.log('Stray added!');
+       });*/
 
 //MediaLibrary.requestPermissionsAsync();
+
 const PostPage = (props) => {
 const [types, setTypes] = useState([//might move the longer lists into text files for clarity
   {label: 'Dog', value: 'Dog'},
@@ -45,20 +103,23 @@ const [Breeds, setBreeds] = useState([
   const[colorValue, setcolorValue] = useState([]);
   const[sizeValue, setsizeValue] = useState(null);
 
-/*
-  const docRef = addDoc(collection(db, "StraysFound"), {
-    Breed: breedValue,
-    Color: colorValue,
-    Size: sizeValue,
-    type: typeValue
-  });
-  console.log("Document written with ID: ", docRef.id);
-*/
-
   const [text, onChangeText] = React.useState(null);// This is the additional details value 
 
   const submitFunction = () => {//this is the function that gets called when the button is pushed
     return(
+
+       firebase.firestore()
+           .collection('StraysFound')
+           .add({
+              Breed: breedValue,
+              Color: colorValue,
+              Size: sizeValue,
+              Type: typeValue,
+           })
+            .then(() => {
+               console.log('Stray added!');
+             }),
+
         <Text style={{fontSize: 20}}>
           {"SUBMITTED"}
         </Text>
