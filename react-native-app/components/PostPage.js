@@ -3,6 +3,7 @@ import { Text, Pressable, View, StyleSheet, TextInput, Appearance, TouchableWith
 //import { ImageBrowser } from 'expo-image-picker-multiple';
 //import * as MediaLibrary from 'expo-media-library';
 import DropDownPicker from 'react-native-dropdown-picker';
+import dbo from './dataStorage';
 
 import { darkTheme, lightTheme } from './Themes';
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
@@ -11,16 +12,7 @@ const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 
 
 //firebase stuff
-import firebase from '@firebase/app';
-import firestore from '@firebase/firestore';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBvxF2PzJFjhiJUQxzSyt67oEQBRo56fUA",
-  authDomain: "stray-spotter.firebaseapp.com",
-  databaseURL: "https://stray-spotter.firebaseio.com/",
-  projectId: "stray-spotter",
-  storageBucket: "stray-spotter.appspot.com"
-};
 
 /*
   apiKey: 'api-key',
@@ -33,9 +25,7 @@ const firebaseConfig = {
   measurementId: 'G-measurement-id',
 */
 
-const app = firebase.initializeApp(firebaseConfig);
 
-const database = firebase.firestore();
 
 
 /*await setDoc(doc(database, "StraysFound", "Temp2"), {
@@ -70,7 +60,7 @@ firebase.firestore()
 
 //MediaLibrary.requestPermissionsAsync();
 
-const PostPage = (props) => {
+const PostPage = ({route, navigation}) => {
 const [types, setTypes] = useState([//might move the longer lists into text files for clarity
   {label: 'Dog', value: 'Dog'},
   {label: 'Cat', value: 'Cat'}
@@ -108,13 +98,14 @@ const [Breeds, setBreeds] = useState([
   const submitFunction = () => {//this is the function that gets called when the button is pushed
     return(
 
-       firebase.firestore()
+      dbo.firebase.firestore()
            .collection('StraysFound')
            .add({
               Breed: breedValue,
               Color: colorValue,
               Size: sizeValue,
               Type: typeValue,
+              Description: text,
            })
             .then(() => {
                console.log('Stray added!');

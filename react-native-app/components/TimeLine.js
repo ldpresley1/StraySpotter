@@ -1,8 +1,10 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import { Text, View, FlatList, StyleSheet, ScrollView, Image, Dimensions, Appearance, Pressable, Platform } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { darkTheme, lightTheme } from './Themes';
 import * as Linking from 'expo-linking';
+
+import dbo, {getStrays} from "./dataStorage";
 
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 const screenWidth = Dimensions.get('window').width;
@@ -178,30 +180,54 @@ const renderPost = ({ item }) => (
 	<Post description={item.description} title={item.title} images={item.images} cord={item.cord} tags={item.tags}/>
 );
 
-const TimeLine = (props) => {
-	const flatListRef = useRef();
-	const toTop = () => {
-		flatListRef.current.scrollToOffset({ animated: true, offset: 0 })
+class TimeLine extends React.Component {
+// const TimeLine = ({route, navigation}) => {
+	state = {
+		strayList:[],
+		loaded:false,
+	};
+
+	componentDidMount() {
+		if (this.state.loaded == false) {
+			let tempVar = dbo.database.collection("FakeStrays");
+			let DATA = [];
+			tempVar.get().then((querySnapshot) => {
+				querySnapshot.forEach((doc) => {
+					DATA.push({...doc.data(),id:doc.id});
+				});
+				// console.log(querySnapshot);
+				this.setState({strayList:DATA,loaded:true});
+			});
+		}
 	}
 
-	// notes for timeline render
-	// * ScrollView loads all objects
-	// * FlatList uses lazy rendering
-	// * for section support (don't know what that is), use SectionList 
-	return (
-		<View style={styles.window}>
-			<Pressable style={styles.toTop} onPress={toTop}></Pressable>
-			<FlatList
-				ref={flatListRef}
-				style={{width:screenWidth}}
-				data={DATA}
-				renderItem={renderPost}
-				keyExtractor={post => post.id}
-				numColumns={1}
-				contentContainerStyle={styles.flatlist}
-			/>
-		</View>
-	);
+	render() {
+		// const flatListRef = useRef();
+		// const toTop = () => {
+		// 	flatListRef.current.scrollToOffset({ animated: true, offset: 0 })
+		// }
+				
+
+		// notes for timeline render
+		// * ScrollView loads all objects
+		// * FlatList uses lazy rendering
+		// * for section support (don't know what that is), use SectionList 
+		return (
+			<View style={styles.window}>
+				{/* <Pressable style={styles.toTop} onPress={toTop}></Pressable> */}
+				<Pressable style={styles.toTop}></Pressable>
+				<FlatList
+					// ref={flatListRef}
+					style={{width:screenWidth}}
+					data={this.state.strayList}
+					renderItem={renderPost}
+					keyExtractor={post => post.id}
+					numColumns={1}
+					contentContainerStyle={styles.flatlist}
+				/>
+			</View>
+		);
+	}
 }
 
 export default TimeLine

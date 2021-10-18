@@ -17,8 +17,8 @@ import PostPage from './components/PostPage';
 import { darkTheme, lightTheme } from './components/Themes';
 
 //START FIREBASE STUFF
-import { firebase } from '@firebase/app'
-import {firestore} from 'firebase/firestore'
+// import { firebase } from '@firebase/app'
+// import {firestore} from 'firebase/firestore'
 //import {initializeApp} from 'firebase/app';
 //import { initializeApp } from 'firebase/app';
 //import { getDatabase } from 'firebase/database';
@@ -102,7 +102,6 @@ export default function App() {
 	);
 }
 
-const darkMode = Appearance.getColorScheme() === 'dark';
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
