@@ -7,7 +7,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { Icon } from 'react-native-elements';
 
-
 import Header from './components/Header';
 import Navigation from './components/Navigation';
 import Profile from './components/Profile';
@@ -15,33 +14,6 @@ import TimeLine from './components/TimeLine';
 import Map from './components/Map';
 import PostPage from './components/PostPage';
 import { darkTheme, lightTheme } from './components/Themes';
-
-//START FIREBASE STUFF
-// import { firebase } from '@firebase/app'
-// import {firestore} from 'firebase/firestore'
-//import {initializeApp} from 'firebase/app';
-//import { initializeApp } from 'firebase/app';
-//import { getDatabase } from 'firebase/database';
-//import { getDatabase } from "firebase/firestore";
-
-// Set the configuration for your app
-/*const firebaseConfig = {
-  apiKey: "AIzaSyBvxF2PzJFjhiJUQxzSyt67oEQBRo56fUA",
-  authDomain: "stray-spotter.firebaseapp.com",
-  databaseURL: "https://stray-spotter.firebaseio.com/",
-  storageBucket: "stray-spotter.appspot.com"
-};
-
-firebase.initializeApp(firebaseConfig);*/
-//const newApp = firebase.getFirestore();
-
-/*firebase.firestore();
-export firebase;*/
-
-// Get a reference to the database service
-//const database = getDatabase(app);
-
-//END FIREBASE STUFF
 
 const Tab = createBottomTabNavigator();
 
@@ -102,6 +74,7 @@ export default function App() {
 	);
 }
 
+const darkMode = Appearance.getColorScheme() === 'dark';
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,

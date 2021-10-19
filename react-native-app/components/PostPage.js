@@ -8,56 +8,6 @@ import dbo from './dataStorage';
 import { darkTheme, lightTheme } from './Themes';
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 
-//Realtime database
-
-
-//firebase stuff
-
-
-/*
-  apiKey: 'api-key',
-  authDomain: 'project-id.firebaseapp.com',
-  databaseURL: 'https://project-id.firebaseio.com',
-  projectId: 'project-id',
-  storageBucket: 'project-id.appspot.com',
-  messagingSenderId: 'sender-id',
-  appId: 'app-id',
-  measurementId: 'G-measurement-id',
-*/
-
-
-
-
-/*await setDoc(doc(database, "StraysFound", "Temp2"), {
-  employment: "plumber",
-  outfitColor: "red",
-  specialAttack: "fireball"
-});*/
-
-/*CORRECT FORMAT NEEDED TO ADD SOMETHING!!
-firebase.firestore()
-  .collection('StraysFound')
-  .add({
-    name: 'Ada Lovelace',
-    age: 30,
-  })
-  .then(() => {
-    console.log('User added!');
-  });*/
-
-
- /*firebase.firestore()
-     .collection('StraysFound')
-     .add({
-        Breed: 'tempBreed',
-        Color: 'tempColor',
-        Size: 'tempSize',
-        Type: 'tempType',
-     })
-      .then(() => {
-         console.log('Stray added!');
-       });*/
-
 //MediaLibrary.requestPermissionsAsync();
 
 const PostPage = ({route, navigation}) => {

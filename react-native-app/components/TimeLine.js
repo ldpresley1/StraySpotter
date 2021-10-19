@@ -10,6 +10,25 @@ const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
+
+dbo.firebase.firestore()
+  .collection('StraysFound')
+  .doc('tm1qDWpDw314lRRhPkzu')
+  .get()
+  .then(documentSnapshot => {
+    console.log('User exists: ', documentSnapshot.exists);
+
+    if (documentSnapshot.exists) {
+      console.log('User data: ', documentSnapshot.data());
+    }
+  });
+
+
+
+
+
+
+
 const DATA = [
 	{
 		id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
