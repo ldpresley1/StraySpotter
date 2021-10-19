@@ -54,34 +54,40 @@ const [Breeds, setBreeds] = useState([
 
   const submitFunction = () => {//this is the function that gets called when the button is pushed
     return(
+      console.log(colorValue),
       tagsList = colorValue, //THIS HAS TO GO FIRST so that we don't get nested arrays
+      //console.log(typeValue),
       tagsList.push(typeValue),
       tagsList.push(breedValue),
       tagsList.push(sizeValue),
-      //console.log(tagsList), //TEST
+      console.log(tagsList), //TEST
 
       dbo.firebase.firestore()
            .collection('StraysFound')
            .add({
-              Breed: breedValue,
-              Color: colorValue,
-              Size: sizeValue,
-              Type: typeValue,
-              Description: text,
-              Title: title,
-              Tags: tagsList
-
+              description: text,
+              title: title,
+              tags: tagsList,
+              id: 42, //Temp Data
+              cord: {lat:33.209953358934264,long:-87.5463168}, //TEMP DATA
+              images: ["https://drive.google.com/file/d/1qNcYmOapTKTs2eARJCa6hOvFijK5ykll/view?usp=sharing]", "https://drive.google.com/file/d/1t71FPVZGB5jPaynUaQ8wYXwlnc1pTdK0/view?usp=sharing"], //TEMP DATA
            })
             .then(() => {
                console.log('Stray added!'); //TEST
              }),
-        tagsList = [],
-
+        emptyArray(tagsList),
+        console.log(tagsList),
         <Text style={{fontSize: 20}}>
           {"SUBMITTED"}
         </Text>
     );
   }
+
+  function emptyArray(array){
+    while(array.length > 0)
+        array.pop();
+  }
+
   //const widgetSettings = useMemo(
     //() => ({
       //  getImageMetaData: false,

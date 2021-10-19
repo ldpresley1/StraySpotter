@@ -208,7 +208,7 @@ class TimeLine extends React.Component {
 
 	componentDidMount() {
 		if (this.state.loaded == false) {
-			let tempVar = dbo.database.collection("FakeStrays");
+			let tempVar = dbo.database.collection("StraysFound");
 			let DATA = [];
 			tempVar.get().then((querySnapshot) => {
 				querySnapshot.forEach((doc) => {
