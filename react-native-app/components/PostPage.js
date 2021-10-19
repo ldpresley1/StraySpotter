@@ -4,12 +4,14 @@ import { Text, Pressable, View, StyleSheet, TextInput, Appearance, TouchableWith
 //import * as MediaLibrary from 'expo-media-library';
 import DropDownPicker from 'react-native-dropdown-picker';
 import dbo from './dataStorage';
+import MapView, { Marker } from 'react-native-maps';
 
 import { darkTheme, lightTheme } from './Themes';
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 
 //MediaLibrary.requestPermissionsAsync();
 
+var tagsList = [];
 const PostPage = ({route, navigation}) => {
 const [types, setTypes] = useState([//might move the longer lists into text files for clarity
   {label: 'Dog', value: 'Dog'},
@@ -43,10 +45,20 @@ const [Breeds, setBreeds] = useState([
   const[colorValue, setcolorValue] = useState([]);
   const[sizeValue, setsizeValue] = useState(null);
 
-  const [text, onChangeText] = React.useState(null);// This is the additional details value 
+  const [text, onChangeText] = React.useState(null);// This is the additional details value
+  const [title, titleText] = React.useState(null);
+  const [location, locationText] = React.useState(null);
+  const [locationButton, locationButtonInfo] = React.useState(null);
+
+
 
   const submitFunction = () => {//this is the function that gets called when the button is pushed
     return(
+      tagsList = colorValue, //THIS HAS TO GO FIRST so that we don't get nested arrays
+      tagsList.push(typeValue),
+      tagsList.push(breedValue),
+      tagsList.push(sizeValue),
+      //console.log(tagsList), //TEST
 
       dbo.firebase.firestore()
            .collection('StraysFound')
@@ -56,10 +68,14 @@ const [Breeds, setBreeds] = useState([
               Size: sizeValue,
               Type: typeValue,
               Description: text,
+              Title: title,
+              Tags: tagsList
+
            })
             .then(() => {
-               console.log('Stray added!');
+               console.log('Stray added!'); //TEST
              }),
+        tagsList = [],
 
         <Text style={{fontSize: 20}}>
           {"SUBMITTED"}
@@ -103,8 +119,14 @@ const [Breeds, setBreeds] = useState([
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} >
 		<View style={[styles.container]}>
 		<>
-  
-		<DropDownPicker
+   <TextInput
+      style={styles.titleStyle}
+      multiline
+      onChangeText={titleText}
+      value={title}
+      placeholder="Post Title"
+    />
+	<DropDownPicker
       open={typeOpen}
 	  onOpen={ontypeOpen}
 	  defaultNull
@@ -114,7 +136,7 @@ const [Breeds, setBreeds] = useState([
       setOpen={settypeOpen}
       setValue={settypeValue}
       setItems={setTypes}
-	  containerStyle={{width:82}}
+	  containerStyle={{width:90}}
 	  zIndex={4000}
       zIndexInverse={1000}
     />
@@ -149,7 +171,7 @@ const [Breeds, setBreeds] = useState([
 	  zIndex={2000}
       zIndexInverse={1000}
     />
-           <DropDownPicker
+     <DropDownPicker
       open={breedOpen}
 	  onOpen={onbreedOpen}
 	  defaultNull
@@ -165,7 +187,7 @@ const [Breeds, setBreeds] = useState([
       setItems={setBreeds}
 	  zIndex={1000}
       zIndexInverse={2000}
-    />   
+    />
      <TextInput
         style={styles.input}
         multiline
@@ -173,7 +195,11 @@ const [Breeds, setBreeds] = useState([
         onChangeText={onChangeText}
         value={text}
         placeholder="Additional details"
-      />  
+      />
+    <Pressable
+      style={styles.button} onPress={() => navigation.navigate('CustomGeo')}>
+        <Text style={styles.basicText}>Select Location</Text>
+    </Pressable>
       <Pressable onPress={submitFunction} style= {[styles.button]}>
 				<Text style={{fontSize: 20, color:theme.colors.foreground}}> 
         {'Submit'}
@@ -194,6 +220,24 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     backgroundColor: '#fff',
+  },
+  basicText: {
+    fontSize: 15,
+    color:theme.colors.foreground,
+  },
+  titleStyle:{
+        height: 50,
+        width: "90%",
+        borderWidth: 2,
+        padding: 10,
+        backgroundColor: '#fff',
+  },
+  locationStyle:{
+          height: 50,
+          width: "55%",
+          borderWidth: 1,
+          padding: 10,
+          backgroundColor: '#fff',
   },
   container: {
 		alignContent: 'space-around',
