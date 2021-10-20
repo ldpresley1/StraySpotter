@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import { StyleSheet, Text, View, Appearance } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { Icon } from 'react-native-elements';
@@ -17,7 +18,7 @@ import PostPage from './components/PostPage';
 import { darkTheme, lightTheme } from './components/Themes';
 
 const Tab = createBottomTabNavigator();
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme;
 function PostStackScreens(){
 	return (
