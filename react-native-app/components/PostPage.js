@@ -13,8 +13,10 @@ const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 //MediaLibrary.requestPermissionsAsync();
 
 var tagsList = [];
+var locationButtonText = "Select Location";
 const PostPage = ({route, navigation}) => {
 
+var submitButtonText = "Submit";
 const [markerData,setMarkerData] = useState({
     latitude: 33.2083,
     longitude: -87.5504
@@ -71,13 +73,10 @@ const [types, setTypes] = useState([//might move the longer lists into text file
 
   const submitFunction = () => {//this is the function that gets called when the button is pushed
     return(
-      //console.log(colorValue),
       tagsList = colorValue, //THIS HAS TO GO FIRST so that we don't get nested arrays
-      //console.log(typeValue),
       tagsList.push(typeValue),
-      //tagsList.push(breedValue),
+      //tagsList.push(breedValue), //Commented out until we figure out breed values
       tagsList.push(sizeValue),
-      //console.log(tagsList), //TEST
 
       dbo.firebase.firestore()
            .collection('StraysFound')
@@ -87,14 +86,13 @@ const [types, setTypes] = useState([//might move the longer lists into text file
               tags: tagsList,
               id: 42, //Temp Data
               cord: {lat: markerData.latitude, long: markerData.longitude},
-              //cord: {lat:33.209953358934264,long:-87.5463168}, //TEMP DATA
               images: ["https://drive.google.com/file/d/1qNcYmOapTKTs2eARJCa6hOvFijK5ykll/view?usp=sharing]", "https://drive.google.com/file/d/1t71FPVZGB5jPaynUaQ8wYXwlnc1pTdK0/view?usp=sharing"], //TEMP DATA
            })
             .then(() => {
                console.log('Stray added!'); //TEST
              }),
         emptyArray(tagsList),
-       // console.log(tagsList),
+        submitButtonText = "SUBMITTED!",
         <Text style={{fontSize: 20}}>
           {"SUBMITTED"}
         </Text>
@@ -105,29 +103,6 @@ const [types, setTypes] = useState([//might move the longer lists into text file
     while(array.length > 0)
         array.pop();
   }
-
-
-//BREAKS THE RULES OF HOOKS
-/*
-  const breedSelector = () => {
-          console.log('Entering breedSelector function');
-          if (typeValue === 'Dog'){
-            return( [Breeds, setBreeds] = useState([
-            	{label: 'dog breeds', value: 'temp dog breed'}
-            ]));
-          }
-          else if (typeValue == 'Cat'){
-            return( [Breeds, setBreeds] = useState([
-                {label: 'cat breeds', value: 'temp cat breed'}
-            ]));
-          }else{
-            return([Breeds, setBreeds] = useState([
-                {label: 'please select type first', value: 'temp'}
-            ]));
-          }
-  }*/
-
-
 
   //const widgetSettings = useMemo(
     //() => ({
@@ -245,21 +220,21 @@ const [types, setTypes] = useState([//might move the longer lists into text file
       />
     <Pressable
       style={styles.button} onPress={() => navigation.navigate('CustomGeo')}>
-        <Text style={styles.buttonText}>Select Location</Text>
+        <Text style={styles.buttonText}>{locationButtonText}</Text>
     </Pressable>
     <Text style={styles.basicText}>Lat: {markerData.latitude}</Text>
     <Text style={styles.basicText}>Long: {markerData.longitude}</Text>
-      <Pressable onPress={submitFunction} style= {[styles.button]}>
-				<Text style={{fontSize: 20, color:theme.colors.foreground}}> 
-        {'Submit'}
+    <Pressable onPress={submitFunction} style= {[styles.button]}>
+    	<Text style={styles.buttonText}>{submitButtonText}
         </Text> 
-		</Pressable>
-            </>
-			</View>
-      </TouchableWithoutFeedback>
+	</Pressable>
+    </>
+    </View>
+    </TouchableWithoutFeedback>
 	);
 }
 
+//Custom location grabber
 const CustomGeolocation = (props) => {
 	const [mapRegion, setMapRegion] = useState({
 		latitude: 33.2083,
@@ -296,6 +271,7 @@ const CustomGeolocation = (props) => {
 			</MapView>
 			<Pressable style={styles.mapButton} onPress={() => {
 					props.navigation.navigate('Uploads', markerData);
+					locationButtonText = "Location Saved!";
 				}}>
 				{/* there is no cancel */}
 				<Text style={styles.buttonText}>Save Location</Text>
@@ -314,7 +290,6 @@ function App() {
 		</Stack.Navigator>
 	);
 }
-
 
 export default App;
 
