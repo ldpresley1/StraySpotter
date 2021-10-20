@@ -25,7 +25,7 @@ const imageURL = ''
         region={mapRegion}
         showsUserLocation = {true}
       >
-              <Marker
+          <Marker
             coordinate={{latitude: 33.2083, longitude: -87.5504}}
             title="this is a marker"
             description="this is a marker example"
