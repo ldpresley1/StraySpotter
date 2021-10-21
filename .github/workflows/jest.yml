@@ -31,7 +31,7 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: Jest Test
+        working-directory: ./react-native-app
         run: |
-          cd ./react-native-app/,
           npm install --force,
           npm test
