@@ -30,7 +30,8 @@ jobs:
 #         run: echo Hello, world!
 
       # Runs a set of commands using the runners shell
-      - name: Install Dependencies
+      - name: Jest Test
         run: |
+          cd ./react-native-app/,
           npm install --force,
           npm test
