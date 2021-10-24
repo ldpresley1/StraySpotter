@@ -1,50 +1,20 @@
-import React, {useState,  useCallback} from 'react';
-import { Text, Pressable, Button, View, StyleSheet, Image, ScrollView, TextInput, Appearance, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import { ImageBrowser } from 'expo-image-picker-multiple';
+import React, {useState,  useCallback, Component} from 'react';
+import { Text, Pressable, Button, View, navigation, StyleSheet, Image, ScrollView, TextInput, Appearance, TouchableWithoutFeedback, Keyboard, Dimensions } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';//THIS IS FOR PERMISSIONS
 import DropDownPicker from 'react-native-dropdown-picker';
 
+import ImageCarousel from './ImageCarousel';
+import SimpleDropdownPicker from './DropdownPicker';
 import { darkTheme, lightTheme } from './Themes';
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
-
+const screenWidth = Dimensions.get('window').width;
 import { collection, addDoc } from "firebase/firestore";
 
 //const strayUploadsDB = collection(db, 'StraysFound');
 
 MediaLibrary.requestPermissionsAsync();//working
-const PostPage = (props) => {
-const [types, setTypes] = useState([//might move the longer lists into text files for clarity
-  {label: 'Dog', value: 'Dog'},
-  {label: 'Cat', value: 'Cat'}
-]);
-const [Breeds, setBreeds] = useState([
-	{label: 'figure out how to switch between', value: 'apple'},
-	{label: 'Cat and dog breeds', value: 'banana'}
-  ]);
-  const [Color, setColors] = useState([
-	{label: 'Brown', value: 'Brown'},
-	{label: 'Tan', value: 'Tan'},
-	{label: 'White', value: 'White'},
-	{label: 'Black', value: 'Black'},
-	{label: 'Orange', value: 'Orange'},
-	{label: 'Grey', value: 'Grey'}
-  ]);
-  const [Sizes, setSizes] = useState([
-	{label: 'Small', value: 'Small'},
-	{label: 'Medium', value: 'Medium'},
-	{label: 'Large', value: 'Large'},
-	{label: 'Huge', value: 'Huge'}
-  ]);
-  const [typeOpen, settypeOpen] = useState(false);
-  const [breedOpen, setbreedOpen] = useState(false);
-  const [colorOpen, setcolorOpen] = useState(false);
-  const [sizeOpen, setsizeOpen] = useState(false);
-
-  const[typeValue, settypeValue] = useState(null);//These are the values for the dropdowns theyre contained 
-  const[breedValue, setbreedValue] = useState(null);
-  const[colorValue, setcolorValue] = useState([]);
-  const[sizeValue, setsizeValue] = useState(null);
-
+const { navigate } = props.navigation;
+function dropdownsandtextboxes(props){
 /*
   const docRef = addDoc(collection(db, "StraysFound"), {
     Breed: breedValue,
@@ -54,17 +24,16 @@ const [Breeds, setBreeds] = useState([
   });
   console.log("Document written with ID: ", docRef.id);
 */
-const { navigate } = props.navigation;
-  const [text, onChangeText] = React.useState(null);// This is the additional details value 
 
   const submitFunction = () => {//this is the function that gets called when the button is pushed
     return(
         <Text style={{fontSize: 20}}>
-          {"SUBMITTED"}
+          {'SUBMITTED'}
         </Text>
     );
   }
- 
+  const [text, onChangeText] = React.useState(null);// This is the additional details value 
+  
   const ontypeOpen = useCallback(() => {
     setbreedOpen(false);
 	setcolorOpen(false);
@@ -86,97 +55,55 @@ const { navigate } = props.navigation;
 	setbreedOpen(false);
 	setcolorOpen(false);
   }, []);
+  return(<View style={[styles.container]}>
+  <Pressable style = {[styles.button]} onPress={() => { navigate('ImageBrowser');}}>
+        <Text style={{fontSize: 15, color:theme.colors.foreground}}> 
+           {'Open Image Browser'}
+        </Text>
+  </Pressable>
+  <SimpleDropdownPicker items = {[{label: 'Dog', value: 'Dog'}, {label: 'Cat', value: 'Cat'}]} title = 'Type' width = {82} priority = {10}/>
+  <SimpleDropdownPicker items = {[{label: 'dog', value: 'dog'}, {label: 'cat', value: 'cat'}]} title = 'simple test' searchable = {true} width = {"100%"} priority = {9}/>
+   <TextInput
+      style={styles.input}
+      multiline
+      numberOfLines={50}
+      onChangeText={onChangeText}
+      value={text}
+      placeholder='Additional details'
+    />  
+    <Pressable onPress={submitFunction} style= {[styles.buttonActive]}>
+      <Text style={{fontSize: 20, color:theme.colors.foreground}}> 
+      {'Submit'}
+      </Text> 
+  </Pressable>
+    </View>);
+}
+
+export default class PostPage extends Component {
+  constructor (props){
+    super(props)
+    this.state = {photos: []}
+  }
+
+  componentDidUpdate() {
+    const {params} = this.props.route;
+    if (params) {
+      const {photos} = params;
+        if (photos) this.setState({photos}); 
+        delete params.photos;
+    }
+  }
+  render(){
 	return (
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} >
 		<View style={[styles.container]}>
-		<>
-    <Pressable style = {[styles.button]} onPress={() => { navigate('ImageBrowser'); }}>
-          <Text style={{fontSize: 15, color:theme.colors.foreground}}> 
-             {'Open Image Browser'}
-          </Text>
-    </Pressable>
-		<DropDownPicker
-      open={typeOpen}
-	  onOpen={ontypeOpen}
-	  defaultNull
-	  placeholder = "Type"
-      value={typeValue}
-      items={types}
-      setOpen={settypeOpen}
-      setValue={settypeValue}
-      setItems={setTypes}
-	  containerStyle={{width:82}}
-	  zIndex={4000}
-      zIndexInverse={1000}
-    />
-	<DropDownPicker
-      open={colorOpen}
-	  onOpen={oncolorOpen}
-	  defaultNull
-	  placeholder = "Colors"
-      value={colorValue}
-      items={Color}
-      setOpen={setcolorOpen}
-      setValue={setcolorValue}
-      setItems={setColors}
-	  multiple={true}
-      min={0}
-      max={6}
-	  containerStyle={{width:125}}
-	  zIndex={3000}
-      zIndexInverse={1000}
-    />
-	<DropDownPicker
-      open={sizeOpen}
-	  onOpen={onsizeOpen}
-	  defaultNull
-	  placeholder = "Size"
-      value={sizeValue}
-      items={Sizes}
-      setOpen={setsizeOpen}
-      setValue={setsizeValue}
-      setItems={setSizes}
-	  containerStyle={{width:93}}
-	  zIndex={2000}
-      zIndexInverse={1000}
-    />
-           <DropDownPicker
-      open={breedOpen}
-	  onOpen={onbreedOpen}
-	  defaultNull
-	  placeholder = "Breed"
-	  searchable={true}
-      value={breedValue}
-      items={Breeds}
-	  setOpen={setbreedOpen}
-      setValue={setbreedValue}
-	  //disabled={true}
-	  disabledStyle={{opacity:0}}
-	  containerStyle={{width:200}}
-      setItems={setBreeds}
-	  zIndex={1000}
-      zIndexInverse={2000}
-    />   
-     <TextInput
-        style={styles.input}
-        multiline
-        numberOfLines={50}
-        onChangeText={onChangeText}
-        value={text}
-        placeholder="Additional details"
-      />  
-      <Pressable onPress={submitFunction} style= {[styles.buttonActive]}>
-				<Text style={{fontSize: 20, color:theme.colors.foreground}}> 
-        {'Submit'}
-        </Text> 
-		</Pressable>
-            </>
+      <ImageCarousel items = {this.state.photos}/>
+      {dropdownsandtextboxes()}
 			</View>
       </TouchableWithoutFeedback>
-	);
+	);}
 }
 
-export default PostPage;
 
 const styles = StyleSheet.create({
 	input: {
@@ -215,4 +142,33 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       paddingTop: "4%",
     },
+    scrollViewContainer: {
+      flex:1,
+      width:screenWidth,
+      position:'relative',
+  },
+  imageScroller: {
+      flex:1,
+      width:screenWidth,
+  },
+  postImage: {
+      height:screenWidth,
+      width:screenWidth
+  },
+  paging: {
+      flexDirection:'row',
+      position:'absolute',
+      bottom:0,
+      alignSelf:'center',
+      backgroundColor:'#00000050',
+      borderTopEndRadius:10,
+      borderTopLeftRadius:10,
+  },
+  pagingText: {
+      margin: 5,
+      color:'grey'
+  },
+  pagingTextActive: {
+      margin: 5,
+      color: 'white'},
 });
