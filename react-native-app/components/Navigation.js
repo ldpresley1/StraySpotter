@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
 		width: "100%",
 		// position:'absolute',
 		// bottom: 0,
-		flex: (Platform.OS === 'ios') ? .74 : .54,
+		flex: .74,
 		backgroundColor: '#121212',
 		flexDirection: "row",
 	},

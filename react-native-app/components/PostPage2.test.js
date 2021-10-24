@@ -1,9 +1,8 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 
-import Map from './Map';
+import emptyArray from './PostPage';
 
 it('renders correctly', async () => {
-  const tree = renderer.create(<Map />).toJSON();
-  expect(tree).toMatchSnapshot();
+  expect(renderer.create(<emptyArray />).toJSON()).toMatchSnapshot();
 });

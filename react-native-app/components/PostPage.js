@@ -226,7 +226,7 @@ const [types, setTypes] = useState([//might move the longer lists into text file
     <Text style={styles.basicText}>Long: {markerData.longitude}</Text>
     <Pressable onPress={submitFunction} style= {[styles.button]}>
     	<Text style={styles.buttonText}>{submitButtonText}
-        </Text> 
+        </Text>
 	</Pressable>
     </>
     </View>
@@ -292,8 +292,6 @@ function App() {
 }
 
 export default App;
-
-//export default PostPage;
 
 const styles = StyleSheet.create({
 	input: {
@@ -369,7 +367,7 @@ const styles = StyleSheet.create({
       borderColor:theme.colors.foreground,
       alignItems: 'center',
       justifyContent: 'flex-start',
-      paddingTop: (Platform.OS === 'ios') ? 20 : 15,
-      paddingBottom: (Platform.OS === 'ios') ? 0 : 0,
+      paddingTop: 15,
+      paddingBottom: 0,
     },
 });
