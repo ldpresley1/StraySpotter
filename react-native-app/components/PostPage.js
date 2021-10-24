@@ -6,6 +6,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import dbo from './dataStorage';
 import MapView, { Marker } from 'react-native-maps';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Modal from "react-native-modal";
 
 import { darkTheme, lightTheme } from './Themes';
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
@@ -71,7 +72,11 @@ const [types, setTypes] = useState([//might move the longer lists into text file
   const [breedOpen, setbreedOpen] = useState(false);
   const[breedValue, setbreedValue] = useState(null);
 
+  const [isModalVisible, setIsModalVisible] = React.useState(false);
+  const [isPosted, setIsPosted] = React.useState(false);
+
   const submitFunction = () => {//this is the function that gets called when the button is pushed
+		setIsModalVisible(true);
     return(
       tagsList = colorValue, //THIS HAS TO GO FIRST so that we don't get nested arrays
       tagsList.push(typeValue),
@@ -90,6 +95,13 @@ const [types, setTypes] = useState([//might move the longer lists into text file
            })
             .then(() => {
                console.log('Stray added!'); //TEST
+              //  set posted true
+                setIsPosted(true);
+                setTimeout(function() {
+                  setIsModalVisible(false);
+                  setIsPosted(false);
+                  // set psted false
+                }, 750);
              }),
         emptyArray(tagsList),
         submitButtonText = "SUBMITTED!",
@@ -137,6 +149,20 @@ const [types, setTypes] = useState([//might move the longer lists into text file
 	setbreedOpen(false);
 	setcolorOpen(false);
   }, []);
+
+	const practiceModal = () => {
+		setIsModalVisible(true);
+		setTimeout(function(){
+      // setDefaults();
+      setIsPosted(true);
+      setTimeout(function(){
+        // setDefaults();
+        setIsModalVisible(false);
+        setIsPosted(false);
+      }, 750);
+		}, 3000);
+	}
+
 	return (
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} >
 		<View style={[styles.container]}>
@@ -228,6 +254,15 @@ const [types, setTypes] = useState([//might move the longer lists into text file
     	<Text style={styles.buttonText}>{submitButtonText}
         </Text>
 	</Pressable>
+
+		<Modal isVisible={isModalVisible}>
+			<View style={{ flex: 1, justifyContent:"center",alignItems:"center" }}>
+				{!isPosted ? 
+          <Text style={{fontSize:36,backgroundColor:'white',paddingHorizontal:10,paddingVertical:5,borderRadius:2,overflow:"hidden"}}>Submitting...</Text>
+          : <Text style={{fontSize:36,backgroundColor:'white',paddingHorizontal:10,paddingVertical:5,borderRadius:2,overflow:"hidden"}}>Submitted!</Text>
+        }
+			</View>
+		</Modal>
     </>
     </View>
     </TouchableWithoutFeedback>
