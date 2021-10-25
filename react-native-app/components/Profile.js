@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Icon } from 'react-native-elements';
-import { Text, View, Appearance, StyleSheet, Pressable } from 'react-native';
+import { Text, View, Appearance, StyleSheet, Pressable, SafeAreaView, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MapView, { Marker } from 'react-native-maps';
 
@@ -11,6 +11,8 @@ const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 
 // class Profile extends React.Component {
 const Profile = ({navigation, route}) => {
+	const [viewType, setView] = useState("listView");
+	const [username, setUsername] = useState("username");
 	const [markerData,setMarkerData] = useState({
 		latitude: 33.2083,
 		longitude: -87.5504
@@ -26,33 +28,51 @@ const Profile = ({navigation, route}) => {
 			});
 		}
 	}
+	if (route.params?.username && route.params.username != username) {
+		setUsername(route.params.username);
+	}
 
 	return (
 		<View style={styles.window}>
-			<Text style={{color:theme.colors.foreground}}>This would be your profile, if you had one</Text>
-			<Pressable style={styles.button} onPress={() => navigation.navigate('Settings')}>
-				<Text style={styles.basicText}>Go to Settings</Text>
-				<Icon style={styles.iconStyle} name='spinner-cog' type='fontisto' color={theme.colors.foreground}/>
-				{/* <Icon style={styles.iconStyle} name='player-settings' type='fontisto' color={theme.colors.foreground}/> */}
-			</Pressable>
-			<Pressable style={styles.button} onPress={() => navigation.navigate('CustomGeo')}>
-				<Text style={styles.basicText}>Select Location</Text>
-			</Pressable>
-			<Text style={styles.basicText}>Lat: {markerData.latitude}</Text>
-			<Text style={styles.basicText}>Long: {markerData.longitude}</Text>
-			{/* <TimeLine /> */}
+			<View style={styles.usernameView}>
+				<Text style={[styles.basicText,{marginRight:20}]}>{username}</Text>
+				<Pressable style={styles.button} onPress={() => navigation.navigate('Settings',{parent:'PersonalProfile'})}>
+					<Icon style={styles.iconStyle} name='spinner-cog' type='fontisto' color={theme.colors.foreground}/>
+					{/* <Icon style={styles.iconStyle} name='player-settings' type='fontisto' color={theme.colors.foreground}/> */}
+				</Pressable>
+			</View>
+			<View style={styles.viewChangerView}>
+				<Pressable style={viewType == "mapView" ? styles.viewButtonActive : styles.viewButton} onPress={() => setView("mapView")}>
+					<Text style={styles.basicText}>Map View</Text>
+				</Pressable>
+				<Pressable style={viewType == "listView" ? styles.viewButtonActive : styles.viewButton} onPress={() => setView("listView")}>
+					<Text style={styles.basicText}>List View</Text>
+				</Pressable>
+			</View>
+			<TimeLine view={viewType}/>
 		</View>
 	);
 }
 
-const Settings = (props) => {
+const Settings = ({navigation, route}) => {
+	const [username, setUsername] = useState('');
+
 	return (
-		<View style={styles.window}>
-			<Text style={styles.basicText}>Settings</Text>
-			<Pressable style={styles.button} onPress={() => props.navigation.goBack()}>
-				<Text style={styles.basicText}>Go Back</Text>
-			</Pressable>
-		</View>
+		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} >
+			<View style={styles.window}>
+				<Text style={styles.basicText}>Settings</Text>
+				<SafeAreaView>
+					<TextInput
+						style={styles.input}
+						onChangeText={setUsername}
+						value={username}
+					/>
+				</SafeAreaView>
+				<Pressable style={styles.button} onPress={() => navigation.navigate(route.params.parent,{username:username.trim()})}>
+					<Text style={styles.basicText}>Go Back</Text>
+				</Pressable>
+			</View>
+		</TouchableWithoutFeedback>
 	);
 }
 
@@ -107,7 +127,6 @@ function App() {
 		<Stack.Navigator screenOptions={{headerShown:false}}>
 			<Stack.Screen name="PersonalProfile" component={Profile} />
 			<Stack.Screen name="Settings" component={Settings} />
-			<Stack.Screen name="CustomGeo" component={CustomGeolocation} />
 		</Stack.Navigator>
 	);
 }
@@ -132,9 +151,39 @@ const styles = StyleSheet.create({
 		borderRadius:2,
 		backgroundColor:theme.colors.primary,
 		marginVertical: 30,
+	},
+	usernameView: {
+		flexDirection:'row',
+		justifyContent:"space-between",
+		alignItems:'center'
+	},
+	viewChangerView: {
+		// flex:1,
+		flexDirection:'row',
+		justifyContent:"space-between",
+		alignItems:'center'
+	},
+	viewButton: {
+		flex:1,
+		paddingVertical: 10,
+		paddingHorizontal: 20,
+		backgroundColor:theme.colors.primary,
 		flexDirection:'row',
 		justifyContent:'center',
-		alignItems:'center'
+		alignItems:'center',
+		borderBottomWidth:1,
+		borderBottomColor:theme.colors.primary,
+	},
+	viewButtonActive: {
+		flex:1,
+		paddingVertical: 10,
+		paddingHorizontal: 20,
+		backgroundColor:theme.colors.primary,
+		flexDirection:'row',
+		justifyContent:'center',
+		alignItems:'center',
+		borderBottomWidth:1,
+		borderBottomColor:theme.colors.foreground,
 	},
 	mapButton: {
 		paddingVertical: 10,
@@ -146,7 +195,12 @@ const styles = StyleSheet.create({
 	},
 	iconStyle: {
 		// flex:1
-		marginLeft:15,
+	},
+	input: {
+		height: 40,
+		margin: 12,
+		borderWidth: 1,
+		padding: 10,
 	}
 });
 

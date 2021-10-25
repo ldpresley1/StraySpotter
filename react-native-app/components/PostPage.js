@@ -75,6 +75,14 @@ const [types, setTypes] = useState([//might move the longer lists into text file
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   const [isPosted, setIsPosted] = React.useState(false);
 
+  const setDefaults = () => {
+    onChangeText('');
+    titleText('');
+    settypeValue(null);
+    setcolorValue([]);
+    setsizeValue(null);
+  }
+
   const submitFunction = () => {//this is the function that gets called when the button is pushed
 		setIsModalVisible(true);
     return(
@@ -98,6 +106,7 @@ const [types, setTypes] = useState([//might move the longer lists into text file
               //  set posted true
                 setIsPosted(true);
                 setTimeout(function() {
+                  setDefaults();
                   setIsModalVisible(false);
                   setIsPosted(false);
                   // set psted false
@@ -151,12 +160,18 @@ const [types, setTypes] = useState([//might move the longer lists into text file
   }, []);
 
 	const practiceModal = () => {
+    // show modal
 		setIsModalVisible(true);
-		setTimeout(function(){
-      // setDefaults();
+
+    // push data
+		setTimeout(function() {
+      // data is posted
+
+      // display data has been posted
       setIsPosted(true);
+
       setTimeout(function(){
-        // setDefaults();
+        setDefaults();
         setIsModalVisible(false);
         setIsPosted(false);
       }, 750);

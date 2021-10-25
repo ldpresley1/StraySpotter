@@ -8,10 +8,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon } from 'react-native-elements';
 
 import Header from './components/Header';
-import Navigation from './components/Navigation';
 import Profile from './components/Profile';
 import TimeLine from './components/TimeLine';
-import Map from './components/Map';
 import PostPage from './components/PostPage';
 import { darkTheme, lightTheme } from './components/Themes';
 
@@ -65,8 +63,8 @@ export default function App() {
 			  	})}
 			>
 				<Tab.Screen name="PostPage" component={PostPage} />
-				<Tab.Screen name="Map" component={Map} />
-				<Tab.Screen name="TimeLine" component={TimeLine} />
+				<Tab.Screen name="Map" component={TimeLine} initialParams={{view:'mapView'}} />
+				<Tab.Screen name="TimeLine" component={TimeLine} initialParams={{view:"listView"}} />
 				<Tab.Screen name="Profile" component={Profile} />
 				
 			</Tab.Navigator>
