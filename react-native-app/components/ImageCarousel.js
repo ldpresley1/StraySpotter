@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, Dimensions, Image, ScrollView } from 'react-native';
 const screenWidth = Dimensions.get('window').width;
 
-//TO USE ME IMPORT THEN <ImageCarousel items= {photos}/>
+//TO USE ME IMPORT THEN <ImageCarousel items= {photos}/> add timeline={true} for the timeline page as they are ever so slightly
 
 export default class ImageCarousel extends Component {
     constructor (props) {
@@ -20,7 +20,7 @@ export default class ImageCarousel extends Component {
 	}
 
     render(){
-
+		if(this.props.timeline) {
         return(
 			<View>
 			{
@@ -65,6 +65,51 @@ export default class ImageCarousel extends Component {
 		}
 		</View> 
         );
+	}
+	else{return(
+		<View>
+		{
+			this.props.items ?
+				(
+					<View style={styles.scrollViewContainer}>
+						<ScrollView 
+							style={styles.imageScroller} 
+							pagingEnabled horizontal 
+							showsHorizontalScrollIndicator={false}
+
+							// it says using bigger numbers here 
+							// increases performance by lowering how 
+							// quickly it checks. It always seems to 
+							// at a very high rate. Do not know what 
+							// number it is best to put this at
+							scrollEventThrottle={64}
+							onScroll={this.change}>
+							{
+								this.props.items.map((imageUrl, index) => {
+									return <Image 
+										key={index} 
+										style={styles.postImage} 
+										source={{uri: imageUrl.uri}} />
+								})
+							}
+						</ScrollView>
+						{
+							this.props.items.length > 1 ? 
+							<View style={styles.paging}>
+								{
+									this.props.items.map((imageUrl, index) => {
+										return <Text key={index} style={this.state.page == index ? styles.pagingTextActive : styles.pagingText}>{'\u2B24'}</Text>
+									})
+								}
+							</View> :
+							<></>
+						}
+					</View>
+				)
+				: <></>
+	}
+	</View> 
+	);}
 
     }
 

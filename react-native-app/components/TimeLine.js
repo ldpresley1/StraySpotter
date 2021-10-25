@@ -102,7 +102,7 @@ class Post extends React.Component {
 	render() {
 		return (
 			<View style={styles.post}>
-				<ImageCarousel items = {this.props.images}/>
+				<ImageCarousel items = {this.props.images} timeline = {true}/>
 				<View style={styles.postHeader}>
 					<Text style={styles.title}> {this.props.title} </Text>
 					<Pressable onPress={() => openMap(this.props.cord)}>
