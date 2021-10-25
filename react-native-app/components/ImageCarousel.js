@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Dimensions, Image, ScrollView } from 'react-native';
 const screenWidth = Dimensions.get('window').width;
+
+//TO USE ME IMPORT THEN <ImageCarousel items= {photos}/>
+
 export default class ImageCarousel extends Component {
     constructor (props) {
         super(props)
         this.state = {
-          photos: [...props.items],
           page: 0
         }
       }
@@ -20,16 +22,25 @@ export default class ImageCarousel extends Component {
     render(){
 
         return(
-            <View style={styles.scrollViewContainer}>
+			<View>
+			{
+				this.props.items ?
+					(
+						<View style={styles.scrollViewContainer}>
 							<ScrollView 
 								style={styles.imageScroller} 
 								pagingEnabled horizontal 
 								showsHorizontalScrollIndicator={false}
 
+								// it says using bigger numbers here 
+								// increases performance by lowering how 
+								// quickly it checks. It always seems to 
+								// at a very high rate. Do not know what 
+								// number it is best to put this at
 								scrollEventThrottle={64}
 								onScroll={this.change}>
 								{
-									this.state.photos.map((imageUrl, index) => {
+									this.props.items.map((imageUrl, index) => {
 										return <Image 
 											key={index} 
 											style={styles.postImage} 
@@ -38,10 +49,10 @@ export default class ImageCarousel extends Component {
 								}
 							</ScrollView>
 							{
-								this.state.photos.length > 1 ? 
+								this.props.items.length > 1 ? 
 								<View style={styles.paging}>
 									{
-										this.state.photos.map((imageUrl, index) => {
+										this.props.items.map((imageUrl, index) => {
 											return <Text key={index} style={this.state.page == index ? styles.pagingTextActive : styles.pagingText}>{'\u2B24'}</Text>
 										})
 									}
@@ -49,6 +60,10 @@ export default class ImageCarousel extends Component {
 								<></>
 							}
 						</View>
+					)
+					: <></>
+		}
+		</View> 
         );
 
     }

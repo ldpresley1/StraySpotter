@@ -3,6 +3,7 @@ import { Text, View, FlatList, StyleSheet, ScrollView, Image, Dimensions, Appear
 import { Icon } from 'react-native-elements';
 import { darkTheme, lightTheme } from './Themes';
 import * as Linking from 'expo-linking';
+import ImageCarousel from './ImageCarousel';
 
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 const screenWidth = Dimensions.get('window').width;
@@ -101,46 +102,7 @@ class Post extends React.Component {
 	render() {
 		return (
 			<View style={styles.post}>
-				{
-				this.props.images ?
-					(
-						<View style={styles.scrollViewContainer}>
-							<ScrollView 
-								style={styles.imageScroller} 
-								pagingEnabled horizontal 
-								showsHorizontalScrollIndicator={false}
-
-								// it says using bigger numbers here 
-								// increases performance by lowering how 
-								// quickly it checks. It always seems to 
-								// at a very high rate. Do not know what 
-								// number it is best to put this at
-								scrollEventThrottle={64}
-								onScroll={this.change}>
-								{
-									this.props.images.map((imageUrl, index) => {
-										return <Image 
-											key={index} 
-											style={styles.postImage} 
-											source={{uri: imageUrl}} />
-									})
-								}
-							</ScrollView>
-							{
-								this.props.images.length > 1 ? 
-								<View style={styles.paging}>
-									{
-										this.props.images.map((imageUrl, index) => {
-											return <Text key={index} style={this.state.page == index ? styles.pagingTextActive : styles.pagingText}>{'\u2B24'}</Text>
-										})
-									}
-								</View> :
-								<></>
-							}
-						</View>
-					)
-					: <></>
-				}
+				<ImageCarousel items = {this.props.images}/>
 				<View style={styles.postHeader}>
 					<Text style={styles.title}> {this.props.title} </Text>
 					<Pressable onPress={() => openMap(this.props.cord)}>
