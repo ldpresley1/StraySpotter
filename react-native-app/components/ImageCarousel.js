@@ -119,7 +119,7 @@ export default class ImageCarousel extends Component {
 
 const styles = StyleSheet.create({
 scrollViewContainer: {
-    flex:1,
+    height: screenWidth,
     width:screenWidth,
     position:'relative',
 },

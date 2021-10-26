@@ -15,6 +15,7 @@ import Profile from './components/Profile';
 import TimeLine from './components/TimeLine';
 import Map from './components/Map';
 import PostPage from './components/PostPage';
+import CustomGeolocation from './components/CustomGeolocationScreen';
 import { darkTheme, lightTheme } from './components/Themes';
 
 const Tab = createBottomTabNavigator();
@@ -28,6 +29,7 @@ function PostStackScreens(){
         			options={{
         			title: 'Selected 0 files'
       				}} />
+			<Stack.Screen name="CustomGeolocation" component = {CustomGeolocation} options={{headerShown: false,}}/>
 		</Stack.Navigator>
 	)
 }
