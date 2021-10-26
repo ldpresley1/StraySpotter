@@ -77,8 +77,8 @@ export default function App() {
 			  	})}
 			>
         		<Tab.Screen name='PostStackScreens' component={PostStackScreens}/>
-				<Tab.Screen name="Map" component={Map} />
-				<Tab.Screen name="TimeLine" component={TimeLine} />
+				<Tab.Screen name="Map" component={TimeLine} initialParams = {{view: 'mapView'}} />
+				<Tab.Screen name="TimeLine" component={TimeLine} initialParams = {{view: 'listView'}}  />
 				<Tab.Screen name="Profile" component={Profile} />
 				
 			</Tab.Navigator>

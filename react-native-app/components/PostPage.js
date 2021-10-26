@@ -50,8 +50,9 @@ export default class PostPage extends Component {
    submitButtontext: 'Submit',
    isModalVisible: false,
    isPosted:false,
+   photoURLs: [],
   }
-    this.onChangeText = this.onChangeText.bind(this);
+    this.onaddText = this.onaddText.bind(this);
     this.titleText = this.titleText.bind(this);
     this.setTypes = this.setTypes.bind(this);
     this.settypeValue = this.settypeValue.bind(this);
@@ -66,6 +67,9 @@ export default class PostPage extends Component {
     this.setBreeds = this.setBreeds.bind(this);
     this.setbreedValue = this.setbreedValue.bind(this);
     this.setMarkerData = this.setMarkerData.bind(this);
+    this.setIsModalVisible = this.setIsModalVisible.bind(this);
+    this.setIsPosted = this.setIsPosted.bind(this);
+    this.submitFunction = this.submitFunction.bind(this);
   }
 
   componentDidUpdate() {
@@ -98,16 +102,12 @@ export default class PostPage extends Component {
   setSubmitText(submitButtonText){
     this.setState({submitButtonText});
   }
-  componentDidMount(){LogBox.ignoreLogs(["VirtualizedLists should"]);}//this is to ignore a stupid warning
-  onChangeText() {
-    this.setState(state => ({
-      text: state.text
-    }));
+  componentDidMount(){LogBox.ignoreLogs(["VirtualizedLists should"], ["Setting a timer"]);}//this is to ignore a stupid warning
+  onaddText(text) {
+    this.setState({text});
   }
-  titleText(callback){
-    this.setState(state => ({
-      title: state.title
-    }));
+  titleText(title){
+    this.setState({title});
   }
 
   /*readBreedsFromFile(){
@@ -188,13 +188,24 @@ export default class PostPage extends Component {
     this.setState({markerData});
   }
   submitFunction() {//this is the function that gets called when the button is pushed
-		setIsModalVisible(true);
+		this.setIsModalVisible(true);
     var tagsList = [];
-    return(
       tagsList = this.state.colorValue, //THIS HAS TO GO FIRST so that we don't get nested arrays
       tagsList.push(this.state.typeValue),
-      tagsList.push(this.state.breedValue), //Commented out until we figure out breed values
+      //tagsList.push(this.state.breedValue), //Commented out until we figure out breed values
       tagsList.push(this.state.sizeValue),
+      this.state.photos.map(image=>{dbo.firebase
+        .storage()
+        .ref(image)
+        .putFile(image);
+        dbo.firebase.storage().ref('/' + image)
+          .getDownloadURL()
+          .then((url) => {
+            //from url you can fetched the uploaded image easily
+            this.setState({photoURLs: url});
+          })
+          .catch((e) => console.log('getting downloadURL of image error => ', e));}
+        );
 
       dbo.firebase.firestore()
            .collection('StraysFound')
@@ -209,16 +220,15 @@ export default class PostPage extends Component {
             .then(() => {
                console.log('Stray added!'); //TEST
               //  set posted true
-                setIsPosted(true);
+                this.setIsPosted(true);
                 setTimeout(function() {
-                  setDefaults();
+                  //setDefaults();
                   setIsModalVisible(false);
-                  setIsPosted(false);
+                  this.setIsPosted(false);
                   // set psted false
                 }, 750);
              }),
-        this.setSubmitText( "SUBMITTED!")
-    );
+        this.setSubmitText( "SUBMITTED!");
   }
   
   render(){
@@ -240,7 +250,7 @@ export default class PostPage extends Component {
       <TextInput
       style={styles.titleStyle}
       multiline
-      onChangeText={this.titleText}
+      onChangeText={text=>this.titleText(text)}
       value={this.state.title}
       placeholder="Post Title"
     />
@@ -304,7 +314,7 @@ export default class PostPage extends Component {
       style={styles.input}
       multiline
       numberOfLines={50}
-      onChangeText={this.onChangeText}
+      onChangeText={text=> this.onaddText(text)}
       value={this.state.text}
       placeholder='Additional details'
     />  
@@ -318,7 +328,7 @@ export default class PostPage extends Component {
 	</Pressable>
   <Modal isVisible={this.state.isModalVisible}>
 			<View style={{ flex: 1, justifyContent:"center",alignItems:"center" }}>
-				{!isPosted ? 
+				{!this.state.isPosted ? 
           <Text style={{fontSize:36,backgroundColor:'white',paddingHorizontal:10,paddingVertical:5,borderRadius:2,overflow:"hidden"}}>Submitting...</Text>
           : <Text style={{fontSize:36,backgroundColor:'white',paddingHorizontal:10,paddingVertical:5,borderRadius:2,overflow:"hidden"}}>Submitted!</Text>
         }
