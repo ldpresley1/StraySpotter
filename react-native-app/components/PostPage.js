@@ -10,8 +10,6 @@ import Modal from "react-native-modal";
 import ImageCarousel from './ImageCarousel';
 import SimpleDropdownPicker from './DropdownPicker';
 import { darkTheme, lightTheme } from './Themes';
-import Modal from "react-native-modal";
-import dbo from './dataStorage';
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -43,7 +41,7 @@ export default class PostPage extends Component {
     {label: 'Huge', value: 'Huge'}],
     breedOpen: false,
     breedValue: [],
-    Breeds: [this.readBreedsFromFile],
+    Breeds: [{label: 'breed', value: null}],
     markerData: {
       latitude: 33.2083,
       longitude: -87.5504
@@ -112,8 +110,8 @@ export default class PostPage extends Component {
     }));
   }
 
-  readBreedsFromFile(){
-    var fs = require('fs');
+  /*readBreedsFromFile(){
+    var fs = require('');
     var text = fs.readFileSync("./assets/DogList.txt", 'utf-8');
     var textByLine = text.split('\n');
     this.setState({Breeds: [{label: 'Dog', value: 'Dog'}]});
@@ -128,7 +126,7 @@ export default class PostPage extends Component {
       var breed = textByLine.pop();
     this.setState({ Breeds: [{label: breed, value: breed, parent: 'Cat'}, ...this.state.Breeds] })
   }
-  }
+  }*/
   
   settypeOpen(typeOpen){
     this.setState({typeOpen});

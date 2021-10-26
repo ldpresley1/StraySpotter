@@ -9,7 +9,9 @@ const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 export default class MapListView extends React.Component {
-
+	constructor(props){
+		super(props);
+	}
 	render() {
 		const mapRegion = {
 			latitude: 33.2083,
