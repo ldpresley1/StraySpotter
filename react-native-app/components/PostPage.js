@@ -99,7 +99,7 @@ const [types, setTypes] = useState([//might move the longer lists into text file
               tags: tagsList,
               id: 42, //Temp Data
               cord: {lat: markerData.latitude, long: markerData.longitude},
-              images: ["https://drive.google.com/file/d/1qNcYmOapTKTs2eARJCa6hOvFijK5ykll/view?usp=sharing]", "https://drive.google.com/file/d/1t71FPVZGB5jPaynUaQ8wYXwlnc1pTdK0/view?usp=sharing"], //TEMP DATA
+              images: ["https://drive.google.com/uc?export=view&id=1t71FPVZGB5jPaynUaQ8wYXwlnc1pTdK0", "https://drive.google.com/uc?export=view&id=1qNcYmOapTKTs2eARJCa6hOvFijK5ykll"], //TEMP DATA
            })
             .then(() => {
                console.log('Stray added!'); //TEST
