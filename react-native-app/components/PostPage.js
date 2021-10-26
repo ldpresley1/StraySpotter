@@ -6,6 +6,8 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import ImageCarousel from './ImageCarousel';
 import SimpleDropdownPicker from './DropdownPicker';
 import { darkTheme, lightTheme } from './Themes';
+import Modal from "react-native-modal";
+import dbo from './dataStorage';
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -33,18 +35,22 @@ export default class PostPage extends Component {
     {label: 'Grey', value: 'Grey'}],
     sizeOpen: false,
     sizeValue: false,
-    Sizes: [{label: 'Small', value: 'Small'},
+    Sizes: [{label: 'Toy', value: 'Toy'},
+      {label: 'Small', value: 'Small'},
     {label: 'Medium', value: 'Medium'},
     {label: 'Large', value: 'Large'},
     {label: 'Huge', value: 'Huge'}],
     breedOpen: false,
     breedValue: [],
-    Breeds: [{label:'Please select type first.', value: null}],
+    Breeds: [this.readBreedsFromFile],
     markerData: {
       latitude: 33.2083,
       longitude: -87.5504
   },
    locationButtonText: 'Select Location',
+   submitButtontext: 'Submit',
+   isModalVisible: false,
+   isPosted:false,
   }
     this.onChangeText = this.onChangeText.bind(this);
     this.titleText = this.titleText.bind(this);
@@ -61,7 +67,6 @@ export default class PostPage extends Component {
     this.setBreeds = this.setBreeds.bind(this);
     this.setbreedValue = this.setbreedValue.bind(this);
     this.setMarkerData = this.setMarkerData.bind(this);
-    //this.submitFunction = this.submitFunction.bind(this);
   }
 
   componentDidUpdate() {
@@ -85,6 +90,15 @@ export default class PostPage extends Component {
   setLocationText(locationButtonText){
     this.setState({locationButtonText});
   }
+  setIsModalVisible(isModalVisible){
+    this.setState({isModalVisible});
+  }
+  setIsPosted(isPosted){
+    this.setState({isPosted});
+  }
+  setSubmitText(submitButtonText){
+    this.setState({submitButtonText});
+  }
   componentDidMount(){LogBox.ignoreLogs(["VirtualizedLists should"]);}//this is to ignore a stupid warning
   onChangeText() {
     this.setState(state => ({
@@ -95,6 +109,24 @@ export default class PostPage extends Component {
     this.setState(state => ({
       title: state.title
     }));
+  }
+
+  readBreedsFromFile(){
+    var fs = require('fs');
+    var text = fs.readFileSync("./assets/DogList.txt", 'utf-8');
+    var textByLine = text.split('\n');
+    this.setState({Breeds: [{label: 'Dog', value: 'Dog'}]});
+    while (textByLine){
+      var breed = textByLine.pop();
+    this.setState({ Breeds: [{label: breed, value: breed, parent: 'Dog'}, ...this.state.Breeds] })
+  }
+  text = fs.readFileSync("./assets/CatList.txt", 'utf-8');
+  textByLine = text.split('\n');
+  this.setState({Breeds: [...this.state.Breeds,{label: 'Cat', value: 'Cat'}]});
+    while (textByLine){
+      var breed = textByLine.pop();
+    this.setState({ Breeds: [{label: breed, value: breed, parent: 'Cat'}, ...this.state.Breeds] })
+  }
   }
   
   settypeOpen(typeOpen){
@@ -156,11 +188,43 @@ export default class PostPage extends Component {
   setMarkerData(markerData){
     this.setState({markerData});
   }
+  submitFunction() {//this is the function that gets called when the button is pushed
+		setIsModalVisible(true);
+    var tagsList = [];
+    return(
+      tagsList = this.state.colorValue, //THIS HAS TO GO FIRST so that we don't get nested arrays
+      tagsList.push(this.state.typeValue),
+      tagsList.push(this.state.breedValue), //Commented out until we figure out breed values
+      tagsList.push(this.state.sizeValue),
+
+      dbo.firebase.firestore()
+           .collection('StraysFound')
+           .add({
+              description: this.state.text,
+              title: this.state.title,
+              tags: tagsList,
+              id: 42, //Temp Data
+              cord: {lat: this.state.markerData.latitude, long: this.state.markerData.longitude},
+              images: this.state.photos, //TEMP DATA
+           })
+            .then(() => {
+               console.log('Stray added!'); //TEST
+              //  set posted true
+                setIsPosted(true);
+                setTimeout(function() {
+                  setDefaults();
+                  setIsModalVisible(false);
+                  setIsPosted(false);
+                  // set psted false
+                }, 750);
+             }),
+        this.setSubmitText( "SUBMITTED!")
+    );
+  }
   
   render(){
     const { navigate } = this.props.navigation;
     var submitButtonText = "Submit";
-    var tagsList = [];
   var carousel = null;
   if(this.state.photos.length){carousel = <ImageCarousel items = {this.state.photos}/>} 
 	return (
@@ -249,6 +313,18 @@ export default class PostPage extends Component {
       style={styles.button} onPress={() => {navigate('CustomGeolocation'); this.setLocationText('Saved Your Location!');}}>
         <Text style={styles.buttonText}>{this.state.locationButtonText}</Text>
     </Pressable>
+    <Pressable onPress={this.submitFunction} style= {[styles.button]}>
+    	<Text style={styles.buttonText}>{submitButtonText}
+        </Text>
+	</Pressable>
+  <Modal isVisible={this.state.isModalVisible}>
+			<View style={{ flex: 1, justifyContent:"center",alignItems:"center" }}>
+				{!isPosted ? 
+          <Text style={{fontSize:36,backgroundColor:'white',paddingHorizontal:10,paddingVertical:5,borderRadius:2,overflow:"hidden"}}>Submitting...</Text>
+          : <Text style={{fontSize:36,backgroundColor:'white',paddingHorizontal:10,paddingVertical:5,borderRadius:2,overflow:"hidden"}}>Submitted!</Text>
+        }
+			</View>
+		</Modal>
 			</ScrollView>
       </TouchableWithoutFeedback>
 	);}
