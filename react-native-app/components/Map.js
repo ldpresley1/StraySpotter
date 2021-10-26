@@ -1,55 +1,53 @@
-import React, { useState } from 'react';
-import { Dimensions, View, StyleSheet, Image, Text, Appearance } from 'react-native';
+import React from 'react';
+import { Text, View, StyleSheet, Image, Dimensions, Appearance, Pressable } from 'react-native';
+import { Icon } from 'react-native-elements';
 import MapView, { Marker } from 'react-native-maps';
 import { darkTheme, lightTheme } from './Themes';
 
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
 
-const width = Dimensions.get('window').width
-const height = Dimensions.get('window').height
+export default class MapListView extends React.Component {
 
-const Map = (props) => {
-const imageURL = ''
-  const [mapRegion, setmapRegion] = useState({
-    latitude: 33.2083,
-    longitude: -87.5504,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  });
+	render() {
+		const mapRegion = {
+			latitude: 33.2083,
+			longitude: -87.5504,
+			latitudeDelta: 0.0922,
+			longitudeDelta: 0.0421,
+		};
+		return (
+			<MapView
+				style={{ alignSelf: 'stretch', height: '100%' }}
+				region={mapRegion}
+				showsUserLocation = {true} >
 
+				{
+				this.props.strayList.map( (data, index) => {
+					// console.log(index, data);
+					// console.log(index, data.cord);
+					return (
+						<Marker
+							coordinate={{latitude:data.cord.lat, longitude:data.cord.long}}
+							title={data.title}
+							description={data.description}
+							key={data.id} >
 
-  return (
-    <View style={[styles.window, styles.container]}>
-      <MapView
-        style={{ alignSelf: 'stretch', height: '100%' }}
-        region={mapRegion}
-        showsUserLocation = {true}
-      >
-              <Marker
-            coordinate={{latitude: 33.2083, longitude: -87.5504}}
-            title="this is a marker"
-            description="this is a marker example"
-          >
+							<Image source={{uri:data.images[0]}} style={styles.pinThumbnail} />
+						</Marker>
+					);
+				})
+				}
+			</MapView>
+		);
+	}
+}
 
-          <Image source={require('./images/whisper.jpg')} style={{height: 40, width:40, borderRadius: 40/ 2 }}
-
-          />
-          </Marker>
-        </MapView>
-    </View>
-  );
-};
-export default Map;
 const styles = StyleSheet.create({
-  container: {
-    width,
-    height
-  },
-  window: {
-    width: '100%',
-    flex: 6,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: theme.colors.background,
-  },
+	pinThumbnail: {
+	  height: 40,
+	  width:40,
+	  borderRadius: 40/2
+	},
 });

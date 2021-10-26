@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
 		width:"100%",
 		// React Navigation uses height to calculate, like so
 		//  does not use flex :(
-		height: Platform.OS === 'ios' ? 100 : 80,
+		height: 100,
 		position:'relative',
 		backgroundColor:theme.colors.background,
 		borderColor:theme.colors.foreground,

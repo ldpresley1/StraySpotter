@@ -10,10 +10,8 @@ import { Icon } from 'react-native-elements';
 
 import ImageBrowser from './components/ImageBrowserScreen';
 import Header from './components/Header';
-import Navigation from './components/Navigation';
 import Profile from './components/Profile';
 import TimeLine from './components/TimeLine';
-import Map from './components/Map';
 import PostPage from './components/PostPage';
 import CustomGeolocation from './components/CustomGeolocationScreen';
 import { darkTheme, lightTheme } from './components/Themes';

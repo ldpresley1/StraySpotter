@@ -2,6 +2,10 @@ import React, {useState,  useCallback, Component} from 'react';
 import { Text, Pressable, View, navigation,  StyleSheet, ScrollView, TextInput, Appearance, TouchableWithoutFeedback, Keyboard, Dimensions, LogBox } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';//THIS IS FOR PERMISSIONS
 import DropDownPicker from 'react-native-dropdown-picker';
+import dbo from './dataStorage';
+import MapView, { Marker } from 'react-native-maps';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Modal from "react-native-modal";
 
 import ImageCarousel from './ImageCarousel';
 import SimpleDropdownPicker from './DropdownPicker';
@@ -11,9 +15,6 @@ import dbo from './dataStorage';
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
-
-
-//const strayUploadsDB = collection(db, 'StraysFound');
 
 MediaLibrary.requestPermissionsAsync();//working
 export default class PostPage extends Component {
@@ -339,6 +340,38 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: '5%',
     backgroundColor: '#fff',
+  },
+  basicText: {
+    fontSize: 12,
+    padding: 10,
+    color:'#000',
+  },
+  buttonText:{
+      fontSize: 15,
+      color:theme.colors.foreground,
+  },
+  titleStyle:{
+        height: 50,
+        width: "90%",
+        borderWidth: 2,
+        padding: 10,
+        backgroundColor: '#fff',
+  },
+  selectLocationButton:{
+        backgroundColor:theme.colors.background,
+        width: "90%",
+        height: "10%",
+        borderWidth: 1,
+        borderColor:theme.colors.foreground,
+        alignItems: 'center',
+        paddingTop: "4%",
+  },
+  locationStyle:{
+          height: 50,
+          width: "55%",
+          borderWidth: 1,
+          padding: 10,
+          backgroundColor: '#fff',
   },
   container: {
 		alignContent: 'space-around',
