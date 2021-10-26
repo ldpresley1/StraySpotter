@@ -1,9 +1,10 @@
 import React from 'react';
+import MapView, { Marker } from 'react-native-maps';
 import renderer from 'react-test-renderer';
 
-import Map from './Map';
+import MapListView from './Map';
 
 it('renders correctly', async () => {
-  const tree = renderer.create(<Map />).toJSON();
+  const tree = renderer.create(<MapListView />).toJSON();
   expect(tree).toMatchSnapshot();
 });

@@ -1,9 +1,11 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 
-import TimeLine from './TimeLine';
+import Map from '../App'
+
+import componentDidMount from './TimeLine';
 
 it('renders correctly', async () => {
-  const tree = renderer.create(<TimeLine />).toJSON();
+  const tree = renderer.create(<componentDidMount />).toJSON();
   expect(tree).toMatchSnapshot();
 });
