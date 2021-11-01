@@ -109,6 +109,13 @@ function flagPost(strayID){
         .update({
             flag: true
         });
+    dbo.firebase.firestore()
+        .collection('Reporting')
+        .add({
+            flagged: true,
+            postID: strayID,
+            info: "Temp Text"
+        });
     console.log('Post flagged!');
 }
 
