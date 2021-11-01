@@ -3,6 +3,7 @@ import { Text, View, FlatList, StyleSheet, ScrollView, Image, Dimensions, Appear
 import { Icon } from 'react-native-elements';
 import { darkTheme, lightTheme } from './Themes';
 import * as Linking from 'expo-linking';
+import dbo from "./dataStorage";
 
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 const screenWidth = Dimensions.get('window').width;
@@ -70,6 +71,9 @@ class Post extends React.Component {
 					<Pressable onPress={() => openMap(this.props.cord)}>
 						<Icon style={styles.iconStyle} name='map-marker-alt' type='fontisto' color={theme.colors.foreground}/>
 					</Pressable>
+					<Pressable onPress={() => flagPost(this.props.id)}>
+					    <Icon style={styles.iconStyle} name='map-marker-alt' type='fontisto' color={theme.colors.foreground}/>
+					</Pressable>
 				</View>
 				<Text style={styles.description}>{this.props.description}</Text>
 				<View style={styles.tagContainer}>
@@ -98,8 +102,18 @@ function openMap(cord) {
 	Linking.openURL(url);
 }
 
+function flagPost(strayID){
+    dbo.firebase.firestore()
+        .collection('StraysFound')
+        .doc(strayID)
+        .update({
+            flag: true
+        });
+    console.log('Post flagged!');
+}
+
 const renderPost = ({ item }) => (
-	<Post description={item.description} title={item.title} images={item.images} cord={item.cord} tags={item.tags}/>
+	<Post description={item.description} title={item.title} images={item.images} cord={item.cord} tags={item.tags} id = {item.id}/>
 );
 
 export default class ScrollListView extends React.Component {

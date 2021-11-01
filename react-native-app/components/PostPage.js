@@ -15,9 +15,10 @@ const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 
 var tagsList = [];
 var locationButtonText = "Select Location";
+var submitButtonText = "Submit";
 const PostPage = ({route, navigation}) => {
 
-var submitButtonText = "Submit";
+
 const [markerData,setMarkerData] = useState({
     latitude: 33.2083,
     longitude: -87.5504
@@ -97,9 +98,11 @@ const [types, setTypes] = useState([//might move the longer lists into text file
               description: text,
               title: title,
               tags: tagsList,
+              flag: false, //set to false unless reported on the timeline page
               id: 42, //Temp Data
               cord: {lat: markerData.latitude, long: markerData.longitude},
               images: ["https://drive.google.com/uc?export=view&id=1t71FPVZGB5jPaynUaQ8wYXwlnc1pTdK0", "https://drive.google.com/uc?export=view&id=1qNcYmOapTKTs2eARJCa6hOvFijK5ykll"], //TEMP DATA
+              userID: 42, //temp data
            })
             .then(() => {
                console.log('Stray added!'); //TEST
@@ -185,6 +188,7 @@ const [types, setTypes] = useState([//might move the longer lists into text file
    <TextInput
       style={styles.titleStyle}
       multiline
+      maxLength = {15}
       onChangeText={titleText}
       value={title}
       placeholder="Post Title"
@@ -263,16 +267,15 @@ const [types, setTypes] = useState([//might move the longer lists into text file
       style={styles.button} onPress={() => navigation.navigate('CustomGeo')}>
         <Text style={styles.buttonText}>{locationButtonText}</Text>
     </Pressable>
-    <Text style={styles.basicText}>Lat: {markerData.latitude}</Text>
-    <Text style={styles.basicText}>Long: {markerData.longitude}</Text>
+   <Text style={styles.basicText}>Lat: {markerData.latitude}</Text>
+   <Text style={styles.basicText}>Long: {markerData.longitude}</Text>
     <Pressable onPress={submitFunction} style= {[styles.button]}>
-    	<Text style={styles.buttonText}>{submitButtonText}
-        </Text>
+    	<Text style={styles.buttonText}>{submitButtonText}</Text>
 	</Pressable>
 
 		<Modal isVisible={isModalVisible}>
 			<View style={{ flex: 1, justifyContent:"center",alignItems:"center" }}>
-				{!isPosted ? 
+				{!isPosted ?
           <Text style={{fontSize:36,backgroundColor:'white',paddingHorizontal:10,paddingVertical:5,borderRadius:2,overflow:"hidden"}}>Submitting...</Text>
           : <Text style={{fontSize:36,backgroundColor:'white',paddingHorizontal:10,paddingVertical:5,borderRadius:2,overflow:"hidden"}}>Submitted!</Text>
         }

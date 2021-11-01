@@ -39,9 +39,11 @@ class TimeLine extends React.Component {
 			let DATA = [];
 			tempVar.get().then((querySnapshot) => {
 				querySnapshot.forEach((doc) => {
-					DATA.push({...doc.data(),id:doc.id});
+					if (doc.data().flag == false)
+					    DATA.push({...doc.data(),id:doc.id});
+					//console.log(DATA);
 				});
-				// console.log(querySnapshot);
+				 //console.log(querySnapshot);
 				this.setState({strayList:DATA,loaded:true});
 			});
 		}
@@ -52,6 +54,7 @@ class TimeLine extends React.Component {
 		// const toTop = () => {
 		// 	flatListRef.current.scrollToOffset({ animated: true, offset: 0 })
 		// }
+		//console.log(this.state.strayList);
 		let compareMe;
 		if (this.props.view) compareMe = this.props.view;
 		else if (this.props.route.params) compareMe = this.props.route.params.view;
