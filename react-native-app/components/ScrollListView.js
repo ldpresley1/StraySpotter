@@ -1,18 +1,24 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, useMemo, useCallback} from 'react';
 import { Text, View, FlatList, StyleSheet, ScrollView, Image, Dimensions, Appearance, Pressable, Platform } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { darkTheme, lightTheme } from './Themes';
 import * as Linking from 'expo-linking';
 import dbo from "./dataStorage";
+import Modal from "react-native-modal";
 
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
-
+var type = "temp";
 
 class Post extends React.Component {
 	state = {
-		page:0
+		page:0,
+		isModalVisible:false
+	}
+
+	setModalVisible = (visible) => {
+	    this.setState({isModalVisible: visible});
 	}
 	// Maybe use horizontal flat list for photos
 
@@ -23,7 +29,9 @@ class Post extends React.Component {
 		}
 	}
 
+
 	render() {
+	    const {isModalVisible} = this.state;
 		return (
 			<View style={styles.post}>
 				{
@@ -71,10 +79,50 @@ class Post extends React.Component {
 					<Pressable onPress={() => openMap(this.props.cord)}>
 						<Icon style={styles.iconStyle} name='map-marker-alt' type='fontisto' color={theme.colors.foreground}/>
 					</Pressable>
-					<Pressable onPress={() => flagPost(this.props.id)}>
-					    <Icon style={styles.iconStyle} name='map-marker-alt' type='fontisto' color={theme.colors.foreground}/>
+					<Pressable onPress={() => this.setModalVisible(true)}>
+					    <Icon style={styles.iconStyle} name='bell-alt' type='fontisto' color={theme.colors.foreground}/>
 					</Pressable>
 				</View>
+				<Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={isModalVisible}
+                  onRequestClose={() => {
+                    this.setModalVisible(!modalVisible);
+                  }}
+                >
+                  <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                      <Text style={styles.modalText}>Why would you like to remove this post?</Text>
+                      <Pressable
+                          style={[styles.button, styles.buttonClose]}
+                          onPress={() => {
+                              flagPost(this.props.id, "This stray has been found!"),
+                              this.setModalVisible(!isModalVisible)
+                          }}
+                        >
+                          <Text style={styles.textStyle}>This stray has been found!</Text>
+                      </Pressable>
+                      <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => {
+                            flagPost(this.props.id, "Inappropriate Content"),
+                            this.setModalVisible(!isModalVisible)
+                        }}
+                      >
+                        <Text style={styles.textStyle}>Inappropriate Content</Text>
+                      </Pressable>
+                      <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => {
+                            flagPost(this.props.id, "cancelled"),
+                            this.setModalVisible(!isModalVisible)
+                        }}>
+                        <Text style={styles.textStyle}>Cancel</Text>
+                      </Pressable>
+                    </View>
+                  </View>
+                </Modal>
 				<Text style={styles.description}>{this.props.description}</Text>
 				<View style={styles.tagContainer}>
 					{
@@ -87,6 +135,7 @@ class Post extends React.Component {
 		)
 	}
 }
+
 
 // this is copied directly from stack overflow
 function openMap(cord) {
@@ -102,21 +151,30 @@ function openMap(cord) {
 	Linking.openURL(url);
 }
 
-function flagPost(strayID){
-    dbo.firebase.firestore()
-        .collection('StraysFound')
-        .doc(strayID)
-        .update({
-            flag: true
-        });
-    dbo.firebase.firestore()
-        .collection('Reporting')
-        .add({
-            flagged: true,
-            postID: strayID,
-            info: "Temp Text"
-        });
-    console.log('Post flagged!');
+function pressType(buttonType){
+    console.log(buttonType);
+}
+
+function flagPost(strayID, reason){
+//   flagPost(this.props.id, type),
+    if(reason != "cancelled"){
+        dbo.firebase.firestore()
+            .collection('StraysFound')
+            .doc(strayID)
+            .update({
+                flag: true
+            });
+        console.log(strayID, "flagged")
+
+        dbo.firebase.firestore()
+            .collection('Reporting')
+            .add({
+                flagged: true,
+                postID: strayID,
+                info: reason
+            });
+        console.log(strayID, "added to the reporting db.")
+    }
 }
 
 const renderPost = ({ item }) => (
@@ -152,6 +210,50 @@ export default class ScrollListView extends React.Component {
 }
 
 const styles = StyleSheet.create({
+      centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+      },
+      modalView: {
+        margin: 20,
+        backgroundColor: theme.colors.background,
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: theme.colors.foreground,
+        shadowOffset: {
+          width: 0,
+          height: 5
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+      },
+      button: {
+        borderRadius: 20,
+        padding: 15,
+        elevation: 2,
+        marginVertical: 5
+      },
+      buttonOpen: {
+        backgroundColor: "#F194FF",
+      },
+      buttonClose: {
+        backgroundColor: theme.colors.primary,
+      },
+      textStyle: {
+        color: theme.colors.foreground,
+        fontWeight: "bold",
+        textAlign: "center"
+      },
+      modalText: {
+        color: theme.colors.foreground,
+        marginBottom: 15,
+        fontWeight: "bold",
+        textAlign: "center"
+      },
 	toTop: {
 		position:'absolute',
 		height:Platform.OS === 'ios' ? 100 : 80, // roughly the size of the header

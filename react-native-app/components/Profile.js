@@ -122,7 +122,7 @@ const Help = ({navigation, route}) => {
 	return (
 		<View style={styles.window}>
 			<View style={styles.viewChangerView}>
-				<Text style={styles.basicText}>Oh thank gosh, are you here to help me?</Text>
+				<Text style={styles.basicText}> Oh thank gosh, are you here to help me? </Text>
 			</View>
 		</View>
 	);

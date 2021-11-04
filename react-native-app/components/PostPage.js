@@ -99,8 +99,11 @@ const [types, setTypes] = useState([//might move the longer lists into text file
               title: title,
               tags: tagsList,
               flag: false, //set to false unless reported on the timeline page
-              id: 42, //Temp Data
+             // id: 42, //Temp Data
               cord: {lat: markerData.latitude, long: markerData.longitude},
+              //images: ["https://firebasestorage.googleapis.com/b/stray-spotter/o/IMG_5782.jpeg"],
+              //images: ["https://storage.googleapis.com/stray-spotter/IMG_5782.jpeg"],
+              //images: ["https://storage.googleapis.com/[BUCKET_NAME]/[FILE_PATH]"],
               images: ["https://drive.google.com/uc?export=view&id=1t71FPVZGB5jPaynUaQ8wYXwlnc1pTdK0", "https://drive.google.com/uc?export=view&id=1qNcYmOapTKTs2eARJCa6hOvFijK5ykll"], //TEMP DATA
               userID: 42, //temp data
            })
