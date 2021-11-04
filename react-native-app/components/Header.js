@@ -15,6 +15,13 @@ const Header = (props) => {
 	if (!loaded) return null;
 	return (
 		<View style={styles.header}>
+			{
+			props.nav ? 
+				<Pressable style={styles.iconButton} onPress={() => props.nav.goBack()}>
+					<Icon style={styles.icon} color={theme.colors.foreground} name='angle-left' type='fontisto' />
+				</Pressable> 
+				: <></>
+			}
 			<Text style={styles.headerText}>Stray Spotter</Text>
 			{/* <Icon style={styles.icon} name='search' type='fontisto' color={theme.colors.foreground}/> */}
 		</View>
@@ -44,8 +51,13 @@ const styles = StyleSheet.create({
 		...theme.textVariants.header,
 		// fontFamily:'SatisfyRegular',
 	},
+	iconButton: {
+		position:'absolute',
+		bottom:20,
+		left:20,
+	},
 	icon: {
-		paddingBottom:theme.spacing.l,
+		// paddingBottom:theme.spacing.l,
 		...theme.textVariants.header
 	}
 });

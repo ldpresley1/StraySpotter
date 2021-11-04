@@ -65,7 +65,7 @@ export default function App() {
 				<Tab.Screen name="PostPage" component={PostPage} />
 				<Tab.Screen name="Map" component={TimeLine} initialParams={{view:'mapView'}} />
 				<Tab.Screen name="TimeLine" component={TimeLine} initialParams={{view:"listView"}} />
-				<Tab.Screen name="Profile" component={Profile} />
+				<Tab.Screen name="Profile" component={Profile} options={{headerShown:false}}/>
 				
 			</Tab.Navigator>
 		</NavigationContainer>

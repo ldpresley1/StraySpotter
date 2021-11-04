@@ -1,46 +1,90 @@
 import React, { useState } from 'react';
-import { Icon } from 'react-native-elements';
-import { Text, View, Appearance, StyleSheet, Pressable, SafeAreaView, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { Icon, ThemeContext } from 'react-native-elements';
+import { Text, View, Appearance, StyleSheet, Pressable, SafeAreaView, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView, Image } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MapView, { Marker } from 'react-native-maps';
 
 import { darkTheme, lightTheme } from './Themes';
 import TimeLine from './TimeLine';
+import Header from './Header';
+import { ScreenWidth } from 'react-native-elements/dist/helpers';
 
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 
 // class Profile extends React.Component {
 const Profile = ({navigation, route}) => {
-	const [viewType, setView] = useState("listView");
 	const [username, setUsername] = useState("username");
-	const [markerData,setMarkerData] = useState({
-		latitude: 33.2083,
-		longitude: -87.5504
-	});
 
-	if (route.params?.latitude) {
-		// what it does: check if something has changed, update the state
-		// why: if we always update the state, it will make an infinite loop
-		if (route.params.latitude != markerData.latitude || route.params.longitude != markerData.longitude) {
-			setMarkerData({
-				latitude: route.params.latitude,
-				longitude: route.params.longitude
-			});
-		}
-	}
 	if (route.params?.username && route.params.username != username) {
 		setUsername(route.params.username);
 	}
 
 	return (
-		<View style={styles.window}>
-			<View style={styles.usernameView}>
-				<Text style={[styles.basicText,{marginRight:20}]}>{username}</Text>
-				<Pressable style={styles.button} onPress={() => navigation.navigate('Settings',{parent:'PersonalProfile'})}>
-					<Icon style={styles.iconStyle} name='spinner-cog' type='fontisto' color={theme.colors.foreground}/>
+		<ScrollView style={styles.scrollView}>
+			<View style={styles.wrapper}>
+				<Image source={require('../assets/favicon.png')} style={{alignSelf:'center', overflow:'hidden',borderRadius:ScreenWidth}}/>
+				<Text style={[styles.basicText,{ marginLeft:20, fontSize:36, alignSelf:'center', }]}>{username}</Text>
+				<Pressable style={[styles.button,{flexDirection:'row',alignItems:'center',justifyContent:'center'}]} onPress={() => navigation.navigate('Settings',{parent:'PersonalProfile'})}>
+					<Text style={[styles.basicText,{ marginHorizontal:20, fontSize:36, alignSelf:'center', }]}>Edit Profile</Text>
+					<Icon style={styles.iconStyle} name='eraser' type='fontisto' color={theme.colors.foreground}/>
 					{/* <Icon style={styles.iconStyle} name='player-settings' type='fontisto' color={theme.colors.foreground}/> */}
 				</Pressable>
+
+				<Pressable style={[styles.fullButton,{borderTopWidth:1}]} onPress={() => navigation.navigate('MyPosts')}>
+					<View style={styles.fullButtonIconView}>
+						<Icon style={styles.fullButtonIcon} name='paw' type="fontisto" color={theme.colors.primary}/>
+					</View>
+					<Text style={styles.fullButtonText}>My Posts</Text>
+					<View style={{marginLeft:'auto', marginRight:theme.spacing.m}}>
+						<Icon style={styles.fullButtonIcon} name="angle-right" type="fontisto" color={theme.colors.foreground}/>
+					</View>
+				</Pressable>
+				<Pressable style={styles.fullButton} onPress={() => navigation.navigate('Privacy')}>
+					<View style={styles.fullButtonIconView}>
+						<Icon style={styles.fullButtonIcon} name="lock" type="fontistio" color={theme.colors.primary}/>
+					</View>
+					<Text style={styles.fullButtonText}>Privacy</Text>
+					<View style={{marginLeft:'auto', marginRight:theme.spacing.m}}>
+						<Icon style={styles.fullButtonIcon} name="angle-right" type="fontisto" color={theme.colors.foreground}/>
+					</View>
+				</Pressable>
+				<Pressable style={styles.fullButton} onPress={() => navigation.navigate('About')}>
+					<View style={styles.fullButtonIconView}>
+						<Icon style={styles.fullButtonIcon} name="info" type="fontisto" color={theme.colors.primary}/>
+					</View>
+					<Text style={styles.fullButtonText}>About</Text>
+					<View style={{marginLeft:'auto', marginRight:theme.spacing.m}}>
+						<Icon style={styles.fullButtonIcon} name="angle-right" type="fontisto" color={theme.colors.foreground}/>
+					</View>
+				</Pressable>
+				<Pressable style={styles.fullButton} onPress={() => navigation.navigate('Help')}>
+					<View style={styles.fullButtonIconView}>
+						<Icon style={styles.fullButtonIcon} name="coffeescript" type="fontisto" color={theme.colors.primary}/>
+					</View>
+					<Text style={styles.fullButtonText}>Help</Text>
+					<View style={{marginLeft:'auto', marginRight:theme.spacing.m}}>
+						<Icon style={styles.fullButtonIcon} name="angle-right" type="fontisto" color={theme.colors.foreground}/>
+					</View>
+				</Pressable>
+				<Pressable style={styles.fullButton} onPress={() => navigation.navigate('Privacy')}>
+					<View style={styles.fullButtonIconView}>
+						<Icon style={styles.fullButtonIcon} name="arrow-return-left" type="fontisto" color={theme.colors.primary}/>
+					</View>
+					<Text style={styles.fullButtonText}>Log Out</Text>
+					<View style={{marginLeft:'auto', marginRight:theme.spacing.m}}>
+						<Icon style={styles.fullButtonIcon} name="angle-right" type="fontisto" color={theme.colors.foreground}/>
+					</View>
+				</Pressable>
 			</View>
+		</ScrollView>
+	);
+}
+
+
+const MyPosts = ({navigation, route}) => {
+	const [viewType, setView] = useState("listView");
+	return (
+		<View style={styles.window}>
 			<View style={styles.viewChangerView}>
 				<Pressable style={viewType == "mapView" ? styles.viewButtonActive : styles.viewButton} onPress={() => setView("mapView")}>
 					<Text style={styles.basicText}>Map View</Text>
@@ -53,6 +97,37 @@ const Profile = ({navigation, route}) => {
 		</View>
 	);
 }
+
+const Privacy = ({navigation, route}) => {
+	return (
+		<View style={styles.window}>
+			<View style={styles.viewChangerView}>
+				<Text style={styles.basicText}>This is private. Don't look</Text>
+			</View>
+		</View>
+	);
+}
+
+const About = ({navigation, route}) => {
+	return (
+		<View style={styles.window}>
+			<View style={styles.viewChangerView}>
+				<Text style={styles.basicText}>This is the about page. It's about here</Text>
+			</View>
+		</View>
+	);
+}
+
+const Help = ({navigation, route}) => {
+	return (
+		<View style={styles.window}>
+			<View style={styles.viewChangerView}>
+				<Text style={styles.basicText}>Oh thank gosh, are you here to help me?</Text>
+			</View>
+		</View>
+	);
+}
+
 
 const Settings = ({navigation, route}) => {
 	const [username, setUsername] = useState('');
@@ -69,6 +144,7 @@ const Settings = ({navigation, route}) => {
 					/>
 				</SafeAreaView>
 				<Pressable style={styles.button} onPress={() => navigation.navigate(route.params.parent,{username:username.trim()})}>
+					{/* This must be replaced by updating some async storage component */}
 					<Text style={styles.basicText}>Go Back</Text>
 				</Pressable>
 			</View>
@@ -124,9 +200,24 @@ const Stack = createNativeStackNavigator();
 
 function App() {
 	return (
-		<Stack.Navigator screenOptions={{headerShown:false}}>
-			<Stack.Screen name="PersonalProfile" component={Profile} />
+		<Stack.Navigator 
+			screenOptions={({ route }) => ({
+				// for adding custom header, check docs here https://reactnavigation.org/docs/bottom-tab-navigator/#header-related-options
+				// lets us set a custom header
+				header: ({navigation, route, options}) => {
+					return <Header nav={navigation} />
+				},
+				// removes header
+				// headerShown:false,
+				showLabel: false,
+			})}
+			>
+			<Stack.Screen name="PersonalProfile" component={Profile} options={{headerShown:false}} />
 			<Stack.Screen name="Settings" component={Settings} />
+			<Stack.Screen name="MyPosts" component={MyPosts} />
+			<Stack.Screen name="Privacy" component={Privacy} />
+			<Stack.Screen name="About" component={About} />
+			<Stack.Screen name="Help" component={Help} />
 		</Stack.Navigator>
 	);
 }
@@ -135,6 +226,12 @@ function App() {
 export default App;
 
 const styles = StyleSheet.create({
+	scrollView: {
+		backgroundColor:theme.colors.background,
+	},
+	wrapper: {
+		marginTop:theme.spacing.xl,
+	},
 	window: {
 		width: '100%',
 		flex: 1,
@@ -156,6 +253,32 @@ const styles = StyleSheet.create({
 		flexDirection:'row',
 		justifyContent:"space-between",
 		alignItems:'center'
+	},
+	fullButton: {
+		// flex:1,
+		// height:20,
+		paddingVertical:10,
+		width:'100%',
+		flexDirection:'row',
+		borderColor:theme.colors.foreground,
+		borderBottomWidth:1,
+	},
+	fullButtonIconView: {
+		width:theme.spacing.xl*2,
+		// height:50,
+		alignItems:'center',
+		justifyContent:'center',
+	},
+	fullButtonIcon: {
+		// paddingHorizontal:theme.spacing.l,
+	},
+	fullButtonText: {
+		color:theme.colors.foreground,
+		fontSize:28,
+	},
+	backButton: {
+		backgroundColor:theme.colors.background,
+		paddingVertical:10,
 	},
 	viewChangerView: {
 		// flex:1,

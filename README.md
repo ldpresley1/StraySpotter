@@ -1,4 +1,10 @@
-## Welcome to GitHub Pages
+## Tests:
+
+[![Tests](https://github.com/ldpresley1/StraySpotter/actions/workflows/jest.yml/badge.svg)](https://github.com/ldpresley1/StraySpotter/actions/workflows/jest.yml)
+
+## Website:
+Our full project description and documentation is available [here](https://ldpresley1.github.io/StraySpotter/)
+<!-- ## Welcome to GitHub Pages
 
 You can use the [editor on GitHub](https://github.com/ldpresley1/StraySpotter/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
 
@@ -34,4 +40,4 @@ Your Pages site will use the layout and styles from the Jekyll theme you have se
 
 ### Support or Contact
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out. -->
