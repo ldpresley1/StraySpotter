@@ -101,10 +101,10 @@ const [types, setTypes] = useState([//might move the longer lists into text file
               flag: false, //set to false unless reported on the timeline page
              // id: 42, //Temp Data
               cord: {lat: markerData.latitude, long: markerData.longitude},
-              //images: ["https://firebasestorage.googleapis.com/b/stray-spotter/o/IMG_5782.jpeg"],
-              //images: ["https://storage.googleapis.com/stray-spotter/IMG_5782.jpeg"],
-              //images: ["https://storage.googleapis.com/[BUCKET_NAME]/[FILE_PATH]"],
-              images: ["https://drive.google.com/uc?export=view&id=1t71FPVZGB5jPaynUaQ8wYXwlnc1pTdK0", "https://drive.google.com/uc?export=view&id=1qNcYmOapTKTs2eARJCa6hOvFijK5ykll"], //TEMP DATA
+              //images: ["https://firebasestorage.googleapis.com/v0/b/stray-spotter.appspot.com/o/IMG_5782.jpeg?alt=media&token=3cfd5a4e-4026-4562-942d-1a8282d948d3"], //TEMP IMAGE OF CAT BEHIND FENCE
+              //images: ["https://firebasestorage.googleapis.com/v0/b/stray-spotter.appspot.com/o/IMG_5783.jpeg?alt=media&token=f2ec03d9-34b2-4eb5-9474-aeed816bb0b3 "], //TEMP IMAGE OF STORM DRAIN
+              //images: ["https://firebasestorage.googleapis.com/v0/b/stray-spotter.appspot.com/o/[FILE_PATH]/?alt=media&token=[MEDIA ACCESS TOKEN]"], //LINK EXAMPLE TO ACCESS STORAGE IMAGES
+              images: ["https://firebasestorage.googleapis.com/v0/b/stray-spotter.appspot.com/o/IMG_5782.jpeg?alt=media&token=3cfd5a4e-4026-4562-942d-1a8282d948d3", "https://firebasestorage.googleapis.com/v0/b/stray-spotter.appspot.com/o/IMG_5783.jpeg?alt=media&token=f2ec03d9-34b2-4eb5-9474-aeed816bb0b3"], //TEMP DATA
               userID: 42, //temp data
            })
             .then(() => {
