@@ -234,6 +234,7 @@ const [types, setTypes] = useState([//might move the longer lists into text file
 	  zIndex={4000}
       zIndexInverse={1000}
     />
+    <Text>    </Text>
 	<DropDownPicker
       open={colorOpen}
 	  onOpen={oncolorOpen}
@@ -251,6 +252,7 @@ const [types, setTypes] = useState([//might move the longer lists into text file
 	  zIndex={3000}
       zIndexInverse={1000}
     />
+    <Text>    </Text>
 	<DropDownPicker
       open={sizeOpen}
 	  onOpen={onsizeOpen}
@@ -294,8 +296,6 @@ const [types, setTypes] = useState([//might move the longer lists into text file
       style={styles.button} onPress={() => navigation.navigate('CustomGeo')}>
         <Text style={styles.buttonText}>{locationButtonText}</Text>
     </Pressable>
-   <Text style={styles.basicText}>Lat: {markerData.latitude}</Text>
-   <Text style={styles.basicText}>Long: {markerData.longitude}</Text>
     <Pressable onPress={submitFunction} style= {[styles.button]}>
     	<Text style={styles.buttonText}>{submitButtonText}</Text>
 	</Pressable>
