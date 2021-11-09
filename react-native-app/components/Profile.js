@@ -9,23 +9,21 @@ import TimeLine from './TimeLine';
 import Header from './Header';
 import { ScreenWidth } from 'react-native-elements/dist/helpers';
 
+import dbo from './dataStorage';
+
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 
 // class Profile extends React.Component {
 const Profile = ({navigation, route}) => {
-	const [username, setUsername] = useState("username");
-
-	if (route.params?.username && route.params.username != username) {
-		setUsername(route.params.username);
-	}
+	let username = dbo.firebase.auth().currentUser.displayName ? dbo.firebase.auth().currentUser.displayName : dbo.firebase.auth().currentUser.email;
 
 	return (
 		<ScrollView style={styles.scrollView}>
 			<View style={styles.wrapper}>
-				<Image source={require('../assets/favicon.png')} style={{alignSelf:'center', overflow:'hidden',borderRadius:ScreenWidth}}/>
-				<Text style={[styles.basicText,{ marginLeft:20, fontSize:36, alignSelf:'center', }]}>{username}</Text>
-				<Pressable style={[styles.button,{flexDirection:'row',alignItems:'center',justifyContent:'center'}]} onPress={() => navigation.navigate('Settings',{parent:'PersonalProfile'})}>
-					<Text style={[styles.basicText,{ marginHorizontal:20, fontSize:36, alignSelf:'center', }]}>Edit Profile</Text>
+				<Image source={require('../assets/favicon.png')} style={styles.profilePicture}/>
+				<Text style={styles.usernameText}>{username}</Text>
+				<Pressable style={styles.settingsButton} onPress={() => navigation.navigate('Settings',{parent:'PersonalProfile'})}>
+					<Text style={styles.settingsButtonText}>Edit Profile</Text>
 					<Icon style={styles.iconStyle} name='eraser' type='fontisto' color={theme.colors.foreground}/>
 					{/* <Icon style={styles.iconStyle} name='player-settings' type='fontisto' color={theme.colors.foreground}/> */}
 				</Pressable>
@@ -35,7 +33,7 @@ const Profile = ({navigation, route}) => {
 						<Icon style={styles.fullButtonIcon} name='paw' type="fontisto" color={theme.colors.primary}/>
 					</View>
 					<Text style={styles.fullButtonText}>My Posts</Text>
-					<View style={{marginLeft:'auto', marginRight:theme.spacing.m}}>
+					<View style={styles.fullButtonRightIcon}>
 						<Icon style={styles.fullButtonIcon} name="angle-right" type="fontisto" color={theme.colors.foreground}/>
 					</View>
 				</Pressable>
@@ -44,7 +42,7 @@ const Profile = ({navigation, route}) => {
 						<Icon style={styles.fullButtonIcon} name="lock" type="fontistio" color={theme.colors.primary}/>
 					</View>
 					<Text style={styles.fullButtonText}>Privacy</Text>
-					<View style={{marginLeft:'auto', marginRight:theme.spacing.m}}>
+					<View style={styles.fullButtonRightIcon}>
 						<Icon style={styles.fullButtonIcon} name="angle-right" type="fontisto" color={theme.colors.foreground}/>
 					</View>
 				</Pressable>
@@ -53,7 +51,7 @@ const Profile = ({navigation, route}) => {
 						<Icon style={styles.fullButtonIcon} name="info" type="fontisto" color={theme.colors.primary}/>
 					</View>
 					<Text style={styles.fullButtonText}>About</Text>
-					<View style={{marginLeft:'auto', marginRight:theme.spacing.m}}>
+					<View style={styles.fullButtonRightIcon}>
 						<Icon style={styles.fullButtonIcon} name="angle-right" type="fontisto" color={theme.colors.foreground}/>
 					</View>
 				</Pressable>
@@ -62,16 +60,22 @@ const Profile = ({navigation, route}) => {
 						<Icon style={styles.fullButtonIcon} name="coffeescript" type="fontisto" color={theme.colors.primary}/>
 					</View>
 					<Text style={styles.fullButtonText}>Help</Text>
-					<View style={{marginLeft:'auto', marginRight:theme.spacing.m}}>
+					<View style={styles.fullButtonRightIcon}>
 						<Icon style={styles.fullButtonIcon} name="angle-right" type="fontisto" color={theme.colors.foreground}/>
 					</View>
 				</Pressable>
-				<Pressable style={styles.fullButton} onPress={() => navigation.navigate('Privacy')}>
+				<Pressable style={styles.fullButton} onPress={() => {
+						console.log(dbo.firebase.auth().currentUser?.uid);
+						dbo.firebase.auth().signOut().then(() => {
+							navigation.replace('LogIn');
+						})
+						// .catch(error => this.setState({ errorMessage: error.message }))
+					}}>
 					<View style={styles.fullButtonIconView}>
 						<Icon style={styles.fullButtonIcon} name="arrow-return-left" type="fontisto" color={theme.colors.primary}/>
 					</View>
 					<Text style={styles.fullButtonText}>Log Out</Text>
-					<View style={{marginLeft:'auto', marginRight:theme.spacing.m}}>
+					<View style={styles.fullButtonRightIcon}>
 						<Icon style={styles.fullButtonIcon} name="angle-right" type="fontisto" color={theme.colors.foreground}/>
 					</View>
 				</Pressable>
@@ -249,10 +253,38 @@ const styles = StyleSheet.create({
 		backgroundColor:theme.colors.primary,
 		marginVertical: 30,
 	},
+	profilePicture: {
+		alignSelf:'center',
+		overflow:'hidden',
+		borderRadius:ScreenWidth
+	},
+	settingsButton: {
+		paddingVertical: 10,
+		paddingHorizontal: 20,
+		borderRadius:2,
+		backgroundColor:theme.colors.primary,
+		marginVertical: 30,
+		
+		flexDirection:'row',
+		alignItems:'center',
+		justifyContent:'center'
+	},
+	settingsButtonText: {
+		color:theme.colors.foreground,
+		marginHorizontal:20,
+		fontSize:36,
+		alignSelf:'center',
+	},
 	usernameView: {
 		flexDirection:'row',
 		justifyContent:"space-between",
 		alignItems:'center'
+	},
+	usernameText: {
+		color:theme.colors.foreground,
+		marginLeft:20, 
+		fontSize:36, 
+		alignSelf:'center',
 	},
 	fullButton: {
 		// flex:1,
@@ -275,6 +307,10 @@ const styles = StyleSheet.create({
 	fullButtonText: {
 		color:theme.colors.foreground,
 		fontSize:28,
+	},
+	fullButtonRightIcon: {
+		marginLeft:'auto',
+		marginRight:theme.spacing.m,
 	},
 	backButton: {
 		backgroundColor:theme.colors.background,

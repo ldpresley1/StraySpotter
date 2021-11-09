@@ -1,5 +1,5 @@
 import React, {useState, useMemo, useCallback} from 'react';
-import { Text, Pressable, View, StyleSheet, TextInput, Appearance, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { Text, Pressable, View, StyleSheet, TextInput, Appearance, TouchableWithoutFeedback, Keyboard, ActivityIndicator } from 'react-native';
 //import { ImageBrowser } from 'expo-image-picker-multiple';
 //import * as MediaLibrary from 'expo-media-library';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -272,16 +272,17 @@ const [types, setTypes] = useState([//might move the longer lists into text file
     </Pressable>
    <Text style={styles.basicText}>Lat: {markerData.latitude}</Text>
    <Text style={styles.basicText}>Long: {markerData.longitude}</Text>
-    <Pressable onPress={submitFunction} style= {[styles.button]}>
+    <Pressable onPress={practiceModal} style= {[styles.button]}>
     	<Text style={styles.buttonText}>{submitButtonText}</Text>
 	</Pressable>
 
 		<Modal isVisible={isModalVisible}>
 			<View style={{ flex: 1, justifyContent:"center",alignItems:"center" }}>
-				{!isPosted ?
+				{/* {!isPosted ?
           <Text style={{fontSize:36,backgroundColor:'white',paddingHorizontal:10,paddingVertical:5,borderRadius:2,overflow:"hidden"}}>Submitting...</Text>
           : <Text style={{fontSize:36,backgroundColor:'white',paddingHorizontal:10,paddingVertical:5,borderRadius:2,overflow:"hidden"}}>Submitted!</Text>
-        }
+        } */}
+        <ActivityIndicator size='large' color='white'/>
 			</View>
 		</Modal>
     </>
