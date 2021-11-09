@@ -14,6 +14,7 @@ const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 //MediaLibrary.requestPermissionsAsync();
 
 var tagsList = [];
+var imageID;
 var locationButtonText = "Select Location";
 var submitButtonText = "Submit";
 const PostPage = ({route, navigation}) => {
@@ -87,10 +88,13 @@ const [types, setTypes] = useState([//might move the longer lists into text file
   const submitFunction = () => {//this is the function that gets called when the button is pushed
 		setIsModalVisible(true);
     return(
-      tagsList = colorValue, //THIS HAS TO GO FIRST so that we don't get nested arrays
+      tagsList = arrayIterator(tagsList, colorValue), //THIS HAS TO GO FIRST so that we don't get nested arrays
       tagsList.push(typeValue),
       //tagsList.push(breedValue), //Commented out until we figure out breed values
       tagsList.push(sizeValue),
+      imageID = "This post is a " + sizeValue + " " + typeValue + " with ",
+      imageID = imageIDMaker(imageID, colorValue),
+      //console.log(imageID),
 
       dbo.firebase.firestore()
            .collection('StraysFound')
@@ -99,12 +103,13 @@ const [types, setTypes] = useState([//might move the longer lists into text file
               title: title,
               tags: tagsList,
               flag: false, //set to false unless reported on the timeline page
-             // id: 42, //Temp Data
               cord: {lat: markerData.latitude, long: markerData.longitude},
               //images: ["https://firebasestorage.googleapis.com/v0/b/stray-spotter.appspot.com/o/IMG_5782.jpeg?alt=media&token=3cfd5a4e-4026-4562-942d-1a8282d948d3"], //TEMP IMAGE OF CAT BEHIND FENCE
               //images: ["https://firebasestorage.googleapis.com/v0/b/stray-spotter.appspot.com/o/IMG_5783.jpeg?alt=media&token=f2ec03d9-34b2-4eb5-9474-aeed816bb0b3 "], //TEMP IMAGE OF STORM DRAIN
-              //images: ["https://firebasestorage.googleapis.com/v0/b/stray-spotter.appspot.com/o/[FILE_PATH]/?alt=media&token=[MEDIA ACCESS TOKEN]"], //LINK EXAMPLE TO ACCESS STORAGE IMAGES
-              images: ["https://firebasestorage.googleapis.com/v0/b/stray-spotter.appspot.com/o/IMG_5782.jpeg?alt=media&token=3cfd5a4e-4026-4562-942d-1a8282d948d3", "https://firebasestorage.googleapis.com/v0/b/stray-spotter.appspot.com/o/IMG_5783.jpeg?alt=media&token=f2ec03d9-34b2-4eb5-9474-aeed816bb0b3"], //TEMP DATA
+              //images: ["https://firebasestorage.googleapis.com/v0/b/stray-spotter.appspot.com/o/[FILE_PATH]/?alt=media&token=[MEDIA ACCESS TOKEN]"], //LINK EXAMPLE TO ACCESS STORAGE IMAGES (use getDownloadURL function to get this link for individual files)
+              images: ["https://firebasestorage.googleapis.com/v0/b/stray-spotter.appspot.com/o/IMG_5782.jpeg?alt=media&token=3cfd5a4e-4026-4562-942d-1a8282d948d3",
+                        "https://firebasestorage.googleapis.com/v0/b/stray-spotter.appspot.com/o/IMG_5783.jpeg?alt=media&token=f2ec03d9-34b2-4eb5-9474-aeed816bb0b3"], //TEMP DATA
+              imageID: imageID,
               userID: 42, //temp data
            })
             .then(() => {
@@ -124,6 +129,25 @@ const [types, setTypes] = useState([//might move the longer lists into text file
           {"SUBMITTED"}
         </Text>
     );
+  }
+
+  function arrayIterator(arr1, arr2){
+    for(var i = 0; i < arr2.length; i++){
+        arr1.push(arr2[i]);
+    }
+    return arr1;
+  }
+  function imageIDMaker(text, array){
+    for(var i = 0; i < array.length; i++){
+        if(array.length - 1 == i)
+            text = text + "and " + array[i]
+        else if (array.length > 2)
+            text = text + array[i] + ", ";
+        else
+            text = text + array[i] + " ";
+    }
+    text = text + " fur."
+    return text;
   }
 
   function emptyArray(array){
@@ -272,7 +296,7 @@ const [types, setTypes] = useState([//might move the longer lists into text file
     </Pressable>
    <Text style={styles.basicText}>Lat: {markerData.latitude}</Text>
    <Text style={styles.basicText}>Long: {markerData.longitude}</Text>
-    <Pressable onPress={practiceModal} style= {[styles.button]}>
+    <Pressable onPress={submitFunction} style= {[styles.button]}>
     	<Text style={styles.buttonText}>{submitButtonText}</Text>
 	</Pressable>
 
