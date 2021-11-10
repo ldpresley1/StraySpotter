@@ -97,7 +97,7 @@ const MyPosts = ({navigation, route}) => {
 					<Text style={styles.basicText}>List View</Text>
 				</Pressable>
 			</View>
-			<TimeLine view={viewType}/>
+			<TimeLine view={viewType} uid={dbo.firebase.auth().currentUser.uid}/>
 		</View>
 	);
 }

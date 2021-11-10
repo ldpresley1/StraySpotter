@@ -110,18 +110,15 @@ const [types, setTypes] = useState([//might move the longer lists into text file
               images: ["https://firebasestorage.googleapis.com/v0/b/stray-spotter.appspot.com/o/IMG_5782.jpeg?alt=media&token=3cfd5a4e-4026-4562-942d-1a8282d948d3",
                         "https://firebasestorage.googleapis.com/v0/b/stray-spotter.appspot.com/o/IMG_5783.jpeg?alt=media&token=f2ec03d9-34b2-4eb5-9474-aeed816bb0b3"], //TEMP DATA
               imageID: imageID,
-              userID: 42, //temp data
+              userID: dbo.firebase.auth().currentUser.uid, //temp data
            })
             .then(() => {
                console.log('Stray added!'); //TEST
               //  set posted true
                 setIsPosted(true);
-                setTimeout(function() {
-                  setDefaults();
-                  setIsModalVisible(false);
-                  setIsPosted(false);
-                  // set psted false
-                }, 750);
+                setDefaults();
+                setIsModalVisible(false);
+                setIsPosted(false);
              }),
         emptyArray(tagsList),
         submitButtonText = "SUBMITTED!",

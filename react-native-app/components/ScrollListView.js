@@ -204,6 +204,8 @@ export default class ScrollListView extends React.Component {
                     keyExtractor={post => post.id}
                     numColumns={1}
                     contentContainerStyle={styles.flatlist}
+					refreshing={!this.props.loaded}
+					onRefresh={this.props.refresh}
                 />
         );
 	}

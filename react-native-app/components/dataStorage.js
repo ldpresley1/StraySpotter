@@ -20,3 +20,28 @@ export default DatabaseObject = {
 	app:app,
 	database:database
 }
+
+export const postData = {
+  strayListByUID:[],
+  strayListByDistance:[],
+  getByUID: async function (uid) {
+      let tempVar = database.collection("StraysFound");
+      let DATA = [];
+      snapshot = await tempVar.where('userID', '==', uid).get();
+      snapshot.forEach(doc => {
+        DATA.push({...doc.data(),id:doc.id});
+      });
+      //console.log(querySnapshot);
+      this.strayListByUID = DATA;
+  },
+  getByDistance: async function () {
+    let tempVar = database.collection("StraysFound");
+      let DATA = [];
+      snapshot = await tempVar.get();
+      snapshot.forEach(doc => {
+        DATA.push({...doc.data(),id:doc.id});
+      });
+      //console.log(querySnapshot);
+      this.strayListByDistance = DATA;
+  },
+}
