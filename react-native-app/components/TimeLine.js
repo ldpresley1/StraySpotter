@@ -39,6 +39,7 @@ class TimeLine extends React.Component {
 	}
 
 	loadPosts() {
+		this.setState({loaded:false});
 		if (this.props.uid) {
 			postData.getByUID(this.props.uid).then(() => {
 				this.setState({loaded:true});

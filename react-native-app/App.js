@@ -45,6 +45,7 @@ const LogIn = ({navigation, route}) => {
 	const [isModalVisible, setModalVisible] = useState(false);
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
+	const [showPassword, setShowPassword] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
 
 	const logInFunc = () => {
@@ -100,7 +101,7 @@ const LogIn = ({navigation, route}) => {
 			<TextInput
 				style={styles.textInput}
 				onChangeText={setUsername}
-				placeholder="john@example.com"
+				placeholder="johnnyappleseed@example.com"
 				value={username}
 				autoCapitalize='none'
 				autoCorrect={false}
@@ -114,8 +115,7 @@ const LogIn = ({navigation, route}) => {
 				value={password}
 				autoCapitalize='none'
 				autoCorrect={false}
-				secureTextEntry={true}
-			/>
+				secureTextEntry={!showPassword} />
 			<View style={styles.extraSpace}></View>
 			<Pressable style={styles.logInButton} onPress={logInFunc}><Text style={styles.logInButtonText}>Log In</Text></Pressable>
 			<Pressable style={styles.signInButton} onPress={signUpFunc}><Text style={styles.signInButtonText}>Sign Up</Text></Pressable>

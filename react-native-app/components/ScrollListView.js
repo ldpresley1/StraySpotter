@@ -11,7 +11,7 @@ const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 var type = "temp";
 
-class Post extends React.Component {
+export class Post extends React.Component {
 	state = {
 		page:0,
 		isModalVisible:false
@@ -31,7 +31,6 @@ class Post extends React.Component {
 
 
 	render() {
-	    const {isModalVisible} = this.state;
 		return (
 			<View style={styles.post}>
 				{
@@ -55,7 +54,8 @@ class Post extends React.Component {
 										return <Image 
 											key={index} 
 											style={styles.postImage} 
-											source={{uri: imageUrl}} />
+											source={{uri: imageUrl}} 
+											loadingIndicatorSource={require('../assets/favicon.png')} />
 									})
 								}
 							</ScrollView>
@@ -86,7 +86,7 @@ class Post extends React.Component {
 				<Modal
                   animationType="slide"
                   transparent={true}
-                  visible={isModalVisible}
+                  visible={this.state.isModalVisible}
                   onRequestClose={() => {
                     this.setModalVisible(!modalVisible);
                   }}
@@ -98,7 +98,7 @@ class Post extends React.Component {
                           style={[styles.button, styles.buttonClose]}
                           onPress={() => {
                               flagPost(this.props.id, "This stray has been found!"),
-                              this.setModalVisible(!isModalVisible)
+                              this.setModalVisible(!this.state.isModalVisible)
                           }}
                         >
                           <Text style={styles.textStyle}>This stray has been found!</Text>
@@ -107,7 +107,7 @@ class Post extends React.Component {
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                             flagPost(this.props.id, "Inappropriate Content"),
-                            this.setModalVisible(!isModalVisible)
+                            this.setModalVisible(!this.state.isModalVisible)
                         }}
                       >
                         <Text style={styles.textStyle}>Inappropriate Content</Text>
@@ -116,7 +116,7 @@ class Post extends React.Component {
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {
                             flagPost(this.props.id, "cancelled"),
-                            this.setModalVisible(!isModalVisible)
+                            this.setModalVisible(!this.state.isModalVisible)
                         }}>
                         <Text style={styles.textStyle}>Cancel</Text>
                       </Pressable>

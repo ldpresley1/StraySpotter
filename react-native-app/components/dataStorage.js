@@ -11,7 +11,14 @@ const firebaseConfig = {
   storageBucket: "stray-spotter.appspot.com"
 };
 
-const app = firebase.initializeApp(firebaseConfig);
+// this prevent's firebase throwing the following error when doing the "Hot Reload":
+//    "FirebaseError: Firebase: Firebase App named '[DEFAULT]' already exists (app/duplicate-app)."
+let app;
+if (firebase.apps.length > 0) {
+  app = firebase.app();
+} else {
+  app = firebase.initializeApp(firebaseConfig);
+}
 const database = firebase.firestore();
 
 export default DatabaseObject = {
