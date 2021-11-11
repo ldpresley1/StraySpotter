@@ -36,7 +36,8 @@ export const postData = {
       let DATA = [];
       snapshot = await tempVar.where('userID', '==', uid).get();
       snapshot.forEach(doc => {
-        DATA.push({...doc.data(),id:doc.id});
+        if (doc.data().flag == false)
+      		DATA.push({...doc.data(),id:doc.id});
       });
       //console.log(querySnapshot);
       this.strayListByUID = DATA;
@@ -46,7 +47,8 @@ export const postData = {
       let DATA = [];
       snapshot = await tempVar.get();
       snapshot.forEach(doc => {
-        DATA.push({...doc.data(),id:doc.id});
+        if (doc.data().flag == false)
+      		DATA.push({...doc.data(),id:doc.id});
       });
       //console.log(querySnapshot);
       this.strayListByDistance = DATA;
