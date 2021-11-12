@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, Appearance, Pressable, TextInput, TouchableWithoutFeedback, Keyboard, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, Appearance, Pressable, TextInput, TouchableWithoutFeedback, Keyboard, ActivityIndicator, KeyboardAvoidingView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -35,6 +35,7 @@ export default function AppWithLogin() {
 				})}
 				>
 				<Stack.Screen name="LogIn" component={LogIn} />
+				<Stack.Screen name="Signup" component={SignUpScreen} />
 				<Stack.Screen name="Dash" component={App} />
 			</Stack.Navigator>
 		</NavigationContainer>
@@ -69,7 +70,64 @@ const LogIn = ({navigation, route}) => {
 			})
 	}
 
+	return (
+		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+		<View style={styles.container}>
+			<KeyboardAvoidingView behavior='position' style={{width:'100%'}}>
+				<Pressable onPress={() => {
+					setUsername('test@strayspotter.com');
+					setPassword('password');
+				}}>
+					<Text style={styles.errorText}>{errorMessage}</Text>
+				</Pressable>
+				<Text style={styles.inputLabel}>Email:</Text>
+				<TextInput
+					style={styles.textInput}
+					onChangeText={setUsername}
+					placeholder="johnnyappleseed@example.com"
+					value={username}
+					autoCapitalize='none'
+					autoCorrect={false}
+					secureTextEntry={false}
+				/>
+				<Text style={styles.inputLabel}>Password:</Text>
+				<TextInput
+					style={styles.textInput}
+					onChangeText={setPassword}
+					placeholder="password"
+					value={password}
+					autoCapitalize='none'
+					autoCorrect={false}
+					secureTextEntry={!showPassword} />
+			</KeyboardAvoidingView>
+
+			<View style={styles.extraSpace}></View>
+			<Pressable style={styles.logInButton} onPress={logInFunc}><Text style={styles.logInButtonText}>Log In</Text></Pressable>
+			<Pressable style={styles.signInButton} onPress={() => navigation.navigate("Signup")}><Text style={styles.signInButtonText}>Sign Up</Text></Pressable>
+			<Modal isVisible={isModalVisible}>
+				<View style={{ flex: 1, justifyContent:"center",alignItems:"center" }}>
+					<ActivityIndicator size='large' color='white'/>
+				</View>
+			</Modal>
+		</View>
+		</TouchableWithoutFeedback>
+		);
+}
+
+const SignUpScreen = ({navigation, route}) => {
+
+	const [isModalVisible, setModalVisible] = useState(false);
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
+	const [password2, setPassword2] = useState("");
+	const [showPassword, setShowPassword] = useState(false);
+	const [errorMessage, setErrorMessage] = useState("");
+
 	const signUpFunc = () => {
+		if (password !== password2) {
+			setErrorMessage("Passwords do not match!");
+			return;
+		}
 		setModalVisible(true);
 		dbo.firebase.auth().createUserWithEmailAndPassword(username, password)
 			.then((res) => {
@@ -85,40 +143,53 @@ const LogIn = ({navigation, route}) => {
 			.catch((error) => {
 				setErrorMessage(error.message);
 				setModalVisible(false);
+				console.log("error logging in user");
 			})
 	}
 
 	return (
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
 		<View style={styles.container}>
-			<Pressable onPress={() => {
-				setUsername('test@strayspotter.com');
-				setPassword('password');
-			}}>
+			<KeyboardAvoidingView behavior='position' style={{width:'100%'}}> 
 				<Text style={styles.errorText}>{errorMessage}</Text>
-			</Pressable>
-			<Text style={styles.inputLabel}>Email:</Text>
-			<TextInput
-				style={styles.textInput}
-				onChangeText={setUsername}
-				placeholder="johnnyappleseed@example.com"
-				value={username}
-				autoCapitalize='none'
-				autoCorrect={false}
-				secureTextEntry={false}
-			/>
-			<Text style={styles.inputLabel}>Password:</Text>
-			<TextInput
-				style={styles.textInput}
-				onChangeText={setPassword}
-				placeholder="password"
-				value={password}
-				autoCapitalize='none'
-				autoCorrect={false}
-				secureTextEntry={!showPassword} />
+
+				<Text style={styles.inputLabel}>Email:</Text>
+				<TextInput
+					style={styles.textInput}
+					onChangeText={setUsername}
+					placeholder="johnnyappleseed@example.com"
+					value={username}
+					autoCapitalize='none'
+					autoCorrect={false}
+					secureTextEntry={false}
+				/>
+				<Text style={styles.inputLabel}>Password:</Text>
+				<View style={{width:"100%"}}>
+					<TextInput
+						style={styles.textInput}
+						onChangeText={setPassword}
+						placeholder="password"
+						value={password}
+						autoCapitalize='none'
+						autoCorrect={false}
+						secureTextEntry={!showPassword} />
+					<Icon style={{zIndex:100,position:'absolute',right:0,height:20,width:20,backgroundColor:'yellow'}} name="close" type="evilicon" color={theme.colors.primary} />
+				</View>
+				<Text style={styles.inputLabel}>Confirm Password:</Text>
+				<TextInput
+					style={styles.textInput}
+					onChangeText={setPassword2}
+					placeholder="password"
+					value={password2}
+					autoCapitalize='none'
+					autoCorrect={false}
+					secureTextEntry={!showPassword} />
+
+			</KeyboardAvoidingView>
+
 			<View style={styles.extraSpace}></View>
-			<Pressable style={styles.logInButton} onPress={logInFunc}><Text style={styles.logInButtonText}>Log In</Text></Pressable>
-			<Pressable style={styles.signInButton} onPress={signUpFunc}><Text style={styles.signInButtonText}>Sign Up</Text></Pressable>
+			<Pressable style={styles.logInButton} onPress={signUpFunc}><Text style={styles.logInButtonText}>Sign Up</Text></Pressable>
+			<Pressable style={styles.signInButton} onPress={() => navigation.goBack()}><Text style={styles.signInButtonText}>Cancel</Text></Pressable>
 			<Modal isVisible={isModalVisible}>
 				<View style={{ flex: 1, justifyContent:"center",alignItems:"center" }}>
 					<ActivityIndicator size='large' color='white'/>
@@ -126,7 +197,7 @@ const LogIn = ({navigation, route}) => {
 			</Modal>
 		</View>
 		</TouchableWithoutFeedback>
-		);
+	);
 }
 
 function App({navigation, route}) {
@@ -190,8 +261,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: theme.colors.background,
 		alignItems: 'center',
-		// justifyContent: 'center',
-		paddingTop:theme.spacing.xl*2,
+		justifyContent: 'center',
+		// paddingTop:theme.spacing.xl*2,
 	},
 	window: {
 		width: '100%',
@@ -203,8 +274,10 @@ const styles = StyleSheet.create({
 		backgroundColor:theme.colors.background,
 	},
 	errorText: {
-		color:'crimson',
+		color:theme.colors.failure,
 		marginVertical:theme.spacing.l,
+		marginLeft:'auto',
+		marginRight:'auto',
 		fontWeight:'bold',
 	},
 	inputLabel: {
@@ -226,6 +299,8 @@ const styles = StyleSheet.create({
 		// textAlign:'center',
 		paddingLeft: theme.spacing.l,
 		marginBottom: theme.spacing.s,
+		marginLeft:'auto',
+		marginRight:'auto',
 	},
 	extraSpace: {
 		height: theme.spacing.xl,

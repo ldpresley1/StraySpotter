@@ -70,7 +70,7 @@ export default class MapListView extends React.Component {
 						</ScrollView>
 						<Pressable style={{position:'absolute', bottom:theme.spacing.xl, alignSelf:'center'}} onPress={() => this.setState({isModalVisible:false})}>
 							{/* <Text>X</Text> */}
-							<Icon name={'close'} color={theme.colors.foreground} type='fontisto' size={50}/>
+							<Icon name={'close'} color={theme.colors.primary} reverse raised type='evilicon' size={30}/>
 						</Pressable>
 					</View>
 				 :
