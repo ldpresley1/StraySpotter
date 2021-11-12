@@ -1,14 +1,14 @@
 import React, {useState, useMemo, useCallback} from 'react';
-import { Text, Pressable, View, StyleSheet, TextInput, Appearance, TouchableWithoutFeedback, Keyboard, ActivityIndicator } from 'react-native';
+import { Text, Pressable, View, StyleSheet, TextInput, Appearance, TouchableWithoutFeedback, Keyboard, Modal, ActivityIndicator } from 'react-native';
 //import { ImageBrowser } from 'expo-image-picker-multiple';
 //import * as MediaLibrary from 'expo-media-library';
 import DropDownPicker from 'react-native-dropdown-picker';
 import dbo from './dataStorage';
 import MapView, { Marker } from 'react-native-maps';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Modal from "react-native-modal";
 
 import { darkTheme, lightTheme } from './Themes';
+import LoadingModal from './LoadingModal';
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 
 //MediaLibrary.requestPermissionsAsync();
@@ -297,15 +297,7 @@ const [types, setTypes] = useState([//might move the longer lists into text file
     	<Text style={styles.buttonText}>{submitButtonText}</Text>
 	</Pressable>
 
-		<Modal isVisible={isModalVisible}>
-			<View style={{ flex: 1, justifyContent:"center",alignItems:"center" }}>
-				{/* {!isPosted ?
-          <Text style={{fontSize:36,backgroundColor:'white',paddingHorizontal:10,paddingVertical:5,borderRadius:2,overflow:"hidden"}}>Submitting...</Text>
-          : <Text style={{fontSize:36,backgroundColor:'white',paddingHorizontal:10,paddingVertical:5,borderRadius:2,overflow:"hidden"}}>Submitted!</Text>
-        } */}
-        <ActivityIndicator size='large' color='white'/>
-			</View>
-		</Modal>
+    <LoadingModal isVisible={isModalVisible} />
     </>
     </View>
     </TouchableWithoutFeedback>

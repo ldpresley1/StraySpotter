@@ -4,7 +4,6 @@ import { StyleSheet, Text, View, Appearance, Pressable, TextInput, TouchableWith
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Modal from "react-native-modal";
 
 import { Icon } from 'react-native-elements';
 
@@ -14,6 +13,7 @@ import TimeLine from './components/TimeLine';
 import PostPage from './components/PostPage';
 import { darkTheme, lightTheme } from './components/Themes';
 import dbo from './components/dataStorage';
+import LoadingModal from './components/LoadingModal';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -104,11 +104,7 @@ const LogIn = ({navigation, route}) => {
 			<View style={styles.extraSpace}></View>
 			<Pressable style={styles.logInButton} onPress={logInFunc}><Text style={styles.logInButtonText}>Log In</Text></Pressable>
 			<Pressable style={styles.signInButton} onPress={() => navigation.navigate("Signup")}><Text style={styles.signInButtonText}>Sign Up</Text></Pressable>
-			<Modal isVisible={isModalVisible}>
-				<View style={{ flex: 1, justifyContent:"center",alignItems:"center" }}>
-					<ActivityIndicator size='large' color='white'/>
-				</View>
-			</Modal>
+			<LoadingModal isVisible={isModalVisible} />
 		</View>
 		</TouchableWithoutFeedback>
 		);
@@ -190,11 +186,7 @@ const SignUpScreen = ({navigation, route}) => {
 			<View style={styles.extraSpace}></View>
 			<Pressable style={styles.logInButton} onPress={signUpFunc}><Text style={styles.logInButtonText}>Sign Up</Text></Pressable>
 			<Pressable style={styles.signInButton} onPress={() => navigation.goBack()}><Text style={styles.signInButtonText}>Cancel</Text></Pressable>
-			<Modal isVisible={isModalVisible}>
-				<View style={{ flex: 1, justifyContent:"center",alignItems:"center" }}>
-					<ActivityIndicator size='large' color='white'/>
-				</View>
-			</Modal>
+			<LoadingModal isVisible={isModalVisible}/>
 		</View>
 		</TouchableWithoutFeedback>
 	);

@@ -1,10 +1,9 @@
 import React, {useRef, useState, useMemo, useCallback} from 'react';
-import { Text, View, FlatList, StyleSheet, ScrollView, Image, Dimensions, Appearance, Pressable, Platform } from 'react-native';
+import { Text, View, FlatList, StyleSheet, ScrollView, Image, Dimensions, Appearance, Pressable, Platform, Modal } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { darkTheme, lightTheme } from './Themes';
 import * as Linking from 'expo-linking';
 import dbo from "./dataStorage";
-import Modal from "react-native-modal";
 
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 const screenWidth = Dimensions.get('window').width;
