@@ -1,6 +1,7 @@
 //START FIREBASE STUFF
 import firebase from '@firebase/app';
 import firestore from '@firebase/firestore';
+import { ref, getDownloadURL, putBytes, getStorage } from "firebase/storage";
 import storage from '@firebase/firestore';
 
 const firebaseConfig = {
@@ -8,7 +9,7 @@ const firebaseConfig = {
   authDomain: "stray-spotter.firebaseapp.com",
   databaseURL: "https://stray-spotter.firebaseio.com/",
   projectId: "stray-spotter",
-  storageBucket: "stray-spotter.appspot.com"
+  storageBucket: "gs://stray-spotter.appspot.com"
 };
 
 const app = firebase.initializeApp(firebaseConfig);

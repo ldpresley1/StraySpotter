@@ -3,8 +3,6 @@ import { Text, Pressable, View, navigation,  StyleSheet, ScrollView, TextInput, 
 import * as MediaLibrary from 'expo-media-library';//THIS IS FOR PERMISSIONS
 import DropDownPicker from 'react-native-dropdown-picker';
 import dbo from './dataStorage';
-import MapView, { Marker } from 'react-native-maps';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Modal from "react-native-modal";
 
 import ImageCarousel from './ImageCarousel';
@@ -48,10 +46,8 @@ export default class PostPage extends Component {
   },
    locationButtonText: 'Select Location',
    submitButtontext: 'Submit',
-   isModalVisible: false,
-   isPosted:false,
-   photoURLs: [],
   }
+  this.baseState = this.state;
     this.onaddText = this.onaddText.bind(this);
     this.titleText = this.titleText.bind(this);
     this.setTypes = this.setTypes.bind(this);
@@ -67,8 +63,6 @@ export default class PostPage extends Component {
     this.setBreeds = this.setBreeds.bind(this);
     this.setbreedValue = this.setbreedValue.bind(this);
     this.setMarkerData = this.setMarkerData.bind(this);
-    this.setIsModalVisible = this.setIsModalVisible.bind(this);
-    this.setIsPosted = this.setIsPosted.bind(this);
     this.submitFunction = this.submitFunction.bind(this);
   }
 
@@ -187,25 +181,42 @@ export default class PostPage extends Component {
   setMarkerData(markerData){
     this.setState({markerData});
   }
-  submitFunction() {//this is the function that gets called when the button is pushed
-		this.setIsModalVisible(true);
+  async uploadImageAsync(filename,uri) {
+    // Why are we using XMLHttpRequest? See:
+    // https://github.com/expo/expo/issues/2402#issuecomment-443726662
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function (e) {
+        console.log(e);
+        reject(new TypeError("Network request failed"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", uri, true);
+      xhr.send(null);
+    });
+  
+    const fileRef = dbo.firebase.storage().ref(filename);
+    const result = await fileRef.put(blob);
+    const url = await fileRef.getDownloadURL();
+    // We're done with the blob, close and release it
+    blob.close();
+  
+    return url;
+  }
+  async submitFunction() {//this is the function that gets called when the button is pushed
+		//this.setIsModalVisible(true);
     var tagsList = [];
-      tagsList = this.state.colorValue, //THIS HAS TO GO FIRST so that we don't get nested arrays
-      tagsList.push(this.state.typeValue),
+      tagsList = this.state.colorValue; //THIS HAS TO GO FIRST so that we don't get nested arrays
+      tagsList.push(this.state.typeValue);
       //tagsList.push(this.state.breedValue), //Commented out until we figure out breed values
-      tagsList.push(this.state.sizeValue),
-      this.state.photos.map(image=>{dbo.firebase
-        .storage()
-        .ref(image)
-        .putFile(image);
-        dbo.firebase.storage().ref('/' + image)
-          .getDownloadURL()
-          .then((url) => {
-            //from url you can fetched the uploaded image easily
-            this.setState({photoURLs: url});
-          })
-          .catch((e) => console.log('getting downloadURL of image error => ', e));}
-        );
+      tagsList.push(this.state.sizeValue);
+      var photoURLs = [];
+      for(let i = 0; i< this.state.photos.length; i++){
+      photoURLs.push( await this.uploadImageAsync(this.state.photos[i].name, this.state.photos[i].uri));}
+        
 
       dbo.firebase.firestore()
            .collection('StraysFound')
@@ -215,20 +226,11 @@ export default class PostPage extends Component {
               tags: tagsList,
               id: 42, //Temp Data
               cord: {lat: this.state.markerData.latitude, long: this.state.markerData.longitude},
-              images: this.state.photos, //TEMP DATA
-           })
-            .then(() => {
-               console.log('Stray added!'); //TEST
-              //  set posted true
-                this.setIsPosted(true);
-                setTimeout(function() {
-                  //setDefaults();
-                  setIsModalVisible(false);
-                  this.setIsPosted(false);
-                  // set psted false
-                }, 750);
-             }),
-        this.setSubmitText( "SUBMITTED!");
+              images: photoURLs, 
+           });
+             const {navigate} = this.props.navigation;
+             this.setState(this.baseState);
+             navigate('TimeLine');
   }
   
   render(){
