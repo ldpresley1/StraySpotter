@@ -33,7 +33,7 @@ function PostStackScreens(){
 		</Stack.Navigator>
 	)
 }
-export default function App() {
+export default function AppWithLogin() {
 	return (
 		<NavigationContainer>
 			<Stack.Navigator 

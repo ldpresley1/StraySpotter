@@ -12,8 +12,8 @@ const screenHeight = Dimensions.get('window').height;
 var type = "temp";
 
 export class Post extends React.Component {
-	state = {}
-		isModalVisible:false
+	state = {
+		isModalVisible: false,
 	}
 
 	setModalVisible = (visible) => {
