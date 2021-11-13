@@ -4,7 +4,8 @@ const palette = {
 	lightOne: '#B4CAE8',
 	lightTwo: '#376CB3',
 	green: '#0ECD9D',
-	red: '#CD0E61',
+	// red: '#CD0E61',
+	red: 'crimson',
 	black: '#121212',
 	white: '#F0F2F3',
 }

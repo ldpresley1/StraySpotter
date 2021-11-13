@@ -1,46 +1,94 @@
 import React, { useState } from 'react';
-import { Icon } from 'react-native-elements';
-import { Text, View, Appearance, StyleSheet, Pressable, SafeAreaView, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { Icon, ThemeContext } from 'react-native-elements';
+import { Text, View, Appearance, StyleSheet, Pressable, SafeAreaView, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView, Image } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MapView, { Marker } from 'react-native-maps';
 
 import { darkTheme, lightTheme } from './Themes';
 import TimeLine from './TimeLine';
+import Header from './Header';
+import { ScreenWidth } from 'react-native-elements/dist/helpers';
+
+import dbo from './dataStorage';
 
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 
 // class Profile extends React.Component {
 const Profile = ({navigation, route}) => {
-	const [viewType, setView] = useState("listView");
-	const [username, setUsername] = useState("username");
-	const [markerData,setMarkerData] = useState({
-		latitude: 33.2083,
-		longitude: -87.5504
-	});
-
-	if (route.params?.latitude) {
-		// what it does: check if something has changed, update the state
-		// why: if we always update the state, it will make an infinite loop
-		if (route.params.latitude != markerData.latitude || route.params.longitude != markerData.longitude) {
-			setMarkerData({
-				latitude: route.params.latitude,
-				longitude: route.params.longitude
-			});
-		}
-	}
-	if (route.params?.username && route.params.username != username) {
-		setUsername(route.params.username);
-	}
+	let username = dbo.firebase.auth().currentUser.displayName ? dbo.firebase.auth().currentUser.displayName : dbo.firebase.auth().currentUser.email;
 
 	return (
-		<View style={styles.window}>
-			<View style={styles.usernameView}>
-				<Text style={[styles.basicText,{marginRight:20}]}>{username}</Text>
-				<Pressable style={styles.button} onPress={() => navigation.navigate('Settings',{parent:'PersonalProfile'})}>
-					<Icon style={styles.iconStyle} name='spinner-cog' type='fontisto' color={theme.colors.foreground}/>
+		<ScrollView style={styles.scrollView}>
+			<View style={styles.wrapper}>
+				<Image source={require('../assets/favicon.png')} style={styles.profilePicture}/>
+				<Text style={styles.usernameText}>{username}</Text>
+				<Pressable style={styles.settingsButton} onPress={() => navigation.navigate('Settings',{parent:'PersonalProfile'})}>
+					<Text style={styles.settingsButtonText}>Edit Profile</Text>
+					<Icon style={styles.iconStyle} name='eraser' type='fontisto' color={theme.colors.foreground}/>
 					{/* <Icon style={styles.iconStyle} name='player-settings' type='fontisto' color={theme.colors.foreground}/> */}
 				</Pressable>
+
+				<Pressable style={[styles.fullButton,{borderTopWidth:1}]} onPress={() => navigation.navigate('MyPosts')}>
+					<View style={styles.fullButtonIconView}>
+						<Icon style={styles.fullButtonIcon} name='paw' type="fontisto" color={theme.colors.primary}/>
+					</View>
+					<Text style={styles.fullButtonText}>My Posts</Text>
+					<View style={styles.fullButtonRightIcon}>
+						<Icon style={styles.fullButtonIcon} name="angle-right" type="fontisto" color={theme.colors.foreground}/>
+					</View>
+				</Pressable>
+				<Pressable style={styles.fullButton} onPress={() => navigation.navigate('Privacy')}>
+					<View style={styles.fullButtonIconView}>
+						<Icon style={styles.fullButtonIcon} name="lock" type="fontistio" color={theme.colors.primary}/>
+					</View>
+					<Text style={styles.fullButtonText}>Privacy</Text>
+					<View style={styles.fullButtonRightIcon}>
+						<Icon style={styles.fullButtonIcon} name="angle-right" type="fontisto" color={theme.colors.foreground}/>
+					</View>
+				</Pressable>
+				<Pressable style={styles.fullButton} onPress={() => navigation.navigate('About')}>
+					<View style={styles.fullButtonIconView}>
+						<Icon style={styles.fullButtonIcon} name="info" type="fontisto" color={theme.colors.primary}/>
+					</View>
+					<Text style={styles.fullButtonText}>About</Text>
+					<View style={styles.fullButtonRightIcon}>
+						<Icon style={styles.fullButtonIcon} name="angle-right" type="fontisto" color={theme.colors.foreground}/>
+					</View>
+				</Pressable>
+				<Pressable style={styles.fullButton} onPress={() => navigation.navigate('Help')}>
+					<View style={styles.fullButtonIconView}>
+						<Icon style={styles.fullButtonIcon} name="coffeescript" type="fontisto" color={theme.colors.primary}/>
+					</View>
+					<Text style={styles.fullButtonText}>Help</Text>
+					<View style={styles.fullButtonRightIcon}>
+						<Icon style={styles.fullButtonIcon} name="angle-right" type="fontisto" color={theme.colors.foreground}/>
+					</View>
+				</Pressable>
+				<Pressable style={styles.fullButton} onPress={() => {
+						console.log(dbo.firebase.auth().currentUser?.uid);
+						dbo.firebase.auth().signOut().then(() => {
+							navigation.replace('LogIn');
+						})
+						// .catch(error => this.setState({ errorMessage: error.message }))
+					}}>
+					<View style={styles.fullButtonIconView}>
+						<Icon style={styles.fullButtonIcon} name="arrow-return-left" type="fontisto" color={theme.colors.primary}/>
+					</View>
+					<Text style={styles.fullButtonText}>Log Out</Text>
+					<View style={styles.fullButtonRightIcon}>
+						<Icon style={styles.fullButtonIcon} name="angle-right" type="fontisto" color={theme.colors.foreground}/>
+					</View>
+				</Pressable>
 			</View>
+		</ScrollView>
+	);
+}
+
+
+const MyPosts = ({navigation, route}) => {
+	const [viewType, setView] = useState("listView");
+	return (
+		<View style={styles.window}>
 			<View style={styles.viewChangerView}>
 				<Pressable style={viewType == "mapView" ? styles.viewButtonActive : styles.viewButton} onPress={() => setView("mapView")}>
 					<Text style={styles.basicText}>Map View</Text>
@@ -49,10 +97,55 @@ const Profile = ({navigation, route}) => {
 					<Text style={styles.basicText}>List View</Text>
 				</Pressable>
 			</View>
-			<TimeLine view={viewType}/>
+			<TimeLine view={viewType} uid={dbo.firebase.auth().currentUser.uid}/>
 		</View>
 	);
 }
+
+const Privacy = ({navigation, route}) => {
+	return (
+		<View style={styles.window}>
+			<View style={styles.viewChangerView}>
+				<Text style={styles.basicText}>
+				When opening the Stray Spotter app, you agree to allow us to use your device's location in order to show you, as the user, the best data for your location.
+				This location is not stored anywhere in our system, and is only used for the time in which you have the app open on your device.
+				</Text>
+			</View>
+		</View>
+	);
+}
+
+const About = ({navigation, route}) => {
+	return (
+		<View style={styles.window}>
+			<View style={styles.viewChangerView}>
+				<Text style={styles.basicText}>
+				    Stray Spotter is an app to help owners find their lost pets.
+				    This app allows users to upload photos of strays they have seen while they are outside and geotag the location in which they were seen.
+				    Since the majority of lost animals are found within a few miles of their homes, owners can use the app to check through all of the strays that have been posted within a certain area.
+				    With our app, we are hoping to help owners find their lost pets quicker and easier than before.
+				</Text>
+			</View>
+		</View>
+	);
+}
+
+const Help = ({navigation, route}) => {
+	return (
+		<View style={styles.window}>
+			<View style={styles.viewChangerView}>
+				<Text style={styles.basicText}>
+				There are four pages in the Stray Spotter app.
+				You can use the uploads page to upload any strays that you find.
+				You can use the map page to navigate around a map to find nearby strays.
+				You can use the timeline page to view strays near your location.
+				Lastly, you can use the profile page to access more information about the app and to view your own uploads.
+				</Text>
+			</View>
+		</View>
+	);
+}
+
 
 const Settings = ({navigation, route}) => {
 	const [username, setUsername] = useState('');
@@ -69,6 +162,7 @@ const Settings = ({navigation, route}) => {
 					/>
 				</SafeAreaView>
 				<Pressable style={styles.button} onPress={() => navigation.navigate(route.params.parent,{username:username.trim()})}>
+					{/* This must be replaced by updating some async storage component */}
 					<Text style={styles.basicText}>Go Back</Text>
 				</Pressable>
 			</View>
@@ -124,9 +218,24 @@ const Stack = createNativeStackNavigator();
 
 function App() {
 	return (
-		<Stack.Navigator screenOptions={{headerShown:false}}>
-			<Stack.Screen name="PersonalProfile" component={Profile} />
+		<Stack.Navigator 
+			screenOptions={({ route }) => ({
+				// for adding custom header, check docs here https://reactnavigation.org/docs/bottom-tab-navigator/#header-related-options
+				// lets us set a custom header
+				header: ({navigation, route, options}) => {
+					return <Header nav={navigation} />
+				},
+				// removes header
+				// headerShown:false,
+				showLabel: false,
+			})}
+			>
+			<Stack.Screen name="PersonalProfile" component={Profile} options={{headerShown:false}} />
 			<Stack.Screen name="Settings" component={Settings} />
+			<Stack.Screen name="MyPosts" component={MyPosts} />
+			<Stack.Screen name="Privacy" component={Privacy} />
+			<Stack.Screen name="About" component={About} />
+			<Stack.Screen name="Help" component={Help} />
 		</Stack.Navigator>
 	);
 }
@@ -135,6 +244,12 @@ function App() {
 export default App;
 
 const styles = StyleSheet.create({
+	scrollView: {
+		backgroundColor:theme.colors.background,
+	},
+	wrapper: {
+		marginTop:theme.spacing.xl,
+	},
 	window: {
 		width: '100%',
 		flex: 1,
@@ -152,10 +267,68 @@ const styles = StyleSheet.create({
 		backgroundColor:theme.colors.primary,
 		marginVertical: 30,
 	},
+	profilePicture: {
+		alignSelf:'center',
+		overflow:'hidden',
+		borderRadius:ScreenWidth
+	},
+	settingsButton: {
+		paddingVertical: 10,
+		paddingHorizontal: 20,
+		borderRadius:2,
+		backgroundColor:theme.colors.primary,
+		marginVertical: 30,
+		
+		flexDirection:'row',
+		alignItems:'center',
+		justifyContent:'center'
+	},
+	settingsButtonText: {
+		color:theme.colors.foreground,
+		marginHorizontal:20,
+		fontSize:36,
+		alignSelf:'center',
+	},
 	usernameView: {
 		flexDirection:'row',
 		justifyContent:"space-between",
 		alignItems:'center'
+	},
+	usernameText: {
+		color:theme.colors.foreground,
+		marginLeft:20, 
+		fontSize:36, 
+		alignSelf:'center',
+	},
+	fullButton: {
+		// flex:1,
+		// height:20,
+		paddingVertical:10,
+		width:'100%',
+		flexDirection:'row',
+		borderColor:theme.colors.foreground,
+		borderBottomWidth:1,
+	},
+	fullButtonIconView: {
+		width:theme.spacing.xl*2,
+		// height:50,
+		alignItems:'center',
+		justifyContent:'center',
+	},
+	fullButtonIcon: {
+		// paddingHorizontal:theme.spacing.l,
+	},
+	fullButtonText: {
+		color:theme.colors.foreground,
+		fontSize:28,
+	},
+	fullButtonRightIcon: {
+		marginLeft:'auto',
+		marginRight:theme.spacing.m,
+	},
+	backButton: {
+		backgroundColor:theme.colors.background,
+		paddingVertical:10,
 	},
 	viewChangerView: {
 		// flex:1,

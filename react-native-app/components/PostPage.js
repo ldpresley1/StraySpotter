@@ -8,6 +8,7 @@ import Modal from "react-native-modal";
 import ImageCarousel from './ImageCarousel';
 import SimpleDropdownPicker from './DropdownPicker';
 import { darkTheme, lightTheme } from './Themes';
+import LoadingModal from './LoadingModal';
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
