@@ -94,24 +94,30 @@ const LogIn = ({navigation, route}) => {
 					<Text style={styles.errorText}>{errorMessage}</Text>
 				</Pressable>
 				<Text style={styles.inputLabel}>Email:</Text>
-				<TextInput
-					style={styles.textInput}
-					onChangeText={setUsername}
-					placeholder="johnnyappleseed@example.com"
-					value={username}
-					autoCapitalize='none'
-					autoCorrect={false}
-					secureTextEntry={false}
-				/>
+				<View style={styles.textInputView}>
+					<TextInput
+						style={styles.textInput}
+						onChangeText={setUsername}
+						placeholder="johnnyappleseed@example.com"
+						value={username}
+						autoCapitalize='none'
+						autoCorrect={false}
+						secureTextEntry={false} />
+				</View>
 				<Text style={styles.inputLabel}>Password:</Text>
-				<TextInput
-					style={styles.textInput}
-					onChangeText={setPassword}
-					placeholder="password"
-					value={password}
-					autoCapitalize='none'
-					autoCorrect={false}
-					secureTextEntry={!showPassword} />
+				<View style={styles.textInputView}>
+					<TextInput
+						style={styles.textInput}
+						onChangeText={setPassword}
+						placeholder="password"
+						value={password}
+						autoCapitalize='none'
+						autoCorrect={false}
+						secureTextEntry={!showPassword} />
+					<Pressable style={styles.showPasswordButton} onPress={() => setShowPassword(!showPassword)} >
+						<Icon name={showPassword ? "eye-with-line" : "eye"} type="entypo" color={theme.colors.foreground} />
+					</Pressable>
+				</View>
 			</KeyboardAvoidingView>
 
 			<View style={styles.extraSpace}></View>
@@ -130,6 +136,7 @@ const SignUpScreen = ({navigation, route}) => {
 	const [password, setPassword] = useState("");
 	const [password2, setPassword2] = useState("");
 	const [showPassword, setShowPassword] = useState(false);
+	const [showPassword2, setShowPassword2] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
 
 	const signUpFunc = () => {
@@ -163,17 +170,18 @@ const SignUpScreen = ({navigation, route}) => {
 				<Text style={styles.errorText}>{errorMessage}</Text>
 
 				<Text style={styles.inputLabel}>Email:</Text>
-				<TextInput
-					style={styles.textInput}
-					onChangeText={setUsername}
-					placeholder="johnnyappleseed@example.com"
-					value={username}
-					autoCapitalize='none'
-					autoCorrect={false}
-					secureTextEntry={false}
-				/>
+				<View style={styles.textInputView}>
+					<TextInput
+						style={styles.textInput}
+						onChangeText={setUsername}
+						placeholder="johnnyappleseed@example.com"
+						value={username}
+						autoCapitalize='none'
+						autoCorrect={false}
+						secureTextEntry={false} />
+				</View>
 				<Text style={styles.inputLabel}>Password:</Text>
-				<View style={{width:"100%"}}>
+				<View style={styles.textInputView}>
 					<TextInput
 						style={styles.textInput}
 						onChangeText={setPassword}
@@ -182,18 +190,24 @@ const SignUpScreen = ({navigation, route}) => {
 						autoCapitalize='none'
 						autoCorrect={false}
 						secureTextEntry={!showPassword} />
-					<Icon style={{zIndex:100,position:'absolute',right:0,height:20,width:20,backgroundColor:'yellow'}} name="close" type="evilicon" color={theme.colors.primary} />
+					<Pressable style={styles.showPasswordButton} onPress={() => setShowPassword(!showPassword)} >
+						<Icon name={showPassword ? "eye-with-line" : "eye"} type="entypo" color={theme.colors.foreground} />
+					</Pressable>
 				</View>
 				<Text style={styles.inputLabel}>Confirm Password:</Text>
-				<TextInput
-					style={styles.textInput}
-					onChangeText={setPassword2}
-					placeholder="password"
-					value={password2}
-					autoCapitalize='none'
-					autoCorrect={false}
-					secureTextEntry={!showPassword} />
-
+				<View style={styles.textInputView}>
+					<TextInput
+						style={styles.textInput}
+						onChangeText={setPassword2}
+						placeholder="password"
+						value={password2}
+						autoCapitalize='none'
+						autoCorrect={false}
+						secureTextEntry={!showPassword2} />
+					<Pressable style={styles.showPasswordButton} onPress={() => setShowPassword2(!showPassword2)} >
+						<Icon name={showPassword2 ? "eye-with-line" : "eye"} type="entypo" color={theme.colors.foreground} />
+					</Pressable>
+				</View>
 			</KeyboardAvoidingView>
 
 			<View style={styles.extraSpace}></View>
@@ -253,7 +267,7 @@ function App({navigation, route}) {
         		<Tab.Screen name='PostStackScreens' component={PostStackScreens}/>
 				<Tab.Screen name="Map" component={TimeLine} initialParams = {{view: 'mapView'}} />
 				<Tab.Screen name="TimeLine" component={TimeLine} initialParams = {{view: 'listView'}}  />
-				<Tab.Screen name="Profile" component={Profile} />
+				<Tab.Screen name="Profile" component={Profile} options={{headerShown:false}} />
 				
 			</Tab.Navigator>
 		// </NavigationContainer>
@@ -294,6 +308,11 @@ const styles = StyleSheet.create({
 		marginLeft:theme.spacing.l,
 		marginTop:theme.spacing.s,
 	},
+	textInputView: {
+		marginBottom:theme.spacing.s,
+		width:'100%',
+		alignItems:'center',
+	},
 	textInput: {
 		width:'90%',
 		borderRadius:10,
@@ -301,11 +320,14 @@ const styles = StyleSheet.create({
 		color:theme.colors.foreground,
 		borderWidth:1,
 		paddingVertical:theme.spacing.l,
-		// textAlign:'center',
 		paddingLeft: theme.spacing.l,
-		marginBottom: theme.spacing.s,
-		marginLeft:'auto',
-		marginRight:'auto',
+	},
+	showPasswordButton: {
+		height:'100%',
+		position:'absolute',
+		top:0,
+		right:'10%',
+		justifyContent:'center',
 	},
 	extraSpace: {
 		height: theme.spacing.xl,
