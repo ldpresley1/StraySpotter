@@ -221,6 +221,8 @@ export default class PostPage extends Component {
   }
   async submitFunction() {//this is the function that gets called when the button is pushed
 		//this.setIsModalVisible(true);
+    var imageDescription = "This post is a " + this.state.sizeValue + " " + this.state.typeValue + " with ",
+      imageDescription = this.imageIDMaker(imageDescription, this.state.colorValue);
     var tagsList = [];
       tagsList = this.state.colorValue; //THIS HAS TO GO FIRST so that we don't get nested arrays
       tagsList.push(this.state.typeValue);
@@ -229,8 +231,7 @@ export default class PostPage extends Component {
       var photoURLs = [];
       for(let i = 0; i< this.state.photos.length; i++){
       photoURLs.push( await this.uploadImageAsync(this.state.photos[i].name, this.state.photos[i].uri));}
-      var imageDescription = "This post is a " + this.state.sizeValue + " " + this.state.typeValue + " with ",
-      imageDescription = this.imageIDMaker(imageDescription, this.state.colorValue);
+      
 
 
       dbo.firebase.firestore()
