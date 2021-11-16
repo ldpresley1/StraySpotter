@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, Appearance, Pressable, TextInput, TouchableWithoutFeedback, Keyboard, ActivityIndicator, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, Text, View, Appearance, Pressable, TextInput, TouchableWithoutFeedback, Keyboard, ActivityIndicator, KeyboardAvoidingView, LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -33,7 +33,9 @@ function PostStackScreens(){
 		</Stack.Navigator>
 	)
 }
+LogBox.ignoreLogs(["Setting a timer"]);//this is to ignore a stupid warning
 export default function AppWithLogin() {
+	
 	return (
 		<NavigationContainer>
 			<Stack.Navigator 
