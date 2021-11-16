@@ -12,6 +12,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.15.11",
     "@react-native-firebase/app": "^12.9.1",
     "@react-native-firebase/storage": "^12.9.3",
     "@react-native-masked-view/masked-view": "github:react-native-masked-view/masked-view",
@@ -30,6 +31,7 @@
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
     "react-native-blob-util": "^0.13.16",
+    "react-native-bouncy-checkbox": "^2.1.7",
     "react-native-dropdown-picker": "^5.1.27",
     "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "~1.10.2",

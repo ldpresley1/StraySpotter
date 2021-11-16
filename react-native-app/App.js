@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { Icon } from 'react-native-elements';
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 import ImageBrowser from './components/ImageBrowserScreen';
 import Header from './components/Header';
@@ -15,12 +16,13 @@ import TimeLine from './components/TimeLine';
 import PostPage from './components/PostPage';
 import CustomGeolocation from './components/CustomGeolocationScreen';
 import { darkTheme, lightTheme } from './components/Themes';
-import dbo from './components/dataStorage';
+import dbo, { getData, storeData } from './components/dataStorage';
 import LoadingModal from './components/LoadingModal';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme;
+
 function PostStackScreens(){
 	return (
 		<Stack.Navigator>
@@ -33,6 +35,7 @@ function PostStackScreens(){
 		</Stack.Navigator>
 	)
 }
+
 export default function AppWithLogin() {
 	return (
 		<NavigationContainer>
@@ -55,78 +58,150 @@ export default function AppWithLogin() {
 	);
 }
 
-const LogIn = ({navigation, route}) => {
-	const [isModalVisible, setModalVisible] = useState(false);
-	const [username, setUsername] = useState("");
-	const [password, setPassword] = useState("");
-	const [showPassword, setShowPassword] = useState(false);
-	const [errorMessage, setErrorMessage] = useState("");
+class LogIn extends React.Component {
+	
+	state = {
+		isModalVisible:false,
+		username:'',
+		password:'',
+		showPassword:false,
+		errorMessage:'',
+		loaded:false,
+		rememberMe:false,
+	}
 
-	const logInFunc = () => {
-		setModalVisible(true);
+	componentDidMount() {
+		if (this.state.loaded) return;
+
+		getData("rememberMe").then((data) => {
+			if (data === 'true') {
+				getData("username").then((data) => {
+					if (data) this.setState({username:data});
+				});
+				getData("password").then((data) => {
+					if (data) this.setState({password:data})
+				});
+				this.setState({rememberMe:true});
+			}
+			else this.setState({rememberMe:false});
+		})
+		this.setState({loaded:true});
+	}
+
+	logInFunc() {
+		this.setState({isModalVisible:true});
+		// store login info
+		if (this.state.rememberMe) {
+			storeData("username",this.state.username);
+			storeData("password",this.state.password);
+		}
+
 		dbo.firebase.auth()
-			.signInWithEmailAndPassword(username, password)
+			.signInWithEmailAndPassword(this.state.username, this.state.password)
 			.then((res) => {
 				// console.log(res)
 				console.log(res.user.uid);
 				console.log('User logged-in successfully!')
-				setUsername('');
-				setPassword('');
-				setErrorMessage('');
-				setModalVisible(false);
 
-				navigation.replace('Dash')
+				this.setState({username:'',password:'',errorMessage:'',isModalVisible:false});
+
+				this.props.navigation.replace('Dash')
 			})
 			.catch((error) => {
-				setErrorMessage(error.message);
-				setModalVisible(false);
+				this.setState({errorMessage:error.message,isModalVisible:false});
 			})
 	}
 
-	return (
-		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-		<View style={styles.container}>
-			<KeyboardAvoidingView behavior='position' style={{width:'100%'}}>
-				<Pressable onPress={() => {
-					setUsername('test@strayspotter.com');
-					setPassword('password');
-				}}>
-					<Text style={styles.errorText}>{errorMessage}</Text>
-				</Pressable>
-				<Text style={styles.inputLabel}>Email:</Text>
-				<View style={styles.textInputView}>
-					<TextInput
-						style={styles.textInput}
-						onChangeText={setUsername}
-						placeholder="johnnyappleseed@example.com"
-						value={username}
-						autoCapitalize='none'
-						autoCorrect={false}
-						secureTextEntry={false} />
-				</View>
-				<Text style={styles.inputLabel}>Password:</Text>
-				<View style={styles.textInputView}>
-					<TextInput
-						style={styles.textInput}
-						onChangeText={setPassword}
-						placeholder="password"
-						value={password}
-						autoCapitalize='none'
-						autoCorrect={false}
-						secureTextEntry={!showPassword} />
-					<Pressable style={styles.showPasswordButton} onPress={() => setShowPassword(!showPassword)} >
-						<Icon name={showPassword ? "eye-with-line" : "eye"} type="entypo" color={theme.colors.foreground} />
-					</Pressable>
-				</View>
-			</KeyboardAvoidingView>
+	handleCheck(isChecked) {
+		// isChecked is always false
+		isChecked = !this.state.rememberMe;
+		console.log(isChecked);
 
-			<View style={styles.extraSpace}></View>
-			<Pressable style={styles.logInButton} onPress={logInFunc}><Text style={styles.logInButtonText}>Log In</Text></Pressable>
-			<Pressable style={styles.signInButton} onPress={() => navigation.navigate("Signup")}><Text style={styles.signInButtonText}>Sign Up</Text></Pressable>
-			<LoadingModal isVisible={isModalVisible} />
-		</View>
-		</TouchableWithoutFeedback>
+		this.setState({rememberMe:isChecked});
+		if (isChecked) storeData("rememberMe",'true');
+		else {
+			// remove stored data
+			storeData("username","");
+			storeData("password","");
+			storeData("rememberMe","false");
+		}
+
+		// save stuff
+
+	}
+
+	render() {
+		return (
+			<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+			<View style={styles.container}>
+				<KeyboardAvoidingView behavior='position' style={{width:'100%'}}>
+					<Pressable onPress={() => {
+						this.setState({username:'test@strayspotter.com',password:'password'});
+					}}>
+						<Text style={styles.errorText}>{this.state.errorMessage}</Text>
+					</Pressable>
+					<Text style={styles.inputLabel}>Email:</Text>
+					<View style={styles.textInputView}>
+						<TextInput
+							style={styles.textInput}
+							onChangeText={(text) => this.setState({username:text})}
+							placeholder="johnnyappleseed@example.com"
+							value={this.state.username}
+							autoCapitalize='none'
+							autoCorrect={false}
+							secureTextEntry={false} />
+					</View>
+					<Text style={styles.inputLabel}>Password:</Text>
+					<View style={styles.textInputView}>
+						<TextInput
+							style={styles.textInput}
+							onChangeText={(text)=>this.setState({password:text})}
+							placeholder="password"
+							value={this.state.password}
+							autoCapitalize='none'
+							autoCorrect={false}
+							secureTextEntry={!this.state.showPassword} />
+						<Pressable style={styles.showPasswordButton} onPress={() => this.setState({showPassword:!this.state.showPassword})} >
+							<Icon name={this.state.showPassword ? "eye-with-line" : "eye"} type="entypo" color={theme.colors.foreground} />
+						</Pressable>
+					</View>
+				</KeyboardAvoidingView>
+
+				{/* <View style={styles.extraSpace}></View> */}
+				<BouncyCheckbox 
+					text="Remember Me" 
+					textStyle={{textDecorationLine:'none', color:theme.colors.foreground}}
+					fillColor={theme.colors.primary}
+					style={{marginBottom:theme.spacing.s+theme.spacing.l, marginTop:theme.spacing.s, alignSelf:'flex-start', marginLeft:"10%"}} 
+					onPress={(pressed) => {this.handleCheck(pressed)}}
+					isChecked={this.state.rememberMe} 
+					disableBuiltInState />
+
+				<Pressable style={styles.logInButton} onPress={this.logInFunc.bind(this)}>
+					<Text style={styles.logInButtonText}>Log In</Text>
+				</Pressable>
+				<Pressable style={styles.signInButton} onPress={() => this.props.navigation.navigate("Signup")}>
+					<Text style={styles.signInButtonText}>Sign Up</Text>
+				</Pressable>
+
+				{/* <Pressable style={styles.signInButton} onPress={() => {
+					storeData(this.state.username);
+				}}>
+					<Text style={styles.signInButtonText}>Save</Text>
+				</Pressable>
+
+				<Pressable style={styles.signInButton} onPress={() => {
+					getData().then((data)=>{
+						this.setState({user:data});
+					})
+				}}>
+					<Text style={styles.signInButtonText}>{this.state.user}</Text>
+				</Pressable> */}
+				<LoadingModal isVisible={this.state.isModalVisible} />
+			</View>
+			</TouchableWithoutFeedback>
 		);
+	}
 }
 
 const SignUpScreen = ({navigation, route}) => {
