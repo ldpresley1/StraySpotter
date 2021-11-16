@@ -3,7 +3,6 @@ import { Text, Pressable, View, navigation,  StyleSheet, ScrollView, TextInput, 
 import * as MediaLibrary from 'expo-media-library';//THIS IS FOR PERMISSIONS
 import DropDownPicker from 'react-native-dropdown-picker';
 import dbo from './dataStorage';
-import Modal from "react-native-modal";
 
 import ImageCarousel from './ImageCarousel';
 import SimpleDropdownPicker from './DropdownPicker';
@@ -329,14 +328,7 @@ export default class PostPage extends Component {
     	<Text style={styles.buttonText}>{submitButtonText}
         </Text>
 	</Pressable>
-  <Modal isVisible={this.state.isModalVisible}>
-			<View style={{ flex: 1, justifyContent:"center",alignItems:"center" }}>
-				{!this.state.isPosted ? 
-          <Text style={{fontSize:36,backgroundColor:'white',paddingHorizontal:10,paddingVertical:5,borderRadius:2,overflow:"hidden"}}>Submitting...</Text>
-          : <Text style={{fontSize:36,backgroundColor:'white',paddingHorizontal:10,paddingVertical:5,borderRadius:2,overflow:"hidden"}}>Submitted!</Text>
-        }
-			</View>
-		</Modal>
+			<LoadingModal isVisible={false}/>
 			</ScrollView>
       </TouchableWithoutFeedback>
 	);}
