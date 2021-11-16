@@ -64,6 +64,7 @@ export default class PostPage extends Component {
     this.setbreedValue = this.setbreedValue.bind(this);
     this.setMarkerData = this.setMarkerData.bind(this);
     this.submitFunction = this.submitFunction.bind(this);
+    this.imageIDMaker = this.imageIDMaker.bind(this);
   }
 
   componentDidUpdate() {
@@ -181,6 +182,18 @@ export default class PostPage extends Component {
   setMarkerData(markerData){
     this.setState({markerData});
   }
+  imageIDMaker(text, array){
+    for(var i = 0; i < array.length; i++){
+        if(array.length - 1 == i)
+            text = text + "and " + array[i]
+        else if (array.length > 2)
+            text = text + array[i] + ", ";
+        else
+            text = text + array[i] + " ";
+    }
+    text = text + " fur."
+    return text;
+  }
   async uploadImageAsync(filename,uri) {
     // Why are we using XMLHttpRequest? See:
     // https://github.com/expo/expo/issues/2402#issuecomment-443726662
@@ -216,7 +229,9 @@ export default class PostPage extends Component {
       var photoURLs = [];
       for(let i = 0; i< this.state.photos.length; i++){
       photoURLs.push( await this.uploadImageAsync(this.state.photos[i].name, this.state.photos[i].uri));}
-        
+      var imageDescription = "This post is a " + this.state.sizeValue + " " + this.state.typeValue + " with ",
+      imageDescription = this.imageIDMaker(imageDescription, this.state.colorValue);
+
 
       dbo.firebase.firestore()
            .collection('StraysFound')
@@ -224,9 +239,11 @@ export default class PostPage extends Component {
               description: this.state.text,
               title: this.state.title,
               tags: tagsList,
-              id: 42, //Temp Data
               cord: {lat: this.state.markerData.latitude, long: this.state.markerData.longitude},
               images: photoURLs, 
+              flag: false,
+              userID: dbo.firebase.auth().currentUser.uid,
+              imageID: imageDescription,
            });
              const {navigate} = this.props.navigation;
              this.setState(this.baseState);
