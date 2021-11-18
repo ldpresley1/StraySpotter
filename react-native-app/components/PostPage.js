@@ -1,4 +1,4 @@
-import React, {useState,  useCallback, Component} from 'react';
+import React, { Component} from 'react';
 import { Text, Pressable, View, navigation,  StyleSheet, ScrollView, TextInput, Appearance, TouchableWithoutFeedback, Keyboard, Dimensions, LogBox } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';//THIS IS FOR PERMISSIONS
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -37,9 +37,6 @@ export default class PostPage extends Component {
     {label: 'Medium', value: 'Medium'},
     {label: 'Large', value: 'Large'},
     {label: 'Huge', value: 'Huge'}],
-    breedOpen: false,
-    breedValue: [],
-    Breeds: [{label: 'breed', value: null}],
     markerData: {
       latitude: 33.2083,
       longitude: -87.5504
@@ -47,6 +44,7 @@ export default class PostPage extends Component {
    locationButtonText: 'Select Location',
    submitButtontext: 'Submit',
   }
+  
   this.baseState = this.state;
     this.onaddText = this.onaddText.bind(this);
     this.titleText = this.titleText.bind(this);
@@ -59,9 +57,6 @@ export default class PostPage extends Component {
     this.setsizeOpen = this.setsizeOpen.bind(this);
     this.setSizes = this.setSizes.bind(this);
     this.setsizeValue = this.setsizeValue.bind(this);
-    this.setbreedOpen = this.setbreedOpen.bind(this);
-    this.setBreeds = this.setBreeds.bind(this);
-    this.setbreedValue = this.setbreedValue.bind(this);
     this.setMarkerData = this.setMarkerData.bind(this);
     this.submitFunction = this.submitFunction.bind(this);
     this.imageIDMaker = this.imageIDMaker.bind(this);
@@ -88,12 +83,7 @@ export default class PostPage extends Component {
   setLocationText(locationButtonText){
     this.setState({locationButtonText});
   }
-  setIsModalVisible(isModalVisible){
-    this.setState({isModalVisible});
-  }
-  setIsPosted(isPosted){
-    this.setState({isPosted});
-  }
+
   setSubmitText(submitButtonText){
     this.setState({submitButtonText});
   }
@@ -104,24 +94,6 @@ export default class PostPage extends Component {
   titleText(title){
     this.setState({title});
   }
-
-  /*readBreedsFromFile(){
-    var fs = require('');
-    var text = fs.readFileSync("./assets/DogList.txt", 'utf-8');
-    var textByLine = text.split('\n');
-    this.setState({Breeds: [{label: 'Dog', value: 'Dog'}]});
-    while (textByLine){
-      var breed = textByLine.pop();
-    this.setState({ Breeds: [{label: breed, value: breed, parent: 'Dog'}, ...this.state.Breeds] })
-  }
-  text = fs.readFileSync("./assets/CatList.txt", 'utf-8');
-  textByLine = text.split('\n');
-  this.setState({Breeds: [...this.state.Breeds,{label: 'Cat', value: 'Cat'}]});
-    while (textByLine){
-      var breed = textByLine.pop();
-    this.setState({ Breeds: [{label: breed, value: breed, parent: 'Cat'}, ...this.state.Breeds] })
-  }
-  }*/
   
   settypeOpen(typeOpen){
     this.setState({typeOpen});
@@ -163,20 +135,6 @@ export default class PostPage extends Component {
   setsizeValue(callback) {
     this.setState(state => ({
       sizeValue: callback(state.sizeValue)
-    }));
-  }
-  setbreedOpen(breedOpen){
-    this.setState({breedOpen});
-  }
-  setBreeds(callback) {
-    this.setState(state => ({
-      Breeds: callback(state.Breeds)
-    }));
-  }
-
-  setbreedValue(callback) {
-    this.setState(state => ({
-      breedValue: callback(state.breedValue)
     }));
   }
   setMarkerData(markerData){
@@ -223,10 +181,9 @@ export default class PostPage extends Component {
 		//this.setIsModalVisible(true);
     var imageDescription = "This post is a " + this.state.sizeValue + " " + this.state.typeValue + " with ",
       imageDescription = this.imageIDMaker(imageDescription, this.state.colorValue);
-    var tagsList = [];
+      var tagsList = [];
       tagsList = this.state.colorValue; //THIS HAS TO GO FIRST so that we don't get nested arrays
       tagsList.push(this.state.typeValue);
-      //tagsList.push(this.state.breedValue), //Commented out until we figure out breed values
       tagsList.push(this.state.sizeValue);
       var photoURLs = [];
       for(let i = 0; i< this.state.photos.length; i++){
@@ -315,20 +272,6 @@ export default class PostPage extends Component {
 	    containerStyle={{width:'29%',}}
 	    zIndex={2000}
       zIndexInverse={1000}
-    />
-    <DropDownPicker
-      open={this.state.breedOpen}
-	    defaultNull
-	    placeholder = "Breed"
-	    searchable={true}
-      value={this.state.breedValue}
-      items={this.state.Breeds}
-	    setOpen={this.setbreedOpen}
-      setValue={this.setbreedValue}
-	    containerStyle={{width:'60%', marginLeft: '20%', marginRight: '20%'}}
-      setItems={this.setBreeds}
-	    zIndex={1000}
-      zIndexInverse={2000}
     />
       <TextInput
       style={styles.input}
