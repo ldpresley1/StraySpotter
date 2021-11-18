@@ -3,7 +3,6 @@ import { Text, Pressable, View, navigation,  StyleSheet, ScrollView, TextInput, 
 import * as MediaLibrary from 'expo-media-library';//THIS IS FOR PERMISSIONS
 import DropDownPicker from 'react-native-dropdown-picker';
 import dbo from './dataStorage';
-
 import ImageCarousel from './ImageCarousel';
 import SimpleDropdownPicker from './DropdownPicker';
 import { darkTheme, lightTheme } from './Themes';
@@ -222,7 +221,7 @@ export default class PostPage extends Component {
   async submitFunction() {//this is the function that gets called when the button is pushed
 		//this.setIsModalVisible(true);
     var imageDescription = "This post is a " + this.state.sizeValue + " " + this.state.typeValue + " with ",
-      imageDescription = this.imageIDMaker(imageDescription, this.state.colorValue);
+    imageDescription = this.imageIDMaker(imageDescription, this.state.colorValue);
     var tagsList = [];
       tagsList = this.state.colorValue; //THIS HAS TO GO FIRST so that we don't get nested arrays
       tagsList.push(this.state.typeValue);
@@ -262,16 +261,13 @@ export default class PostPage extends Component {
       
 		<ScrollView style={[styles.container]} contentContainerStyle={[styles.contentcontainer]} >
     {carousel}
-      <Pressable style = {[styles.button]} onPress={() => { navigate('ImageBrowser');}}>
-        <Text style={{fontSize: 15, color:theme.colors.foreground}}> 
-           {'Open Image Browser'}
-        </Text>
-      </Pressable>
-      <TextInput
+    <Text></Text>
+    <TextInput
       style={styles.titleStyle}
       multiline
       onChangeText={text=>this.titleText(text)}
       value={this.state.title}
+      paddingTop = {10}
       placeholder="Post Title"
     />
     <DropDownPicker
@@ -330,14 +326,19 @@ export default class PostPage extends Component {
 	    zIndex={1000}
       zIndexInverse={2000}
     />
-      <TextInput
+     <TextInput
       style={styles.input}
       multiline
       numberOfLines={50}
       onChangeText={text=> this.onaddText(text)}
       value={this.state.text}
       placeholder='Additional details'
-    />  
+    />
+    <Pressable style = {[styles.button]} onPress={() => { navigate('ImageBrowser');}}>
+    <Text style={{fontSize: 15, color:theme.colors.foreground}}>
+       {'Open Image Browser'}
+    </Text>
+    </Pressable>
     <Pressable
       style={styles.button} onPress={() => {navigate('CustomGeolocation'); this.setLocationText('Saved Your Location!');}}>
         <Text style={styles.buttonText}>{this.state.locationButtonText}</Text>
@@ -346,9 +347,9 @@ export default class PostPage extends Component {
     	<Text style={styles.buttonText}>{submitButtonText}
         </Text>
 	</Pressable>
-			<LoadingModal isVisible={false}/>
-			</ScrollView>
-      </TouchableWithoutFeedback>
+    <LoadingModal isVisible={false}/>
+    </ScrollView>
+    </TouchableWithoutFeedback>
 	);}
 }
 
@@ -416,16 +417,16 @@ const styles = StyleSheet.create({
       marginLeft: '5%',
       marginRight: '5%',
       backgroundColor: '#fff',
-},
-basicText: {
-  fontSize: 12,
-  padding: 10,
-  color:'#000',
-},
-buttonText:{
-    fontSize: 15,
-    color:theme.colors.foreground,
-},
+    },
+    basicText: {
+      fontSize: 12,
+      padding: 10,
+      color:'#000',
+    },
+    buttonText:{
+        fontSize: 15,
+        color:theme.colors.foreground,
+    },
     button: {
       backgroundColor:theme.colors.background,
       width: "50%",

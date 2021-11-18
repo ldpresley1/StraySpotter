@@ -5,11 +5,9 @@ import { darkTheme, lightTheme } from './Themes';
 import * as Linking from 'expo-linking';
 import ImageCarousel from './ImageCarousel';
 import dbo from "./dataStorage";
-
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
-var type = "temp";
 
 export class Post extends React.Component {
 	state = {
@@ -19,9 +17,8 @@ export class Post extends React.Component {
 	setModalVisible = (visible) => {
 		this.setState({isModalVisible: visible});
 	}
+
 	// Maybe use horizontal flat list for photos
-
-
 	render() {
 		return (
 			<View style={styles.post}>
@@ -99,17 +96,11 @@ function openMap(cord) {
 		ios: `${scheme}${label}@${latLng}`,
 		android: `${scheme}${latLng}(${label})`
 	});
-
-		
 	Linking.openURL(url);
 }
 
-function pressType(buttonType){
-	console.log(buttonType);
-}
 
-function flagPost(strayID, reason){
-//   flagPost(this.props.id, type),
+function flagPost(strayID, reason, arr){
 	if(reason != "cancelled"){
 		dbo.firebase.firestore()
 			.collection('StraysFound')
