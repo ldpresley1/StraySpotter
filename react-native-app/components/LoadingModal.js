@@ -13,7 +13,7 @@ export default function LoadingModal(props) {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1, 
+		flex: 1,
 		justifyContent:"center",
 		alignItems:"center",
 		backgroundColor:'#000000bb',

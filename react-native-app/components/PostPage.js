@@ -5,6 +5,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import dbo from './dataStorage';
 
 import ImageCarousel from './ImageCarousel';
+import SubmittedModal from './SubmittedModal';
 import SimpleDropdownPicker from './DropdownPicker';
 import { darkTheme, lightTheme } from './Themes';
 import LoadingModal from './LoadingModal';
@@ -46,6 +47,7 @@ export default class PostPage extends Component {
   },
    locationButtonText: 'Select Location',
    submitButtontext: 'Submit',
+   isModalVisible: false,
   }
   this.baseState = this.state;
     this.onaddText = this.onaddText.bind(this);
@@ -71,7 +73,7 @@ export default class PostPage extends Component {
     const {params} = this.props.route;
     if(params) {
       const {photos} = params;
-      if (photos) {this.setState({photos}); 
+      if (photos) {this.setState({photos});
       delete params.photos;}
     }
     if (params?.latitude) {
@@ -122,7 +124,7 @@ export default class PostPage extends Component {
     this.setState({ Breeds: [{label: breed, value: breed, parent: 'Cat'}, ...this.state.Breeds] })
   }
   }*/
-  
+
   settypeOpen(typeOpen){
     this.setState({typeOpen});
   }
@@ -210,17 +212,17 @@ export default class PostPage extends Component {
       xhr.open("GET", uri, true);
       xhr.send(null);
     });
-  
+
     const fileRef = dbo.firebase.storage().ref(filename);
     const result = await fileRef.put(blob);
     const url = await fileRef.getDownloadURL();
     // We're done with the blob, close and release it
     blob.close();
-  
+
     return url;
   }
   async submitFunction() {//this is the function that gets called when the button is pushed
-		//this.setIsModalVisible(true);
+		this.setState({isModalVisible: true});
     var imageDescription = "This post is a " + this.state.sizeValue + " " + this.state.typeValue + " with ",
       imageDescription = this.imageIDMaker(imageDescription, this.state.colorValue);
     var tagsList = [];
@@ -231,7 +233,7 @@ export default class PostPage extends Component {
       var photoURLs = [];
       for(let i = 0; i< this.state.photos.length; i++){
       photoURLs.push( await this.uploadImageAsync(this.state.photos[i].name, this.state.photos[i].uri));}
-      
+
 
 
       dbo.firebase.firestore()
@@ -241,29 +243,31 @@ export default class PostPage extends Component {
               title: this.state.title,
               tags: tagsList,
               cord: {lat: this.state.markerData.latitude, long: this.state.markerData.longitude},
-              images: photoURLs, 
+              images: photoURLs,
               flag: false,
               userID: dbo.firebase.auth().currentUser.uid,
               imageID: imageDescription,
            });
              const {navigate} = this.props.navigation;
+
+           	 this.setState({isModalVisible: false});
              this.setState(this.baseState);
              navigate('TimeLine');
   }
-  
+
   render(){
     const { navigate } = this.props.navigation;
     var submitButtonText = "Submit";
   var carousel = null;
-  if(this.state.photos.length){carousel = <ImageCarousel items = {this.state.photos}/>} 
+  if(this.state.photos.length){carousel = <ImageCarousel items = {this.state.photos}/>}
 	return (
-    
+
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} >
-      
+
 		<ScrollView style={[styles.container]} contentContainerStyle={[styles.contentcontainer]} >
     {carousel}
       <Pressable style = {[styles.button]} onPress={() => { navigate('ImageBrowser');}}>
-        <Text style={{fontSize: 15, color:theme.colors.foreground}}> 
+        <Text style={{fontSize: 15, color:theme.colors.foreground}}>
            {'Open Image Browser'}
         </Text>
       </Pressable>
@@ -337,7 +341,7 @@ export default class PostPage extends Component {
       onChangeText={text=> this.onaddText(text)}
       value={this.state.text}
       placeholder='Additional details'
-    />  
+    />
     <Pressable
       style={styles.button} onPress={() => {navigate('CustomGeolocation'); this.setLocationText('Saved Your Location!');}}>
         <Text style={styles.buttonText}>{this.state.locationButtonText}</Text>
@@ -346,7 +350,7 @@ export default class PostPage extends Component {
     	<Text style={styles.buttonText}>{submitButtonText}
         </Text>
 	</Pressable>
-			<LoadingModal isVisible={false}/>
+      <LoadingModal isVisible={this.state.isModalVisible} />
 			</ScrollView>
       </TouchableWithoutFeedback>
 	);}
@@ -448,5 +452,5 @@ buttonText:{
       alignItems: 'center',
       paddingTop: "4%",
     },
-  
+
 });
