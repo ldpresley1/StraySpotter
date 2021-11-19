@@ -198,6 +198,7 @@ export default class PostPage extends Component {
   }
   async submitFunction() {//this is the function that gets called when the button is pushed
 		this.setState({isModalVisible: true});
+    const timestamp = Date.now();
     var imageDescription = "This post is a " + this.state.sizeValue + " " + this.state.typeValue + " with ",
       imageDescription = this.imageIDMaker(imageDescription, this.state.colorValue);
       var tagsList = [];
@@ -221,6 +222,7 @@ export default class PostPage extends Component {
               flag: false,
               userID: dbo.firebase.auth().currentUser.uid,
               imageID: imageDescription,
+              time: timestamp,
            });
              const {navigate} = this.props.navigation;
 

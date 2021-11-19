@@ -48,7 +48,7 @@ export const postData = {
       this.strayListByUID = DATA;
   },
   getByDistance: async function () {
-    let tempVar = database.collection("StraysFound");
+    let tempVar = database.collection("StraysFound").orderBy("time","desc");
       let DATA = [];
       snapshot = await tempVar.get();
       snapshot.forEach(doc => {
