@@ -1,9 +1,8 @@
-import React, {useState,  useCallback, Component} from 'react';
+import React, { Component} from 'react';
 import { Text, Pressable, View, navigation,  StyleSheet, ScrollView, TextInput, Appearance, TouchableWithoutFeedback, Keyboard, Dimensions, LogBox } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';//THIS IS FOR PERMISSIONS
 import DropDownPicker from 'react-native-dropdown-picker';
 import dbo from './dataStorage';
-
 import ImageCarousel from './ImageCarousel';
 import SubmittedModal from './SubmittedModal';
 import SimpleDropdownPicker from './DropdownPicker';
@@ -38,9 +37,6 @@ export default class PostPage extends Component {
     {label: 'Medium', value: 'Medium'},
     {label: 'Large', value: 'Large'},
     {label: 'Huge', value: 'Huge'}],
-    breedOpen: false,
-    breedValue: [],
-    Breeds: [{label: 'breed', value: null}],
     markerData: {
       latitude: 33.2083,
       longitude: -87.5504
@@ -49,6 +45,7 @@ export default class PostPage extends Component {
    submitButtontext: 'Submit',
    isModalVisible: false,
   }
+
   this.baseState = this.state;
     this.onaddText = this.onaddText.bind(this);
     this.titleText = this.titleText.bind(this);
@@ -61,9 +58,6 @@ export default class PostPage extends Component {
     this.setsizeOpen = this.setsizeOpen.bind(this);
     this.setSizes = this.setSizes.bind(this);
     this.setsizeValue = this.setsizeValue.bind(this);
-    this.setbreedOpen = this.setbreedOpen.bind(this);
-    this.setBreeds = this.setBreeds.bind(this);
-    this.setbreedValue = this.setbreedValue.bind(this);
     this.setMarkerData = this.setMarkerData.bind(this);
     this.submitFunction = this.submitFunction.bind(this);
     this.imageIDMaker = this.imageIDMaker.bind(this);
@@ -90,12 +84,7 @@ export default class PostPage extends Component {
   setLocationText(locationButtonText){
     this.setState({locationButtonText});
   }
-  setIsModalVisible(isModalVisible){
-    this.setState({isModalVisible});
-  }
-  setIsPosted(isPosted){
-    this.setState({isPosted});
-  }
+
   setSubmitText(submitButtonText){
     this.setState({submitButtonText});
   }
@@ -167,20 +156,6 @@ export default class PostPage extends Component {
       sizeValue: callback(state.sizeValue)
     }));
   }
-  setbreedOpen(breedOpen){
-    this.setState({breedOpen});
-  }
-  setBreeds(callback) {
-    this.setState(state => ({
-      Breeds: callback(state.Breeds)
-    }));
-  }
-
-  setbreedValue(callback) {
-    this.setState(state => ({
-      breedValue: callback(state.breedValue)
-    }));
-  }
   setMarkerData(markerData){
     this.setState({markerData});
   }
@@ -225,10 +200,9 @@ export default class PostPage extends Component {
 		this.setState({isModalVisible: true});
     var imageDescription = "This post is a " + this.state.sizeValue + " " + this.state.typeValue + " with ",
       imageDescription = this.imageIDMaker(imageDescription, this.state.colorValue);
-    var tagsList = [];
+      var tagsList = [];
       tagsList = this.state.colorValue; //THIS HAS TO GO FIRST so that we don't get nested arrays
       tagsList.push(this.state.typeValue);
-      //tagsList.push(this.state.breedValue), //Commented out until we figure out breed values
       tagsList.push(this.state.sizeValue);
       var photoURLs = [];
       for(let i = 0; i< this.state.photos.length; i++){
@@ -276,6 +250,7 @@ export default class PostPage extends Component {
       multiline
       onChangeText={text=>this.titleText(text)}
       value={this.state.title}
+      paddingTop = {10}
       placeholder="Post Title"
     />
     <DropDownPicker
@@ -320,20 +295,6 @@ export default class PostPage extends Component {
 	    zIndex={2000}
       zIndexInverse={1000}
     />
-    <DropDownPicker
-      open={this.state.breedOpen}
-	    defaultNull
-	    placeholder = "Breed"
-	    searchable={true}
-      value={this.state.breedValue}
-      items={this.state.Breeds}
-	    setOpen={this.setbreedOpen}
-      setValue={this.setbreedValue}
-	    containerStyle={{width:'60%', marginLeft: '20%', marginRight: '20%'}}
-      setItems={this.setBreeds}
-	    zIndex={1000}
-      zIndexInverse={2000}
-    />
       <TextInput
       style={styles.input}
       multiline
@@ -342,6 +303,11 @@ export default class PostPage extends Component {
       value={this.state.text}
       placeholder='Additional details'
     />
+    <Pressable style = {[styles.button]} onPress={() => { navigate('ImageBrowser');}}>
+    <Text style={{fontSize: 15, color:theme.colors.foreground}}>
+       {'Open Image Browser'}
+    </Text>
+    </Pressable>
     <Pressable
       style={styles.button} onPress={() => {navigate('CustomGeolocation'); this.setLocationText('Saved Your Location!');}}>
         <Text style={styles.buttonText}>{this.state.locationButtonText}</Text>
@@ -420,16 +386,16 @@ const styles = StyleSheet.create({
       marginLeft: '5%',
       marginRight: '5%',
       backgroundColor: '#fff',
-},
-basicText: {
-  fontSize: 12,
-  padding: 10,
-  color:'#000',
-},
-buttonText:{
-    fontSize: 15,
-    color:theme.colors.foreground,
-},
+    },
+    basicText: {
+      fontSize: 12,
+      padding: 10,
+      color:'#000',
+    },
+    buttonText:{
+        fontSize: 15,
+        color:theme.colors.foreground,
+    },
     button: {
       backgroundColor:theme.colors.background,
       width: "50%",
