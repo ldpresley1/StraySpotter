@@ -128,10 +128,6 @@ const renderPost = ({ item }) => (
 export default class ScrollListView extends React.Component {
 
 	render() {
-		// const flatListRef = useRef();
-		// const toTop = () => {
-		// 	flatListRef.current.scrollToOffset({ animated: true, offset: 0 })
-		// }
 
 		if (this.props.strayList.length < 1) {
 			return (
@@ -147,10 +143,7 @@ export default class ScrollListView extends React.Component {
 		// * FlatList uses lazy rendering
 		// * for section support (don't know what that is), use SectionList 
 		return (
-				// <Pressable style={styles.toTop} onPress={toTop}></Pressable>
-				// <Pressable style={styles.toTop}></Pressable>
 				<FlatList
-					// ref={flatListRef}
 					style={{width:screenWidth}}
 					data={this.props.strayList}
 					renderItem={renderPost}

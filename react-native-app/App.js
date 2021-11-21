@@ -101,7 +101,6 @@ class LogIn extends React.Component {
 		dbo.firebase.auth()
 			.signInWithEmailAndPassword(this.state.username, this.state.password)
 			.then((res) => {
-				// console.log(res)
 				console.log(res.user.uid);
 				console.log('User logged-in successfully!')
 

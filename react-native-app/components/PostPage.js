@@ -1,4 +1,4 @@
-import React, { Component} from 'react';
+import React, {useState,  useCallback, Component} from 'react';
 import { Text, Pressable, View, navigation,  StyleSheet, ScrollView, TextInput, Appearance, TouchableWithoutFeedback, Keyboard, Dimensions, LogBox } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';//THIS IS FOR PERMISSIONS
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -12,7 +12,7 @@ const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
-MediaLibrary.requestPermissionsAsync();//working
+MediaLibrary.requestPermissionsAsync();
 export default class PostPage extends Component {
   constructor (props){
     super(props)
@@ -77,7 +77,7 @@ export default class PostPage extends Component {
           this.setMarkerData({
             latitude: params.latitude,
             longitude: params.longitude
-        }); this.setLocationText("Location Saved!");params.markerData;
+        });
       }
   }
   }
@@ -95,24 +95,6 @@ export default class PostPage extends Component {
   titleText(title){
     this.setState({title});
   }
-
-  /*readBreedsFromFile(){
-    var fs = require('');
-    var text = fs.readFileSync("./assets/DogList.txt", 'utf-8');
-    var textByLine = text.split('\n');
-    this.setState({Breeds: [{label: 'Dog', value: 'Dog'}]});
-    while (textByLine){
-      var breed = textByLine.pop();
-    this.setState({ Breeds: [{label: breed, value: breed, parent: 'Dog'}, ...this.state.Breeds] })
-  }
-  text = fs.readFileSync("./assets/CatList.txt", 'utf-8');
-  textByLine = text.split('\n');
-  this.setState({Breeds: [...this.state.Breeds,{label: 'Cat', value: 'Cat'}]});
-    while (textByLine){
-      var breed = textByLine.pop();
-    this.setState({ Breeds: [{label: breed, value: breed, parent: 'Cat'}, ...this.state.Breeds] })
-  }
-  }*/
 
   settypeOpen(typeOpen){
     this.setState({typeOpen});
@@ -196,7 +178,7 @@ export default class PostPage extends Component {
 
     return url;
   }
-  async submitFunction() {//this is the function that gets called when the button is pushed
+  async submitFunction() { //this is the function that gets called when the button is pushed
 		this.setState({isModalVisible: true});
     const timestamp = Date.now();
     var imageDescription = "This post is a " + this.state.sizeValue + " " + this.state.typeValue + " with ",
@@ -208,7 +190,6 @@ export default class PostPage extends Component {
       var photoURLs = [];
       for(let i = 0; i< this.state.photos.length; i++){
       photoURLs.push( await this.uploadImageAsync(this.state.photos[i].name, this.state.photos[i].uri));}
-
 
 
       dbo.firebase.firestore()
@@ -242,11 +223,7 @@ export default class PostPage extends Component {
 
 		<ScrollView style={[styles.container]} contentContainerStyle={[styles.contentcontainer]} >
     {carousel}
-      <Pressable style = {[styles.button]} onPress={() => { navigate('ImageBrowser');}}>
-        <Text style={{fontSize: 15, color:theme.colors.foreground}}>
-           {'Open Image Browser'}
-        </Text>
-      </Pressable>
+    <Text> </Text>
       <TextInput
       style={styles.titleStyle}
       multiline
@@ -264,7 +241,7 @@ export default class PostPage extends Component {
       setOpen={this.settypeOpen}
       setValue={this.settypeValue}
       setItems={this.setTypes}
-	    containerStyle={{width:'23%',marginLeft: '5%',}}
+	    containerStyle={{width:'23%',marginLeft: '5%', marginTop: '10%'}}
 	    zIndex={4000}
       zIndexInverse={1000}
     />

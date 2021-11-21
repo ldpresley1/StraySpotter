@@ -44,7 +44,6 @@ export const postData = {
         if (doc.data().flag == false)
       		DATA.push({...doc.data(),id:doc.id});
       });
-      //console.log(querySnapshot);
       this.strayListByUID = DATA;
   },
   getByDistance: async function () {
@@ -55,7 +54,6 @@ export const postData = {
         if (doc.data().flag == false)
       		DATA.push({...doc.data(),id:doc.id});
       });
-      //console.log(querySnapshot);
       this.strayListByDistance = DATA;
   },
 }
