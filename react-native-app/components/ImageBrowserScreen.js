@@ -24,7 +24,7 @@ export default class ImageBrowserScreen extends Component {
           type: 'image/jpg'
         })
       }
-      navigation.navigate('PostPage', {photos: cPhotos});
+      navigation.navigate(this.props.route.params.parent, {photos: cPhotos});
     })
     .catch((e) => console.log(e));
   };
@@ -64,7 +64,7 @@ export default class ImageBrowserScreen extends Component {
     return (
       <View style={[styles.flex, styles.container]}>
         <ImageBrowser
-          max={5}
+          max={this.props.route.params.maxImages}
           onChange={this.updateHandler}
           callback={this.imagesCallback}
           renderSelectedComponent={this.renderSelectedComponent}

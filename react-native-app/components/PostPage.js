@@ -282,7 +282,7 @@ export default class PostPage extends Component {
       value={this.state.text}
       placeholder='Additional details'
     />
-    <Pressable style = {[styles.button]} onPress={() => { navigate('ImageBrowser');}}>
+    <Pressable style = {[styles.button]} onPress={() => { navigate('ImageBrowser',{parent:'PostPage',maxImages:5});}}>
     <Text style={{fontSize: 15, color:theme.colors.foreground}}>
        {'Open Image Browser'}
     </Text>

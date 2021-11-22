@@ -2,7 +2,6 @@ import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react';
 import { StyleSheet, Text, View, Appearance, Pressable, TextInput, TouchableWithoutFeedback, Keyboard, ActivityIndicator, KeyboardAvoidingView, LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -18,6 +17,7 @@ import CustomGeolocation from './components/CustomGeolocationScreen';
 import { darkTheme, lightTheme } from './components/Themes';
 import dbo, { getData, storeData } from './components/dataStorage';
 import LoadingModal from './components/LoadingModal';
+import SecureInput from './components/SecureInput';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -105,7 +105,6 @@ class LogIn extends React.Component {
 				console.log('User logged-in successfully!')
 
 				this.setState({username:'',password:'',errorMessage:'',isModalVisible:false});
-
 				this.props.navigation.replace('Dash')
 			})
 			.catch((error) => {
@@ -116,7 +115,6 @@ class LogIn extends React.Component {
 	handleCheck(isChecked) {
 		// isChecked is always false
 		isChecked = !this.state.rememberMe;
-		console.log(isChecked);
 
 		this.setState({rememberMe:isChecked});
 		if (isChecked) storeData("rememberMe",'true');
@@ -126,9 +124,6 @@ class LogIn extends React.Component {
 			storeData("password","");
 			storeData("rememberMe","false");
 		}
-
-		// save stuff
-
 	}
 
 	render() {
@@ -152,20 +147,7 @@ class LogIn extends React.Component {
 							autoCorrect={false}
 							secureTextEntry={false} />
 					</View>
-					<Text style={styles.inputLabel}>Password:</Text>
-					<View style={styles.textInputView}>
-						<TextInput
-							style={styles.textInput}
-							onChangeText={(text)=>this.setState({password:text})}
-							placeholder="password"
-							value={this.state.password}
-							autoCapitalize='none'
-							autoCorrect={false}
-							secureTextEntry={!this.state.showPassword} />
-						<Pressable style={styles.showPasswordButton} onPress={() => this.setState({showPassword:!this.state.showPassword})} >
-							<Icon name={this.state.showPassword ? "eye-with-line" : "eye"} type="entypo" color={theme.colors.foreground} />
-						</Pressable>
-					</View>
+					<SecureInput label="Password:" placeholder="password" onChange={(text)=>this.setState({password:text})} val={this.state.password} />
 				</KeyboardAvoidingView>
 
 				{/* <View style={styles.extraSpace}></View> */}
@@ -211,8 +193,6 @@ const SignUpScreen = ({navigation, route}) => {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [password2, setPassword2] = useState("");
-	const [showPassword, setShowPassword] = useState(false);
-	const [showPassword2, setShowPassword2] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
 
 	const signUpFunc = () => {
@@ -256,34 +236,8 @@ const SignUpScreen = ({navigation, route}) => {
 						autoCorrect={false}
 						secureTextEntry={false} />
 				</View>
-				<Text style={styles.inputLabel}>Password:</Text>
-				<View style={styles.textInputView}>
-					<TextInput
-						style={styles.textInput}
-						onChangeText={setPassword}
-						placeholder="password"
-						value={password}
-						autoCapitalize='none'
-						autoCorrect={false}
-						secureTextEntry={!showPassword} />
-					<Pressable style={styles.showPasswordButton} onPress={() => setShowPassword(!showPassword)} >
-						<Icon name={showPassword ? "eye-with-line" : "eye"} type="entypo" color={theme.colors.foreground} />
-					</Pressable>
-				</View>
-				<Text style={styles.inputLabel}>Confirm Password:</Text>
-				<View style={styles.textInputView}>
-					<TextInput
-						style={styles.textInput}
-						onChangeText={setPassword2}
-						placeholder="password"
-						value={password2}
-						autoCapitalize='none'
-						autoCorrect={false}
-						secureTextEntry={!showPassword2} />
-					<Pressable style={styles.showPasswordButton} onPress={() => setShowPassword2(!showPassword2)} >
-						<Icon name={showPassword2 ? "eye-with-line" : "eye"} type="entypo" color={theme.colors.foreground} />
-					</Pressable>
-				</View>
+				<SecureInput label="Password:" placeholder="password" onChange={setPassword} val={password} />
+				<SecureInput label="Confirm Password:" placeholder="password" onChange={setPassword2} val={password2} />
 			</KeyboardAvoidingView>
 
 			<View style={styles.extraSpace}></View>
@@ -350,7 +304,6 @@ function App({navigation, route}) {
 	);
 }
 
-const darkMode = Appearance.getColorScheme() === 'dark';
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
@@ -397,13 +350,6 @@ const styles = StyleSheet.create({
 		borderWidth:1,
 		paddingVertical:theme.spacing.l,
 		paddingLeft: theme.spacing.l,
-	},
-	showPasswordButton: {
-		height:'100%',
-		position:'absolute',
-		top:0,
-		right:'10%',
-		justifyContent:'center',
 	},
 	extraSpace: {
 		height: theme.spacing.xl,

@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
-import { Icon, ThemeContext } from 'react-native-elements';
-import { Text, View, Appearance, StyleSheet, Pressable, SafeAreaView, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView, Image } from 'react-native';
+import { Icon } from 'react-native-elements';
+import { Text, View, Appearance, StyleSheet, Pressable, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView, Image, Alert, KeyboardAvoidingView } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import MapView, { Marker } from 'react-native-maps';
+import ImageBrowserScreen from './ImageBrowserScreen';
 
 import { darkTheme, lightTheme } from './Themes';
 import TimeLine from './TimeLine';
 import Header from './Header';
 import { ScreenWidth } from 'react-native-elements/dist/helpers';
 
-import dbo from './dataStorage';
+import dbo, { storeData } from './dataStorage';
+import LoadingModal from './LoadingModal';
+import SecureInput from './SecureInput';
 
 const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 
@@ -17,68 +19,44 @@ const theme = Appearance.getColorScheme() === 'dark' ? darkTheme : lightTheme
 const Profile = ({navigation, route}) => {
 	let username = dbo.firebase.auth().currentUser.displayName ? dbo.firebase.auth().currentUser.displayName : dbo.firebase.auth().currentUser.email;
 
+	const FullLengthButton = (props) => {
+		return (
+			<Pressable style={styles.fullButton} onPress={props.onTap}>
+				<View style={styles.fullButtonIconView}>
+					<Icon style={styles.fullButtonIcon} name={props.iconName} type={props.iconType} color={theme.colors.primary}/>
+				</View>
+				<Text style={styles.fullButtonText}>{props.title}</Text>
+				<View style={styles.fullButtonRightIcon}>
+					<Icon style={styles.fullButtonIcon} name="angle-right" type="fontisto" color={theme.colors.foreground}/>
+				</View>
+			</Pressable>
+		);
+	}
+
 	return (
 		<ScrollView style={styles.scrollView}>
 			<View style={styles.wrapper}>
-				<Image source={require('../assets/favicon.png')} style={styles.profilePicture}/>
+				<Image source={
+					dbo.firebase.auth().currentUser.photoURL ? 
+						{uri: dbo.firebase.auth().currentUser.photoURL} : 
+						require('../assets/favicon.png')} 
+					style={styles.profilePicture}/>
 				<Text style={styles.usernameText}>{username}</Text>
-				<Pressable style={styles.settingsButton} onPress={() => navigation.navigate('Settings',{parent:'PersonalProfile'})}>
-					<Text style={styles.settingsButtonText}>Edit Profile</Text>
-					<Icon style={styles.iconStyle} name='eraser' type='fontisto' color={theme.colors.foreground}/>
-					{/* <Icon style={styles.iconStyle} name='player-settings' type='fontisto' color={theme.colors.foreground}/> */}
-				</Pressable>
 
-				<Pressable style={[styles.fullButton,{borderTopWidth:1}]} onPress={() => navigation.navigate('MyPosts')}>
-					<View style={styles.fullButtonIconView}>
-						<Icon style={styles.fullButtonIcon} name='paw' type="fontisto" color={theme.colors.primary}/>
-					</View>
-					<Text style={styles.fullButtonText}>My Posts</Text>
-					<View style={styles.fullButtonRightIcon}>
-						<Icon style={styles.fullButtonIcon} name="angle-right" type="fontisto" color={theme.colors.foreground}/>
-					</View>
-				</Pressable>
-				<Pressable style={styles.fullButton} onPress={() => navigation.navigate('Privacy')}>
-					<View style={styles.fullButtonIconView}>
-						<Icon style={styles.fullButtonIcon} name="lock" type="fontistio" color={theme.colors.primary}/>
-					</View>
-					<Text style={styles.fullButtonText}>Privacy</Text>
-					<View style={styles.fullButtonRightIcon}>
-						<Icon style={styles.fullButtonIcon} name="angle-right" type="fontisto" color={theme.colors.foreground}/>
-					</View>
-				</Pressable>
-				<Pressable style={styles.fullButton} onPress={() => navigation.navigate('About')}>
-					<View style={styles.fullButtonIconView}>
-						<Icon style={styles.fullButtonIcon} name="info" type="fontisto" color={theme.colors.primary}/>
-					</View>
-					<Text style={styles.fullButtonText}>About</Text>
-					<View style={styles.fullButtonRightIcon}>
-						<Icon style={styles.fullButtonIcon} name="angle-right" type="fontisto" color={theme.colors.foreground}/>
-					</View>
-				</Pressable>
-				<Pressable style={styles.fullButton} onPress={() => navigation.navigate('Help')}>
-					<View style={styles.fullButtonIconView}>
-						<Icon style={styles.fullButtonIcon} name="coffeescript" type="fontisto" color={theme.colors.primary}/>
-					</View>
-					<Text style={styles.fullButtonText}>Help</Text>
-					<View style={styles.fullButtonRightIcon}>
-						<Icon style={styles.fullButtonIcon} name="angle-right" type="fontisto" color={theme.colors.foreground}/>
-					</View>
-				</Pressable>
-				<Pressable style={styles.fullButton} onPress={() => {
+				<View style={styles.line}></View>
+				<FullLengthButton onTap={() => navigation.navigate("MyPosts")} iconName='paw' iconType='fontisto' title='My Posts' />
+				<FullLengthButton onTap={() => navigation.navigate("Settings")} iconName='spinner-cog' iconType='fontisto' title='Settings' />
+				<FullLengthButton onTap={() => navigation.navigate("Privacy")} iconName='lock' iconType="fontistio" title='Privacy' />
+				<FullLengthButton onTap={() => navigation.navigate("About")} iconName='info' iconType="fontisto" title='About' />
+				<FullLengthButton onTap={() => navigation.navigate("Help")} iconName='coffeescript' iconType="fontisto" title='Help' />
+				<FullLengthButton 
+					onTap={() => {
 						console.log(dbo.firebase.auth().currentUser?.uid);
 						dbo.firebase.auth().signOut().then(() => {
 							navigation.replace('LogIn');
 						})
-						// .catch(error => this.setState({ errorMessage: error.message }))
-					}}>
-					<View style={styles.fullButtonIconView}>
-						<Icon style={styles.fullButtonIcon} name="arrow-return-left" type="fontisto" color={theme.colors.primary}/>
-					</View>
-					<Text style={styles.fullButtonText}>Log Out</Text>
-					<View style={styles.fullButtonRightIcon}>
-						<Icon style={styles.fullButtonIcon} name="angle-right" type="fontisto" color={theme.colors.foreground}/>
-					</View>
-				</Pressable>
+					}}
+					iconName='arrow-return-left' iconType="fontisto" title='Log Out' />
 			</View>
 		</ScrollView>
 	);
@@ -146,71 +124,209 @@ const Help = ({navigation, route}) => {
 	);
 }
 
+const ChangePassword = (props) => {
+	const [errorMessage, setErrorMessage] = useState("");
+	const [currPassword, setCurrPassword] = useState('');
+	const [newPassword, setNewPassword] = useState('');
+	const [confirmPassword, setConfirmPassword] = useState('');
+	const [isModalVisible, setIsModalVisible] = useState(false);
+
+	const updatePassword = async (thePassword) => {
+		var user = dbo.firebase.auth().currentUser;
+
+		try { const response = await user.updatePassword(thePassword); }
+		catch (error) { return error; }
+	}
+
+	const reAuth = async () => {
+		var user = dbo.firebase.auth().currentUser;
+		var cred = dbo.firebase.auth.EmailAuthProvider.credential(user.email, currPassword);
+		return user.reauthenticateWithCredential(cred);
+	}
+
+	const attemptUpdate = () => {
+		setIsModalVisible(true);
+
+		if (newPassword !== confirmPassword) {
+			setErrorMessage("Passwords do not match");
+			setIsModalVisible(false);
+			return;
+		}
+
+		reAuth()
+			.then(() => {
+				updatePassword(newPassword)
+					.then((error) => {
+						if (error) {
+							setErrorMessage(error.message);
+							setIsModalVisible(false);
+						}
+						else {
+							storeData("password", newPassword);
+							setErrorMessage("");
+							setCurrPassword("");
+							setNewPassword("");
+							setConfirmPassword("");
+							setIsModalVisible(false);
+							// this was a success, set everything to default and leave
+							props.navigation.goBack();
+						}
+					});
+			})
+			.catch((error) => {
+				setErrorMessage(error.message);
+				setIsModalVisible(false);
+			});
+		
+	}
+
+	return (
+	<KeyboardAvoidingView behavior='position'>
+		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+			<View style={styles.container}>
+					<Text style={styles.errorText}>{errorMessage}</Text>
+					<SecureInput label="Current Password:" placeholder="password" onChange={setCurrPassword} val={currPassword} />
+					<SecureInput label="New Password:" placeholder="password" onChange={setNewPassword} val={newPassword} />
+					<SecureInput label="Confirm Password:" placeholder="password" onChange={setConfirmPassword} val={confirmPassword} />
+
+					<Pressable style={styles.updateButton} onPress={ attemptUpdate }>
+						<Text style={styles.basicText}>Update Password</Text>
+					</Pressable>
+
+				<LoadingModal isVisible={isModalVisible} />
+			</View>
+		</TouchableWithoutFeedback>
+	</KeyboardAvoidingView>
+	);
+}
+
+// Copied from PostPage
+async function uploadImageAsync(filename,uri) {
+	const blob = await new Promise((resolve, reject) => {
+		const xhr = new XMLHttpRequest();
+		xhr.onload = function () {
+			resolve(xhr.response);
+		};
+		xhr.onerror = function (e) {
+			console.log(e);
+			reject(new TypeError("Network request failed"));
+		};
+		xhr.responseType = "blob";
+		xhr.open("GET", uri, true);
+		xhr.send(null);
+	});
+
+	const fileRef = dbo.firebase.storage().ref(filename);
+	const result = await fileRef.put(blob);
+	const url = await fileRef.getDownloadURL();
+	// We're done with the blob, close and release it
+	blob.close();
+
+	return url;
+}
 
 const Settings = ({navigation, route}) => {
-	const [username, setUsername] = useState('');
+	const [isModalVisible, setIsModalVisible] = useState(false);
+
+	if (route.params?.photos) {
+		setIsModalVisible(true);
+
+		uploadImageAsync(dbo.firebase.auth().currentUser.uid + route.params.photos[0].name, route.params.photos[0].uri)
+			.then((url) => {
+				changePhotoURL(url)
+					.then((error) => {
+						if (error) Alert.alert(error.message);
+						setIsModalVisible(false);
+					});
+			})
+			.catch((error) => {
+				Alert.alert(error.message);
+				setIsModalVisible(false);
+			});
+
+
+		delete route.params.photos;
+	}
+	
+	const changeEmail = async (newEmail) => {
+		var user = dbo.firebase.auth().currentUser;
+
+		try { 
+			const response = await user.updateEmail(newEmail);
+			storeData("email", newPassword);
+		}
+		catch (error) { return error; }
+	}
+
+	const changeDisplayName = async (displayName) => {
+		const update = { displayName: displayName };
+
+		try { const response = await dbo.firebase.auth().currentUser.updateProfile(update); }
+		catch (error) { return error; }
+	}
+
+	const changePhotoURL = async (url) => {
+		const update = { photoURL: url };
+
+		try { const response = await dbo.firebase.auth().currentUser.updateProfile(update); }
+		catch (error) { return error; }
+	}
+
+	const SettingsInput = (props) => {
+		const [textValue, setTextValue] = useState(props.defaultValue);
+	
+		return (<>
+			<Text style={styles.inputLabel}>{props.inputLabel}</Text>
+			<View style={styles.textInputView}>
+				<TextInput
+					style={styles.textInput}
+					onChangeText={setTextValue}
+					placeholder={props.inputPlaceholder}
+					value={textValue}
+					autoCapitalize='none'
+					autoCorrect={false}
+					secureTextEntry={false} />
+			</View>
+	
+			<Pressable style={styles.updateButton} onPress={ () => {
+				setIsModalVisible(true);
+				props.updateFunction(textValue).then((error) => {
+					if (error) Alert.alert(error.message);
+					setIsModalVisible(false);
+				});
+			}}>
+				<Text style={styles.basicText}>Update {props.inputLabel}</Text>
+			</Pressable>
+		</>);
+	}
 
 	return (
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} >
 			<View style={styles.window}>
-				<Text style={styles.basicText}>Settings</Text>
-				<SafeAreaView>
-					<TextInput
-						style={styles.input}
-						onChangeText={setUsername}
-						value={username}
-					/>
-				</SafeAreaView>
-				<Pressable style={styles.button} onPress={() => navigation.navigate(route.params.parent,{username:username.trim()})}>
-					{/* This must be replaced by updating some async storage component */}
-					<Text style={styles.basicText}>Go Back</Text>
+				{/* <Text style={styles.basicText}>Settings</Text> */}
+
+				<SettingsInput 
+					inputLabel="Display Name"
+					inputPlaceholder="Johnny Appleseed"
+					defaultValue={dbo.firebase.auth().currentUser.displayName}
+					updateFunction={changeDisplayName} />
+
+				<SettingsInput 
+					inputLabel="Email"
+					inputPlaceholder="johnnyappleseed@example.com"
+					defaultValue={dbo.firebase.auth().currentUser.email}
+					updateFunction={changeEmail} />
+
+				<Pressable style={styles.updateButton} onPress={ () => navigation.navigate("ProfilePicturePicker",{parent:"Settings",maxImages:1}) }>
+					<Text style={styles.basicText}>Change Profile Picture</Text>
 				</Pressable>
+				<Pressable style={styles.updateButton} onPress={ () => navigation.navigate("ChangePassword") }>
+					<Text style={styles.basicText}>Change Password</Text>
+				</Pressable>
+
+				<LoadingModal isVisible={isModalVisible} />
 			</View>
 		</TouchableWithoutFeedback>
-	);
-}
-
-const CustomGeolocation = (props) => {
-	const [mapRegion, setMapRegion] = useState({
-		latitude: 33.2083,
-		longitude: -87.5504,
-		latitudeDelta: 0.0922,
-		longitudeDelta: 0.0421,
-	});
-
-	const [markerData, setMarkerData] = useState({
-		latitude: 33.2083,
-		longitude: -87.5504
-	});
-
-	return (
-		<View style={styles.window}>
-			<MapView
-				style={{ alignSelf: 'stretch', height: '100%' }}
-				region={mapRegion}
-
-				// if you don't do this, the placing of the marker will 
-				// re-render everything and change the region back to original
-				onRegionChangeComplete={(region) => {setMapRegion(region)}}
-				showsUserLocation = {true}
-				// super buggy if rotate is on
-				rotateEnabled={false}
-				onPress={(e) => {setMarkerData(e.nativeEvent.coordinate)}} >
-
-				<Marker
-					coordinate={{latitude: markerData.latitude, longitude: markerData.longitude}}
-					draggable
-					onDragEnd={(e) => {setMarkerData(e.nativeEvent.coordinate)}}
-				>
-				</Marker>
-			</MapView>
-			<Pressable style={styles.mapButton} onPress={() => {
-					props.navigation.navigate('PersonalProfile', markerData);
-				}}>
-				{/* there is no cancel */}
-				<Text style={styles.basicText}>Save Location</Text>
-			</Pressable>
-		</View>
 	);
 }
 
@@ -231,7 +347,20 @@ function App() {
 			})}
 			>
 			<Stack.Screen name="PersonalProfile" component={Profile} options={{headerShown:false}} />
-			<Stack.Screen name="Settings" component={Settings} />
+			<Stack.Screen name="Settings" component={Settings} options={{
+				gestureEnabled: false,
+				header:({navigation, route, options}) => {
+					return <Header navFunc={() => navigation.navigate("PersonalProfile",{needsReload:true}) } />
+				},
+			}}/>
+			<Stack.Screen name="ChangePassword" component={ChangePassword} />
+			<Stack.Screen name="ProfilePicturePicker" component={ImageBrowserScreen}
+				options={{
+					title: 'Selected 0 files',
+					header:({navigation, route, options}) => {
+						return <Header route={route} options={options} nav={navigation} />
+					},
+				}} />
 			<Stack.Screen name="MyPosts" component={MyPosts} />
 			<Stack.Screen name="Privacy" component={Privacy} />
 			<Stack.Screen name="About" component={About} />
@@ -250,6 +379,13 @@ const styles = StyleSheet.create({
 	wrapper: {
 		marginTop:theme.spacing.xl,
 	},
+	container: {
+		width:'100%',
+		height:'100%',
+		alignItems:'center',
+		justifyContent:'center',
+		backgroundColor: theme.colors.background,
+	},
 	window: {
 		width: '100%',
 		flex: 1,
@@ -260,17 +396,12 @@ const styles = StyleSheet.create({
 	basicText: {
 		color:theme.colors.foreground,
 	},
-	button: {
-		paddingVertical: 10,
-		paddingHorizontal: 20,
-		borderRadius:2,
-		backgroundColor:theme.colors.primary,
-		marginVertical: 30,
-	},
 	profilePicture: {
 		alignSelf:'center',
 		overflow:'hidden',
-		borderRadius:ScreenWidth
+		borderRadius:ScreenWidth,
+		width:ScreenWidth/2,
+		height:ScreenWidth/2,
 	},
 	settingsButton: {
 		paddingVertical: 10,
@@ -296,9 +427,15 @@ const styles = StyleSheet.create({
 	},
 	usernameText: {
 		color:theme.colors.foreground,
-		marginLeft:20, 
-		fontSize:36, 
+		marginVertical:theme.spacing.m,
+		fontSize:36,
 		alignSelf:'center',
+	},
+	line: {
+		width:'100%',
+		height:0,
+		borderBottomColor:theme.colors.foreground,
+		borderBottomWidth:1
 	},
 	fullButton: {
 		// flex:1,
@@ -325,10 +462,6 @@ const styles = StyleSheet.create({
 	fullButtonRightIcon: {
 		marginLeft:'auto',
 		marginRight:theme.spacing.m,
-	},
-	backButton: {
-		backgroundColor:theme.colors.background,
-		paddingVertical:10,
 	},
 	viewChangerView: {
 		// flex:1,
@@ -369,11 +502,41 @@ const styles = StyleSheet.create({
 	iconStyle: {
 		// flex:1
 	},
-	input: {
-		height: 40,
-		margin: 12,
-		borderWidth: 1,
-		padding: 10,
+	inputLabel: {
+		color:theme.colors.foreground,
+		fontWeight:'bold',
+		fontSize:24,
+		alignSelf:'flex-start',
+		
+		marginLeft:theme.spacing.l,
+		marginTop:theme.spacing.s,
+	},
+	textInputView: {
+		width:'100%',
+		alignItems:'center',
+	},
+	textInput: {
+		width:'90%',
+		borderRadius:10,
+		borderColor:theme.colors.foreground,
+		color:theme.colors.foreground,
+		borderWidth:1,
+		paddingVertical:theme.spacing.l,
+		paddingLeft: theme.spacing.l,
+	},
+	updateButton: {
+		paddingVertical: 10,
+		paddingHorizontal: 20,
+		borderRadius:2,
+		backgroundColor:theme.colors.primary,
+		marginTop:theme.spacing.s,
+	},
+	errorText: {
+		color:theme.colors.failure,
+		marginVertical:theme.spacing.l,
+		marginLeft:'auto',
+		marginRight:'auto',
+		fontWeight:'bold',
 	}
 });
 
