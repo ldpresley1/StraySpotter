@@ -51,7 +51,6 @@ const Profile = ({navigation, route}) => {
 				<FullLengthButton onTap={() => navigation.navigate("Help")} iconName='coffeescript' iconType="fontisto" title='Help' />
 				<FullLengthButton 
 					onTap={() => {
-						console.log(dbo.firebase.auth().currentUser?.uid);
 						dbo.firebase.auth().signOut().then(() => {
 							navigation.replace('LogIn');
 						})
@@ -84,8 +83,8 @@ const Privacy = ({navigation, route}) => {
 	return (
 		<View style={styles.window}>
 			<View style={styles.viewChangerView}>
-				<Text style={styles.basicText}>
-				When opening the Stray Spotter app, you agree to allow us to use your device's location in order to show you, as the user, the best data for your location.
+				<Text style={styles.basicTextButLarger}>
+				When opening the Stray Spotter app, you agree to allow us to use your device's location in order to show you, as the user, the best data for your location.{"\n"}{"\n"}
 				This location is not stored anywhere in our system, and is only used for the time in which you have the app open on your device.
 				</Text>
 			</View>
@@ -97,10 +96,10 @@ const About = ({navigation, route}) => {
 	return (
 		<View style={styles.window}>
 			<View style={styles.viewChangerView}>
-				<Text style={styles.basicText}>
-				    Stray Spotter is an app to help owners find their lost pets.
-				    This app allows users to upload photos of strays they have seen while they are outside and geotag the location in which they were seen.
-				    Since the majority of lost animals are found within a few miles of their homes, owners can use the app to check through all of the strays that have been posted within a certain area.
+				<Text style={styles.basicTextButLarger}>
+				    Stray Spotter is an app to help owners find their lost pets.{"\n"}{"\n"}
+				    This app allows users to upload photos of strays they have seen while they are outside and geotag the location in which they were seen.{"\n"}{"\n"}
+				    Since the majority of lost animals are found within a few miles of their homes, owners can use the app to check through all of the strays that have been posted within a certain area.{"\n"}{"\n"}
 				    With our app, we are hoping to help owners find their lost pets quicker and easier than before.
 				</Text>
 			</View>
@@ -112,11 +111,19 @@ const Help = ({navigation, route}) => {
 	return (
 		<View style={styles.window}>
 			<View style={styles.viewChangerView}>
-				<Text style={styles.basicText}>
-				There are four pages in the Stray Spotter app.
-				You can use the uploads page to upload any strays that you find.
-				You can use the map page to navigate around a map to find nearby strays.
-				You can use the timeline page to view strays near your location.
+				<Text style={styles.basicTextButLarger}>
+				There are four pages in the Stray Spotter app.{"\n"}{"\n"}
+
+				<Icon name={'camera'} color={theme.colors.primary} type='fontisto'/> {'   '}
+				You can use the uploads page to upload any strays that you find.{"\n"}{"\n"}
+
+				<Icon name={'map'} color={theme.colors.primary} type='fontisto'/> {'   '}
+				You can use the map page to navigate around a map to find nearby strays.{"\n"}{"\n"}
+
+				<Icon name={'paw'} color={theme.colors.primary} type='fontisto'/> {'   '}
+				You can use the timeline page to view strays near your location.{"\n"}{"\n"}
+
+				<Icon name={'person'} color={theme.colors.primary} type='fontisto'/> {'   '}
 				Lastly, you can use the profile page to access more information about the app and to view your own uploads.
 				</Text>
 			</View>
@@ -395,6 +402,11 @@ const styles = StyleSheet.create({
 	},
 	basicText: {
 		color:theme.colors.foreground,
+	},
+	basicTextButLarger: {
+		color:theme.colors.foreground,
+		fontSize:20,
+		marginHorizontal:theme.spacing.xl,
 	},
 	profilePicture: {
 		alignSelf:'center',

@@ -37,7 +37,7 @@ export const postData = {
   strayListByUID:[],
   strayListByDistance:[],
   getByUID: async function (uid) {
-      let tempVar = database.collection("StraysFound");
+      let tempVar = database.collection("StraysFound").orderBy("time","desc");
       let DATA = [];
       snapshot = await tempVar.where('userID', '==', uid).get();
       snapshot.forEach(doc => {

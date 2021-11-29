@@ -101,9 +101,6 @@ class LogIn extends React.Component {
 		dbo.firebase.auth()
 			.signInWithEmailAndPassword(this.state.username, this.state.password)
 			.then((res) => {
-				console.log(res.user.uid);
-				console.log('User logged-in successfully!')
-
 				this.setState({username:'',password:'',errorMessage:'',isModalVisible:false});
 				this.props.navigation.replace('Dash')
 			})
@@ -203,8 +200,6 @@ const SignUpScreen = ({navigation, route}) => {
 		setModalVisible(true);
 		dbo.firebase.auth().createUserWithEmailAndPassword(username, password)
 			.then((res) => {
-				console.log(res.user.uid);
-				console.log('User registered successfully!')
 				setUsername('');
 				setPassword('');
 				setErrorMessage('');
@@ -215,7 +210,6 @@ const SignUpScreen = ({navigation, route}) => {
 			.catch((error) => {
 				setErrorMessage(error.message);
 				setModalVisible(false);
-				console.log("error logging in user");
 			})
 	}
 

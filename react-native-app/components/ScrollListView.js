@@ -129,11 +129,14 @@ export default class ScrollListView extends React.Component {
 
 	render() {
 
-		if (this.props.strayList.length < 1) {
+		if (this.props.loaded && this.props.strayList.length < 1) {
 			return (
 				<>
 					<Text style={styles.textStyle}>Looks like there aren't any posts</Text>
 					<Text style={[styles.textStyle,{fontSize:50, marginTop:theme.spacing.m}]}>😿</Text>
+					<Pressable style={[styles.button, styles.buttonClose]} onPress={this.props.refresh}>
+						<Text style={styles.textStyle}>Refresh</Text>
+					</Pressable>
 				</>
 			)
 		}
