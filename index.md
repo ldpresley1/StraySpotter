@@ -5,7 +5,7 @@ We are developing an app to help owners find their lost pets. This app will allo
 <html>
 <body>
  <iframe src="https://drive.google.com/file/d/1YuPAbAOPONVLlbt4kWjWFB11NUWPWz9Z/preview" width="640" height="480" allow="autoplay"></iframe>
-
+<iframe allowfullscreen="allowfullscreen" src="https://drive.google.com/file/d/1YuPAbAOPONVLlbt4kWjWFB11NUWPWz9Z/preview" ></iframe>
 </body>
 </html>
 
