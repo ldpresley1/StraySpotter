@@ -4,7 +4,11 @@
 
 ## Website:
 Our full project description and documentation is available [here](https://ldpresley1.github.io/StraySpotter/)
+
+For more information on how to run our app, see the README in the react-native-app folder.
+
 <!-- ## Welcome to GitHub Pages
+
 
 You can use the [editor on GitHub](https://github.com/ldpresley1/StraySpotter/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
 
